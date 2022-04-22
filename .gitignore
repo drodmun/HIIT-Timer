@@ -1,3 +1,51 @@
-node_modules/
-.cache/
-public
+# dependencies
+/node_modules
+/.pnp
+/.cache/
+.pnp.js
+
+# testing
+/coverage
+
+# front end generic 
+*target*
+*node_modules*
+
+# JetBrains
+.idea/
+
+# VSCode
+.vs/
+.vscode/
+.chrome/
+.history/
+
+# production
+/build
+/dist
+/template
+.rpt2_cache
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# npm
+# .npmrc
+npm-debug.log*
+package-lock.json
+
+# yarn
+yarn.lock
+yarn-debug.log*
+yarn-error.log*
+
+*.lock
+/.scannerwork/
+/sonar-project.properties
+
+# eslint
+.eslintcache

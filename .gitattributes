@@ -1,0 +1,6 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+# lf based on the default being LF since prettier 2.0 - https://prettier.io/docs/en/options.html#end-of-line
+# Additional steps may need done if done to an existing repo...
+# https://docs.github.com/en/github/getting-started-with-github/configuring-git-to-handle-line-endings#refreshing-a-repository-after-changing-line-endings
+# https://stackoverflow.com/questions/14345160/how-to-get-git-to-change-the-line-ending-in-the-working-directory
+* text=auto eol=lf
