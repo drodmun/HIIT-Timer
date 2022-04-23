@@ -16,8 +16,12 @@ const TimerSetter = () => {
 
   const handleOnLess = (setter: SetterOrUpdater<number>) => () =>
     setter((prev) => Number(Math.max(0, Math.min(prev - 1, 59))));
+  const handleOnTenLess = (setter: SetterOrUpdater<number>) => () =>
+    setter((prev) => Number(Math.max(0, Math.min(prev - 10, 59))));
   const handleOnMore = (setter: SetterOrUpdater<number>) => () =>
     setter((prev) => Number(Math.max(0, Math.min(prev + 1, 59))));
+  const handleOnTenMore = (setter: SetterOrUpdater<number>) => () =>
+    setter((prev) => Number(Math.max(0, Math.min(prev + 10, 59))));
 
   return (
     <div
@@ -32,7 +36,9 @@ const TimerSetter = () => {
         label="Minutes"
         value={mins}
         onLess={handleOnLess(setMins)}
+        onTenLess={handleOnTenLess(setMins)}
         onMore={handleOnMore(setMins)}
+        onTenMore={handleOnTenMore(setMins)}
         onInput={handleOnInput}
         onChange={handleOnChange(setMins)}
       />
@@ -45,7 +51,9 @@ const TimerSetter = () => {
         label="Seconds"
         value={secs}
         onLess={handleOnLess(setSecs)}
+        onTenLess={handleOnTenLess(setSecs)}
         onMore={handleOnMore(setSecs)}
+        onTenMore={handleOnTenMore(setSecs)}
         onInput={handleOnInput}
         onChange={handleOnChange(setSecs)}
       />

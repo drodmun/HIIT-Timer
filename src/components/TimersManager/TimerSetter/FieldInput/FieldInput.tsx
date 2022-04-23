@@ -6,6 +6,8 @@ const FieldInput = (props: {
   value: number;
   onLess: () => void;
   onMore: () => void;
+  onTenLess: () => void;
+  onTenMore: () => void;
   onInput: (e: ChangeEvent<HTMLInputElement>) => string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) => {
@@ -19,12 +21,22 @@ const FieldInput = (props: {
       </Typography>
 
       <div style={{ display: "flex" }}>
-        <Button variant="outlined" onClick={props.onLess}>
-          -
-        </Button>
-        <Button variant="outlined" onClick={props.onMore}>
-          +
-        </Button>
+        <div style={{ display: "flex", flexDirection: "column-reverse" }}>
+          <Button variant="outlined" onClick={props.onTenLess}>
+            -
+          </Button>
+          <Button variant="outlined" onClick={props.onTenMore}>
+            +
+          </Button>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column-reverse" }}>
+          <Button variant="outlined" onClick={props.onLess}>
+            -
+          </Button>
+          <Button variant="outlined" onClick={props.onMore}>
+            +
+          </Button>
+        </div>
       </div>
 
       <Modal
