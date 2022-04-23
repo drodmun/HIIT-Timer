@@ -9,7 +9,7 @@ import { countersConfigSetAtom, isPlaySoundAtom, isRunningAtom } from "@src/stor
 import styles from "./ShowCounter.styles";
 
 const mmss = (seconds: number) => {
-  const mm = Math.round(seconds / 60);
+  const mm = Math.floor(seconds / 60);
   const ss = seconds - mm * 60;
 
   return [(mm > 9 ? "" : "0") + mm, (ss > 9 ? "" : "0") + ss].join(":");
