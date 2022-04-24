@@ -12,13 +12,14 @@ import {
   useMediaQuery,
   DialogTitle,
   Typography,
-  IconButton
+  IconButton,
+  Link
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import particlesConfig from "@config/tsParticlesConfig";
 import TimersManager from "@components/TimersManager/TimersManager";
-import SoundConfig from "@components/SoundConfig/SoundConfig";
+import ConfigHeader from "@components/ConfigHeader/ConfigHeader";
 import SetsConfigurator from "@components/SetsConfigurator/SetsConfigurator";
 
 const Index = () => {
@@ -63,7 +64,7 @@ const Index = () => {
               justifyContent: "center"
             }}
           >
-            <SoundConfig />
+            <ConfigHeader />
 
             <TimersManager />
 
@@ -94,6 +95,18 @@ const Index = () => {
 
         <SetsConfigurator onFinish={toggleSetsConfigurator} />
       </Dialog>
+
+      <div style={{ position: "absolute", bottom: 0, width: "100%", textAlign: "center", marginBottom: 8 }}>
+        <Typography color={fullScreen ? "secondary" : "#fff"}>
+          Created and maintained by
+          {fullScreen && <br />}
+          <Link href="https://github.com/drodmun" underline="none">
+            {!fullScreen && " "}
+            Damian Rodriguez (drodmun){" "}
+          </Link>
+          &copy;2021
+        </Typography>
+      </div>
     </RecoilRoot>
   );
 };
