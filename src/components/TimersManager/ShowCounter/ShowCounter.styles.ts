@@ -6,7 +6,8 @@ const timerStyles = {
 };
 
 const valueStyles = {
-  fontWeight: 400
+  fontWeight: 400,
+  fontSize: "4.75rem"
 };
 
 export default { timerStyles, valueStyles };

@@ -1,6 +1,18 @@
 import { ChangeEvent, Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { Box, Button, Grid, Step, StepButton, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Step,
+  StepButton,
+  StepContent,
+  StepLabel,
+  Stepper,
+  Typography,
+  useMediaQuery,
+  useTheme
+} from "@mui/material";
 
 import FieldInput from "@components/TimersManager/TimerSetter/FieldInput/FieldInput";
 import { countersConfigSetAtom } from "@src/stores/timers";
@@ -41,6 +53,9 @@ const steps: {
 ];
 
 const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
   const [activeStep, setActiveStep] = useState(0);
@@ -230,7 +245,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
 
   return (
     <Grid container spacing={0}>
-      <Grid item xs={12} style={{ margin: 64, marginTop: 0 }}>
+      <Grid item xs={12} style={{ margin: fullScreen ? 32 : 64, marginTop: 0 }}>
         <Stepper nonLinear activeStep={activeStep} orientation="vertical">
           {steps.map((step, index) => (
             <Step key={step.label}>
@@ -253,6 +268,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
                     <div>
                       <Button
                         variant="contained"
+                        color="secondary"
                         onClick={handleNext}
                         sx={{ mt: 1, mr: 1 }}
                         disabled={index === steps.length - 1 && !minutes && !seconds}

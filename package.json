@@ -26,6 +26,7 @@
     "gatsby-plugin-material-ui": "^4.1.0",
     "gatsby-plugin-sharp": "^4.12.1",
     "gatsby-plugin-styled-components": "^5.12.1",
+    "gatsby-theme-material-ui": "^5.2.0",
     "gatsby-transformer-sharp": "^4.12.1",
     "react": "^18.0.0",
     "react-countdown-circle-timer": "^3.0.9",

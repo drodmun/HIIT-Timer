@@ -46,6 +46,7 @@ const Actions = () => {
       <Button
         style={{ maxWidth: "5em", maxHeight: "5em", minWidth: "5em", minHeight: "5em", margin: "0 16px" }}
         variant="outlined"
+        color="secondary"
         onClick={!isRunning ? handleOnStart : toggleTunning}
         disabled={!isRunning && !isTimerSet && !countersConfigSet.length}
       >

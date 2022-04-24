@@ -8,7 +8,7 @@ export const minutesAtom = atom({
 
 export const secondsAtom = atom({
   key: "secondsAtom", // unique ID (with respect to other atoms/selectors)
-  default: 0 // default value (aka initial value)
+  default: 30 // default value (aka initial value)
 });
 
 export const isTimerSetSelector = selector({
