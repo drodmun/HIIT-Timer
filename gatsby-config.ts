@@ -12,7 +12,7 @@ const config: GatsbyConfig = {
     siteUrl: `https://www.yourdomain.tld`
   },
   plugins: [
-    "gatsby-plugin-material-ui",
+    "gatsby-theme-material-ui",
     "gatsby-plugin-styled-components",
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",

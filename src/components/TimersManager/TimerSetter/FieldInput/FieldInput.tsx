@@ -1,5 +1,7 @@
 import { ChangeEvent, useState } from "react";
-import { Button, Modal, Paper, TextField, Typography } from "@mui/material";
+import { Button, IconButton, Modal, Paper, TextField, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const FieldInput = (props: {
   label: string;
@@ -15,27 +17,36 @@ const FieldInput = (props: {
   const toggleModal = () => setModal((prev) => !prev);
 
   return (
-    <div>
-      <Typography variant="h1" component="div" onClick={toggleModal}>
-        {(props.value > 9 ? "" : "0") + props.value}
-      </Typography>
-
-      <div style={{ display: "flex" }}>
-        <div style={{ display: "flex", flexDirection: "column-reverse" }}>
-          <Button variant="outlined" onClick={props.onTenLess}>
-            -
-          </Button>
-          <Button variant="outlined" onClick={props.onTenMore}>
-            +
-          </Button>
+    <>
+      <div style={{ display: "flex", flexDirection: "column", width: "fit-content" }}>
+        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+          <div style={{ display: "flex", flexDirection: "column-reverse" }}>
+            <IconButton onClick={props.onTenMore} color="secondary">
+              <AddIcon />
+            </IconButton>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column-reverse" }}>
+            <IconButton onClick={props.onMore} color="secondary">
+              <AddIcon />
+            </IconButton>
+          </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column-reverse" }}>
-          <Button variant="outlined" onClick={props.onLess}>
-            -
-          </Button>
-          <Button variant="outlined" onClick={props.onMore}>
-            +
-          </Button>
+
+        <Typography variant="h1" component="div" onClick={toggleModal} style={{ lineHeight: 1 }}>
+          {(props.value > 9 ? "" : "0") + props.value}
+        </Typography>
+
+        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+          <div style={{ display: "flex", flexDirection: "column-reverse" }}>
+            <IconButton onClick={props.onTenLess} color="primary">
+              <RemoveIcon />
+            </IconButton>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column-reverse" }}>
+            <IconButton onClick={props.onLess} color="primary">
+              <RemoveIcon />
+            </IconButton>
+          </div>
         </div>
       </div>
 
@@ -65,7 +76,7 @@ const FieldInput = (props: {
           />
         </Paper>
       </Modal>
-    </div>
+    </>
   );
 };
 

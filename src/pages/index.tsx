@@ -1,14 +1,25 @@
 import { useState } from "react";
+import { RecoilRoot } from "recoil";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import { tsParticles } from "tsparticles-engine";
-import { Button, Dialog, Grid, Paper, useTheme, useMediaQuery, DialogTitle, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  Grid,
+  Paper,
+  useTheme,
+  useMediaQuery,
+  DialogTitle,
+  Typography,
+  IconButton
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 import particlesConfig from "@config/tsParticlesConfig";
 import TimersManager from "@components/TimersManager/TimersManager";
 import SoundConfig from "@components/SoundConfig/SoundConfig";
 import SetsConfigurator from "@components/SetsConfigurator/SetsConfigurator";
-import { RecoilRoot } from "recoil";
 
 const Index = () => {
   const theme = useTheme();
@@ -25,12 +36,24 @@ const Index = () => {
 
   return (
     <RecoilRoot>
-      <Particles init={particlesInit} options={particlesConfig} />
+      {!fullScreen && <Particles init={particlesInit} options={particlesConfig} />}
 
-      <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: "calc(100vh - 16px)" }}>
-        <Grid item xs={12} sm={8} md={6} style={{ height: "70%" }}>
+      <Grid
+        container
+        spacing={0}
+        alignItems="center"
+        justifyContent="center"
+        style={{
+          display: "flex",
+          height: "100%",
+          alignContent: "center",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <Grid item xs={12} md={6}>
           <Paper
-            elevation={24}
+            elevation={!fullScreen ? 24 : 0}
             style={{
               padding: 32,
               height: "100%",
@@ -58,10 +81,15 @@ const Index = () => {
         open={openSetsConfigurator}
         onClose={toggleSetsConfigurator}
       >
-        <DialogTitle style={{ textAlign: "center" }}>
-          <Typography variant="h4" component="span" color="#040267">
-            Configure ROUNDS/SETS
-          </Typography>
+        <DialogTitle>
+          <Grid container direction="row" justifyContent="space-between" alignItems="center">
+            <Typography variant="h4" component="span" color="primary">
+              {!fullScreen && "Configure ROUNDS/SETS"}
+            </Typography>
+            <IconButton aria-label="close" color="secondary" onClick={toggleSetsConfigurator}>
+              <CloseIcon />
+            </IconButton>
+          </Grid>
         </DialogTitle>
 
         <SetsConfigurator onFinish={toggleSetsConfigurator} />
