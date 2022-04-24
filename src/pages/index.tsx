@@ -27,8 +27,20 @@ const Index = () => {
     <RecoilRoot>
       <Particles init={particlesInit} options={particlesConfig} />
 
-      <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: "calc(100vh - 16px)" }}>
-        <Grid item xs={12} sm={8} md={6} style={{ height: "70%" }}>
+      <Grid
+        container
+        spacing={0}
+        alignItems="center"
+        justifyContent="center"
+        style={{
+          display: "flex",
+          height: "100%",
+          alignContent: "center",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <Grid item xs={12} md={6}>
           <Paper
             elevation={24}
             style={{
