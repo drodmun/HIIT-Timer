@@ -22,6 +22,7 @@ const config: GatsbyConfig = {
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
+    "gatsby-plugin-netlify",
     {
       resolve: "gatsby-plugin-alias-imports",
       options: {
@@ -72,8 +73,24 @@ const config: GatsbyConfig = {
           // origin: "https://drodmun-hiit-timer.netlify.app"
         }
       }
+    },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: "HIIT Timer",
+        short_name: "HIIT Timer",
+        start_url: "/",
+        background_color: "#cb18ac",
+        theme_color: "#4fc2f7",
+        // Enables "Add to Homescreen" prompt and disables browser UI (including back button)
+        // see https://developers.google.com/web/fundamentals/web-app-manifest/#display
+        display: "standalone",
+        icon: "public/static/assets/images/android-chrome-512x512.png", // This path is relative to the root of the site.
+        include_favicon: true
+      }
     }
   ]
 };
 
+console.log(path.resolve(process.cwd(), "public/static/assets/images/android-chrome-512x512.png"));
 export default config;

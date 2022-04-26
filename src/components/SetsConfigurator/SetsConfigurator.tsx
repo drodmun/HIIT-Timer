@@ -22,13 +22,18 @@ const steps: {
   label: string;
   description?: string;
   example?: string;
-  field: "rounds" | "sets" | "cooldowns" | "prep" | "countdown";
+  field: "rounds" | "between-rounds" | "sets" | "cooldowns" | "prep" | "countdown";
 }[] = [
   {
     label: "How many ROUNDs?",
     description: "Number of sets to apply",
     example: "2 rounds of a set 2 of 30s would be 30s * 2s (sets) * 2s (rounds) = 120s (02:00)",
     field: "rounds"
+  },
+  {
+    label: "Rest between ROUNDs!",
+    description: "Once a round is done, take a break!",
+    field: "between-rounds"
   },
   {
     label: "How many SETs",
@@ -61,6 +66,9 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const [rounds, setRounds] = useState(1);
+  const [rMinutes, setRMinutes] = useState(0);
+  const [rSeconds, setRSeconds] = useState(0);
+
   const [sets, setSets] = useState(1);
 
   const [cdMinutes, setCdMinutes] = useState(0);
@@ -79,14 +87,8 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const handleOnChange = (setter: Dispatch<SetStateAction<number>>) => (e: ChangeEvent<HTMLInputElement>) =>
     setter(Number(e.target.value));
 
-  const handleOnLess =
-    (setter: Dispatch<SetStateAction<number>>, min = 0, max = 59) =>
-    () =>
-      setter((prev) => Number(Math.max(min, Math.min(prev - 1, max))));
-  const handleOnMore =
-    (setter: Dispatch<SetStateAction<number>>, min = 0, max = 59) =>
-    () =>
-      setter((prev) => Number(Math.max(min, Math.min(prev + 1, max))));
+  const handleOnValueChange = (setter: Dispatch<SetStateAction<number>>, value: number) => () =>
+    setter((prev) => Number(Math.max(0, Math.min(prev + value, 59))));
 
   const handleNext = () => {
     if (activeStep == steps.length - 1) {
@@ -114,31 +116,50 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
   const handleStep = (step: number) => () => setActiveStep(step);
 
+  const renderFieldInput = useCallback(
+    (setter: Dispatch<SetStateAction<number>>, value: number, label: string, isTime = false) => {
+      return (
+        <FieldInput
+          label={label}
+          value={value}
+          onLess={handleOnValueChange(setter, -1)}
+          onTenLess={handleOnValueChange(setter, -10)}
+          onMore={handleOnValueChange(setter, 1)}
+          onTenMore={handleOnValueChange(setter, 10)}
+          onInput={isTime ? handleOnInput() : handleOnInput(1, 99)}
+          onChange={handleOnChange(setter)}
+        />
+      );
+    },
+    []
+  );
+
   const renderContent = useCallback(
     (field: typeof steps[number]["field"]) => {
       switch (field) {
         case "rounds":
+          return renderFieldInput(setRounds, rounds, "Rounds (1 - 99)", false);
+        case "between-rounds":
           return (
-            <FieldInput
-              label="Rounds (1 - 99)"
-              value={rounds}
-              onLess={handleOnLess(setRounds, 1, 99)}
-              onMore={handleOnMore(setRounds, 1, 99)}
-              onInput={handleOnInput(1, 99)}
-              onChange={handleOnChange(setRounds)}
-            />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: 16
+              }}
+            >
+              {renderFieldInput(setRMinutes, rMinutes, "Minutes", true)}
+
+              <Typography variant="h3" component="div" style={{ margin: 16 }}>
+                :
+              </Typography>
+
+              {renderFieldInput(setRSeconds, rSeconds, "Seconds", true)}
+            </div>
           );
         case "sets":
-          return (
-            <FieldInput
-              label="Sets (1 - 99)"
-              value={sets}
-              onLess={handleOnLess(setSets, 1, 99)}
-              onMore={handleOnMore(setSets, 1, 99)}
-              onInput={handleOnInput(1, 99)}
-              onChange={handleOnChange(setSets)}
-            />
-          );
+          return renderFieldInput(setSets, sets, "Sets (1 - 99)", false);
         case "cooldowns":
           return (
             <div
@@ -149,27 +170,13 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
                 margin: 16
               }}
             >
-              <FieldInput
-                label="Minutes"
-                value={cdMinutes}
-                onLess={handleOnLess(setCdMinutes)}
-                onMore={handleOnMore(setCdMinutes)}
-                onInput={handleOnInput()}
-                onChange={handleOnChange(setCdMinutes)}
-              />
+              {renderFieldInput(setCdMinutes, cdMinutes, "Minutes", true)}
 
               <Typography variant="h3" component="div" style={{ margin: 16 }}>
                 :
               </Typography>
 
-              <FieldInput
-                label="Seconds"
-                value={cdSeconds}
-                onLess={handleOnLess(setCdSeconds)}
-                onMore={handleOnMore(setCdSeconds)}
-                onInput={handleOnInput()}
-                onChange={handleOnChange(setCdSeconds)}
-              />
+              {renderFieldInput(setCdSeconds, cdSeconds, "Seconds", true)}
             </div>
           );
         case "prep":
@@ -182,27 +189,13 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
                 margin: 16
               }}
             >
-              <FieldInput
-                label="Minutes"
-                value={pMinutes}
-                onLess={handleOnLess(setPMinutes)}
-                onMore={handleOnMore(setPMinutes)}
-                onInput={handleOnInput()}
-                onChange={handleOnChange(setPMinutes)}
-              />
+              {renderFieldInput(setPMinutes, pMinutes, "Minutes", true)}
 
               <Typography variant="h3" component="div" style={{ margin: 16 }}>
                 :
               </Typography>
 
-              <FieldInput
-                label="Seconds"
-                value={pSeconds}
-                onLess={handleOnLess(setPSeconds)}
-                onMore={handleOnMore(setPSeconds)}
-                onInput={handleOnInput()}
-                onChange={handleOnChange(setPSeconds)}
-              />
+              {renderFieldInput(setPSeconds, pSeconds, "Seconds", true)}
             </div>
           );
         case "countdown":
@@ -215,32 +208,18 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
                 margin: 16
               }}
             >
-              <FieldInput
-                label="Minutes"
-                value={minutes}
-                onLess={handleOnLess(setMinutes)}
-                onMore={handleOnMore(setMinutes)}
-                onInput={handleOnInput()}
-                onChange={handleOnChange(setMinutes)}
-              />
+              {renderFieldInput(setMinutes, minutes, "Minutes", true)}
 
               <Typography variant="h3" component="div" style={{ margin: 16 }}>
                 :
               </Typography>
 
-              <FieldInput
-                label="Seconds"
-                value={seconds}
-                onLess={handleOnLess(setSeconds)}
-                onMore={handleOnMore(setSeconds)}
-                onInput={handleOnInput()}
-                onChange={handleOnChange(setSeconds)}
-              />
+              {renderFieldInput(setSeconds, seconds, "Seconds", true)}
             </div>
           );
       }
     },
-    [cdMinutes, cdSeconds, minutes, pMinutes, pSeconds, rounds, seconds, sets]
+    [cdMinutes, cdSeconds, minutes, pMinutes, pSeconds, rMinutes, rSeconds, renderFieldInput, rounds, seconds, sets]
   );
 
   return (
