@@ -72,6 +72,37 @@ const config: GatsbyConfig = {
           // origin: "https://drodmun-hiit-timer.netlify.app"
         }
       }
+    },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: "HIIT Timer",
+        short_name: "HIIT Timer",
+        start_url: "/",
+        background_color: "#cb18ac",
+        theme_color: "#4fc2f7",
+        // Enables "Add to Homescreen" prompt and disables browser UI (including back button)
+        // see https://developers.google.com/web/fundamentals/web-app-manifest/#display
+        display: "standalone",
+        icon: "public/static/assets/images/favicon-32x32.png",
+        icons: [
+          {
+            src: `static/assets/images/apple-touch-icon.png`,
+            sizes: `180x180`,
+            type: `image/png`
+          },
+          {
+            src: `static/assets/images/android-chrome-192x192.png`,
+            sizes: `192x192`,
+            type: `image/png`
+          },
+          {
+            src: `static/assets/images/android-chrome-512x512.png`,
+            sizes: `512x512`,
+            type: `image/png`
+          }
+        ] // This path is relative to the root of the site.
+      }
     }
   ]
 };
