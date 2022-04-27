@@ -92,5 +92,4 @@ const config: GatsbyConfig = {
   ]
 };
 
-console.log(path.resolve(process.cwd(), "public/static/assets/images/android-chrome-512x512.png"));
 export default config;

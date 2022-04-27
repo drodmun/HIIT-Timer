@@ -54,8 +54,8 @@ yarn-error.log*
 
 # gatsby
 # Ignore everything in the "public" directory, except the "assets"
-/public/page-data/
-/public/static/webfonts/
+/public/*
+!/public/static/assets/**/*
 
 # Since it is a TS project, ignore JS compiled
 /**/*.js
