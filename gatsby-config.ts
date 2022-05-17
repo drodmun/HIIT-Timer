@@ -59,14 +59,15 @@ const config: GatsbyConfig = {
         gtagConfig: {
           // optimize_id: "OPT_CONTAINER_ID",
           anonymize_ip: true,
-          cookie_expires: 0
+          cookie_expires: 0,
+          send_page_view: true // default appears to be false.
         },
         // This object is used for configuration specific to this plugin
         pluginConfig: {
           // Puts tracking script in the head instead of the body
-          head: false,
+          head: true,
           // Setting this parameter is also optional
-          respectDNT: true,
+          respectDNT: false,
           // Avoids sending pageview hits from custom paths
           exclude: ["/preview/**", "/do-not-track/me/too/"]
           // Defaults to https://www.googletagmanager.com
