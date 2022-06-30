@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { ISourceOptions } from "tsparticles-engine";
+import { ISourceOptions } from 'tsparticles-engine';
 
 const options: ISourceOptions = {
   autoPlay: true,
   background: {
     color: {
-      value: "#00FAFC"
+      value: '#00FAFC'
     },
     image: "url('/static/assets/images/background.webp')",
-    position: "50% 50%",
-    repeat: "no-repeat",
-    size: "cover",
+    position: '50% 50%',
+    repeat: 'no-repeat',
+    size: 'cover',
     opacity: 0.8
   },
   backgroundMask: {
-    composite: "destination-out",
+    composite: 'destination-out',
     cover: {
       color: {
-        value: "#fff"
+        value: '#fff'
       },
       opacity: 1
     },
@@ -31,22 +31,22 @@ const options: ISourceOptions = {
   duration: 0,
   fpsLimit: 120,
   interactivity: {
-    detectsOn: "window",
+    detectsOn: 'window',
     events: {
       onClick: {
         enable: true,
-        mode: "push"
+        mode: 'push'
       },
       // @ts-ignore
       onDiv: {
         selectors: [],
         enable: false,
         mode: [],
-        type: "circle"
+        type: 'circle'
       },
       onHover: {
         enable: true,
-        mode: "grab",
+        mode: 'grab',
         parallax: {
           enable: true,
           force: 80,
@@ -60,7 +60,7 @@ const options: ISourceOptions = {
         distance: 128,
         duration: 0.3,
         // @ts-ignore
-        easing: "ease-out-quad",
+        easing: 'ease-out-quad',
         factor: 1,
         maxSpeed: 50,
         speed: 1
@@ -100,17 +100,17 @@ const options: ISourceOptions = {
         area: {
           gradient: {
             start: {
-              value: "#ffffff"
+              value: '#ffffff'
             },
             stop: {
-              value: "#000000"
+              value: '#000000'
             }
           },
           radius: 1000
         },
         shadow: {
           color: {
-            value: "#000000"
+            value: '#000000'
           },
           length: 2000
         }
@@ -130,7 +130,7 @@ const options: ISourceOptions = {
         speed: 1,
         maxSpeed: 50,
         // @ts-ignore
-        easing: "ease-out-quad",
+        easing: 'ease-out-quad',
         // @ts-ignore
         divs: {
           distance: 200,
@@ -138,7 +138,7 @@ const options: ISourceOptions = {
           factor: 100,
           speed: 1,
           maxSpeed: 50,
-          easing: "ease-out-quad",
+          easing: 'ease-out-quad',
           selectors: []
         }
       },
@@ -196,14 +196,14 @@ const options: ISourceOptions = {
         }
       },
       enable: false,
-      mode: "bounce",
+      mode: 'bounce',
       overlap: {
         enable: true,
         retries: 0
       }
     },
     color: {
-      value: "#ffffff",
+      value: '#ffffff',
       animation: {
         h: {
           count: 0,
@@ -230,7 +230,7 @@ const options: ISourceOptions = {
     },
     destroy: {
       // @ts-ignore
-      mode: "none",
+      mode: 'none',
       split: {
         count: 1,
         factor: {
@@ -277,7 +277,7 @@ const options: ISourceOptions = {
     links: {
       blink: false,
       color: {
-        value: "#ffffff"
+        value: '#ffffff'
       },
       consent: false,
       distance: 150,
@@ -287,7 +287,7 @@ const options: ISourceOptions = {
       shadow: {
         blur: 5,
         color: {
-          value: "#000"
+          value: '#000'
         },
         enable: false
       },
@@ -318,7 +318,7 @@ const options: ISourceOptions = {
       },
       decay: 0,
       distance: {},
-      direction: "none",
+      direction: 'none',
       drift: 0,
       enable: true,
       gravity: {
@@ -340,11 +340,11 @@ const options: ISourceOptions = {
         options: {}
       },
       outModes: {
-        default: "out",
-        bottom: "out",
-        left: "out",
-        right: "out",
-        top: "out"
+        default: 'out',
+        bottom: 'out',
+        left: 'out',
+        right: 'out',
+        top: 'out'
       },
       random: false,
       size: false,
@@ -358,7 +358,7 @@ const options: ISourceOptions = {
         enable: false,
         length: 10,
         fillColor: {
-          value: "#000000"
+          value: '#000000'
         }
       },
       vibrate: false,
@@ -387,8 +387,8 @@ const options: ISourceOptions = {
         enable: true,
         speed: 1,
         sync: false,
-        destroy: "none",
-        startValue: "random",
+        destroy: 'none',
+        startValue: 'random',
         minimumValue: 0.1
       }
     },
@@ -433,7 +433,7 @@ const options: ISourceOptions = {
         enable: false,
         value: 0
       },
-      mode: "vertical",
+      mode: 'vertical',
       speed: 25
     },
     rotate: {
@@ -447,13 +447,13 @@ const options: ISourceOptions = {
         speed: 0,
         sync: false
       },
-      direction: "clockwise",
+      direction: 'clockwise',
       path: false
     },
     shadow: {
       blur: 0,
       color: {
-        value: "#000"
+        value: '#000'
       },
       enable: false,
       offset: {
@@ -463,7 +463,7 @@ const options: ISourceOptions = {
     },
     shape: {
       options: {},
-      type: "circle"
+      type: 'circle'
     },
     size: {
       random: {
@@ -479,8 +479,8 @@ const options: ISourceOptions = {
         enable: true,
         speed: 20,
         sync: false,
-        destroy: "none",
-        startValue: "random",
+        destroy: 'none',
+        startValue: 'random',
         minimumValue: 0.1
       }
     },
@@ -498,7 +498,7 @@ const options: ISourceOptions = {
         speed: 0,
         sync: false
       },
-      direction: "clockwise",
+      direction: 'clockwise',
       enable: false
     },
     twinkle: {

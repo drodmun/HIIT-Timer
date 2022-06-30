@@ -1,5 +1,5 @@
-import { ChangeEvent, Dispatch, SetStateAction, useCallback, useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { ChangeEvent, Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import {
   Box,
   Button,
@@ -12,54 +12,54 @@ import {
   Typography,
   useMediaQuery,
   useTheme
-} from "@mui/material";
+} from '@mui/material';
 
-import FieldInput from "@components/TimersManager/TimerSetter/FieldInput/FieldInput";
-import { countersConfigSetAtom } from "@src/stores/timers";
-import { CounterConfig } from "@src/types/CounterConfig";
+import FieldInput from 'components/TimersManager/TimerSetter/FieldInput/FieldInput';
+import { countersConfigSetAtom } from 'stores/timers';
+import { CounterConfig } from 'types/CounterConfig';
 
 const steps: {
   label: string;
   description?: string;
   example?: string;
-  field: "rounds" | "between-rounds" | "sets" | "cooldowns" | "prep" | "countdown";
+  field: 'rounds' | 'between-rounds' | 'sets' | 'cooldowns' | 'prep' | 'countdown';
 }[] = [
   {
-    label: "How many ROUNDs?",
-    description: "Number of sets to apply",
-    example: "2 rounds of a set 2 of 30s would be 30s * 2s (sets) * 2s (rounds) = 120s (02:00)",
-    field: "rounds"
+    label: 'How many ROUNDs?',
+    description: 'Number of sets to apply',
+    example: '2 rounds of a set 2 of 30s would be 30s * 2s (sets) * 2s (rounds) = 120s (02:00)',
+    field: 'rounds'
   },
   {
-    label: "Rest between ROUNDs!",
-    description: "Once a round is done, take a break!",
-    field: "between-rounds"
+    label: 'Rest between ROUNDs!',
+    description: 'Once a round is done, take a break!',
+    field: 'between-rounds'
   },
   {
-    label: "How many SETs",
+    label: 'How many SETs',
     description: `Number of timers (including cooldown and preparation times) to repeat`,
-    example: "2 sets or timers of 30s with a cooldown of 15s and preparation of 5s = 100s (01:40)",
-    field: "sets"
+    example: '2 sets or timers of 30s with a cooldown of 15s and preparation of 5s = 100s (01:40)',
+    field: 'sets'
   },
   {
-    label: "With COOLDOWN?",
+    label: 'With COOLDOWN?',
     description: `Time to rest between countdowns`,
-    field: "cooldowns"
+    field: 'cooldowns'
   },
   {
-    label: "With PREP?",
+    label: 'With PREP?',
     description: `Time to prepare before countdowns`,
-    field: "prep"
+    field: 'prep'
   },
   {
-    label: "FINALLY, THE COUNTDOWN!!",
-    field: "countdown"
+    label: 'FINALLY, THE COUNTDOWN!!',
+    field: 'countdown'
   }
 ];
 
 const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
@@ -98,12 +98,12 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
       for (let round = 1; round <= rounds; round++) {
         for (let set = 1; set <= sets; set++) {
           if (hasPreparation)
-            countersConfig.push({ round, set, minutes: pMinutes, seconds: pSeconds, type: "preparation" });
+            countersConfig.push({ round, set, minutes: pMinutes, seconds: pSeconds, type: 'preparation' });
 
-          countersConfig.push({ round, set, minutes, seconds, type: "countdown" });
+          countersConfig.push({ round, set, minutes, seconds, type: 'countdown' });
 
           if (hasCooldown)
-            countersConfig.push({ round, set, minutes: cdMinutes, seconds: cdSeconds, type: "cooldown" });
+            countersConfig.push({ round, set, minutes: cdMinutes, seconds: cdSeconds, type: 'cooldown' });
         }
       }
 
@@ -135,86 +135,86 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   );
 
   const renderContent = useCallback(
-    (field: typeof steps[number]["field"]) => {
+    (field: typeof steps[number]['field']) => {
       switch (field) {
-        case "rounds":
-          return renderFieldInput(setRounds, rounds, "Rounds (1 - 99)", false);
-        case "between-rounds":
+        case 'rounds':
+          return renderFieldInput(setRounds, rounds, 'Rounds (1 - 99)', false);
+        case 'between-rounds':
           return (
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 margin: 16
               }}
             >
-              {renderFieldInput(setRMinutes, rMinutes, "Minutes", true)}
+              {renderFieldInput(setRMinutes, rMinutes, 'Minutes', true)}
 
-              <Typography variant="h3" component="div" style={{ margin: 16 }}>
+              <Typography variant='h3' component='div' style={{ margin: 16 }}>
                 :
               </Typography>
 
-              {renderFieldInput(setRSeconds, rSeconds, "Seconds", true)}
+              {renderFieldInput(setRSeconds, rSeconds, 'Seconds', true)}
             </div>
           );
-        case "sets":
-          return renderFieldInput(setSets, sets, "Sets (1 - 99)", false);
-        case "cooldowns":
+        case 'sets':
+          return renderFieldInput(setSets, sets, 'Sets (1 - 99)', false);
+        case 'cooldowns':
           return (
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 margin: 16
               }}
             >
-              {renderFieldInput(setCdMinutes, cdMinutes, "Minutes", true)}
+              {renderFieldInput(setCdMinutes, cdMinutes, 'Minutes', true)}
 
-              <Typography variant="h3" component="div" style={{ margin: 16 }}>
+              <Typography variant='h3' component='div' style={{ margin: 16 }}>
                 :
               </Typography>
 
-              {renderFieldInput(setCdSeconds, cdSeconds, "Seconds", true)}
+              {renderFieldInput(setCdSeconds, cdSeconds, 'Seconds', true)}
             </div>
           );
-        case "prep":
+        case 'prep':
           return (
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 margin: 16
               }}
             >
-              {renderFieldInput(setPMinutes, pMinutes, "Minutes", true)}
+              {renderFieldInput(setPMinutes, pMinutes, 'Minutes', true)}
 
-              <Typography variant="h3" component="div" style={{ margin: 16 }}>
+              <Typography variant='h3' component='div' style={{ margin: 16 }}>
                 :
               </Typography>
 
-              {renderFieldInput(setPSeconds, pSeconds, "Seconds", true)}
+              {renderFieldInput(setPSeconds, pSeconds, 'Seconds', true)}
             </div>
           );
-        case "countdown":
+        case 'countdown':
           return (
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 margin: 16
               }}
             >
-              {renderFieldInput(setMinutes, minutes, "Minutes", true)}
+              {renderFieldInput(setMinutes, minutes, 'Minutes', true)}
 
-              <Typography variant="h3" component="div" style={{ margin: 16 }}>
+              <Typography variant='h3' component='div' style={{ margin: 16 }}>
                 :
               </Typography>
 
-              {renderFieldInput(setSeconds, seconds, "Seconds", true)}
+              {renderFieldInput(setSeconds, seconds, 'Seconds', true)}
             </div>
           );
       }
@@ -225,12 +225,12 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} style={{ margin: fullScreen ? 32 : 64, marginTop: 0 }}>
-        <Stepper nonLinear activeStep={activeStep} orientation="vertical">
+        <Stepper nonLinear activeStep={activeStep} orientation='vertical'>
           {steps.map((step, index) => (
             <Step key={step.label}>
               <StepButton onClick={handleStep(index)}>
                 <StepLabel>
-                  <Typography variant="h6" component="span">
+                  <Typography variant='h6' component='span'>
                     {step.label}
                   </Typography>
                 </StepLabel>
@@ -246,13 +246,13 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
                   <Box sx={{ mb: 2 }}>
                     <div>
                       <Button
-                        variant="contained"
-                        color="secondary"
+                        variant='contained'
+                        color='secondary'
                         onClick={handleNext}
                         sx={{ mt: 1, mr: 1 }}
                         disabled={index === steps.length - 1 && !minutes && !seconds}
                       >
-                        {index === steps.length - 1 ? "Finish" : "Next"}
+                        {index === steps.length - 1 ? 'Finish' : 'Next'}
                       </Button>
                       {!!index && (
                         <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>

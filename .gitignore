@@ -34,6 +34,8 @@
 .env.test.local
 .env.production
 .env.production.local
+*.log
+storybook-static
 
 # npm
 # .npmrc
@@ -59,3 +61,4 @@ yarn-error.log*
 
 # Since it is a TS project, ignore JS compiled
 /**/*.js
+/**/*.js.map

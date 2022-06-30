@@ -4,3 +4,7 @@ node_modules
 build
 dist
 public
+
+# Since it is a TS project, ignore JS compiled
+**/*.js
+**/*.js.map

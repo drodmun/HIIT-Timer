@@ -1,9 +1,9 @@
-import { ChangeEvent } from "react";
-import { SetterOrUpdater, useRecoilState } from "recoil";
-import { Typography } from "@mui/material";
+import { ChangeEvent } from 'react';
+import { SetterOrUpdater, useRecoilState } from 'recoil';
+import { Typography } from '@mui/material';
 
-import FieldInput from "@components/TimersManager/TimerSetter/FieldInput/FieldInput";
-import { minutesAtom, secondsAtom } from "@src/stores/timers";
+import FieldInput from 'components/TimersManager/TimerSetter/FieldInput/FieldInput';
+import { minutesAtom, secondsAtom } from 'stores/timers';
 
 const TimerSetter = () => {
   const [mins, setMins] = useRecoilState(minutesAtom);
@@ -26,14 +26,14 @@ const TimerSetter = () => {
   return (
     <div
       style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         height: 300
       }}
     >
       <FieldInput
-        label="Minutes"
+        label='Minutes'
         value={mins}
         onLess={handleOnLess(setMins)}
         onTenLess={handleOnTenLess(setMins)}
@@ -43,12 +43,12 @@ const TimerSetter = () => {
         onChange={handleOnChange(setMins)}
       />
 
-      <Typography variant="h2" component="div" style={{ margin: 16 }}>
+      <Typography variant='h2' component='div' style={{ margin: 16 }}>
         :
       </Typography>
 
       <FieldInput
-        label="Seconds"
+        label='Seconds'
         value={secs}
         onLess={handleOnLess(setSecs)}
         onTenLess={handleOnTenLess(setSecs)}
