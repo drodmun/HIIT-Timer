@@ -43,7 +43,7 @@ const TimerSetter = () => {
         onChange={handleOnChange(setMins)}
       />
 
-      <Typography variant='h2' component='div' style={{ margin: 16 }}>
+      <Typography variant='h1' component='div' style={{ margin: 16, color: '#ffffff' }}>
         :
       </Typography>
 

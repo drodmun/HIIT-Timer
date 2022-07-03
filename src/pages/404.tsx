@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const pageStyles = {
   color: '#232129',
   padding: '96px',
-  fontFamily: '-apple-system, Roboto, sans-serif, serif'
+  fontFamily: '"Source Sans 3", sans-serif'
 };
 const headingStyles = {
   marginTop: 0,

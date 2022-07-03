@@ -1,8 +1,7 @@
-import { ChangeEvent, Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { ChangeEvent, Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import {
   Box,
-  Button,
   Grid,
   Step,
   StepButton,
@@ -17,6 +16,9 @@ import {
 import FieldInput from 'components/TimersManager/TimerSetter/FieldInput/FieldInput';
 import { countersConfigSetAtom } from 'stores/timers';
 import { CounterConfig } from 'types/CounterConfig';
+
+import Dialog from 'components/Dialog/Dialog';
+import Button from 'components/Button/Button';
 
 const steps: {
   label: string;
@@ -128,6 +130,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
           onTenMore={handleOnValueChange(setter, 10)}
           onInput={isTime ? handleOnInput() : handleOnInput(1, 99)}
           onChange={handleOnChange(setter)}
+          onSecondView
         />
       );
     },
@@ -151,7 +154,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setRMinutes, rMinutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16 }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: '#0d174d' }}>
                 :
               </Typography>
 
@@ -223,52 +226,77 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   );
 
   return (
-    <Grid container spacing={0}>
-      <Grid item xs={12} style={{ margin: fullScreen ? 32 : 64, marginTop: 0 }}>
-        <Stepper nonLinear activeStep={activeStep} orientation='vertical'>
-          {steps.map((step, index) => (
-            <Step key={step.label}>
-              <StepButton onClick={handleStep(index)}>
-                <StepLabel>
-                  <Typography variant='h6' component='span'>
-                    {step.label}
-                  </Typography>
-                </StepLabel>
-              </StepButton>
-              <StepContent>
-                <>
-                  {!!step?.description && <Typography>{step.description}</Typography>}
+    <Dialog
+      onClose={onFinish}
+      title='Configure ROUNDS/SETS'
+      content={
+        <Grid container spacing={0}>
+          <Grid item xs={12} style={{ margin: fullScreen ? 32 : 64, marginTop: 0 }}>
+            <Stepper nonLinear activeStep={activeStep} orientation='vertical'>
+              {steps.map((step, index) => (
+                <Step key={step.label}>
+                  <StepButton onClick={handleStep(index)}>
+                    <StepLabel>
+                      <Typography variant='h6' component='span'>
+                        {step.label}
+                      </Typography>
+                    </StepLabel>
+                  </StepButton>
+                  <StepContent>
+                    <>
+                      {!!step?.description && <Typography>{step.description}</Typography>}
 
-                  {!!step?.example && <Typography>ie: {step.example}</Typography>}
+                      {!!step?.example && <Typography>ie: {step.example}</Typography>}
 
-                  {renderContent(step.field)}
+                      {renderContent(step.field)}
 
-                  <Box sx={{ mb: 2 }}>
-                    <div>
-                      <Button
-                        variant='contained'
-                        color='secondary'
-                        onClick={handleNext}
-                        sx={{ mt: 1, mr: 1 }}
-                        disabled={index === steps.length - 1 && !minutes && !seconds}
-                      >
-                        {index === steps.length - 1 ? 'Finish' : 'Next'}
-                      </Button>
-                      {!!index && (
-                        <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                          Back
-                        </Button>
-                      )}
-                    </div>
-                  </Box>
-                </>
-              </StepContent>
-            </Step>
-          ))}
-        </Stepper>
-      </Grid>
-    </Grid>
+                      <Box sx={{ mb: 2 }}>
+                        <div>
+                          <Button
+                            size='large'
+                            variant='contained'
+                            color='secondary'
+                            onClick={handleNext}
+                            sx={{ mt: 1, mr: 1, borderRadius: 4 }}
+                            disabled={index === steps.length - 1 && !minutes && !seconds}
+                          >
+                            {index === steps.length - 1 ? 'Finish' : 'Next'}
+                          </Button>
+                          {!!index && (
+                            <Button
+                              size='large'
+                              disabled={index === 0}
+                              onClick={handleBack}
+                              sx={{
+                                mt: 1,
+                                mr: 1,
+                                borderRadius: 4,
+
+                                background: '#ffffff',
+                                border: 0,
+                                color: '#0d174d',
+                                '&:hover': {
+                                  background: '#0d174d',
+                                  color: '#ffffff',
+                                  borderColor: '#ffffff'
+                                }
+                              }}
+                            >
+                              Back
+                            </Button>
+                          )}
+                        </div>
+                      </Box>
+                    </>
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+          </Grid>
+        </Grid>
+      }
+    />
   );
 };
 
-export default SetsConfigurator;
+export default memo(SetsConfigurator);

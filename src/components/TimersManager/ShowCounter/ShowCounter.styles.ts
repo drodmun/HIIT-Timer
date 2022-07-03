@@ -1,6 +1,7 @@
 const valueStyles = {
   fontWeight: 400,
-  fontSize: '4.75rem'
+  fontSize: '7.5rem',
+  color: 'white'
 };
 
 export default { valueStyles };

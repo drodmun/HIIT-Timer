@@ -1,11 +1,15 @@
+import { useMemo } from 'react';
+
+import { useRecoilValue } from 'recoil';
+import { Typography } from '@mui/material';
+
 import ShowCounter from 'components/TimersManager/ShowCounter/ShowCounter';
 import TimerSetter from 'components/TimersManager/TimerSetter/TimerSetter';
 import Actions from 'components/Actions/Actions';
-import { useRecoilValue } from 'recoil';
 import { countersConfigSetAtom, isRunningAtom } from 'stores/timers';
-import { useMemo } from 'react';
+
 import { CounterConfig } from 'types/CounterConfig';
-import { Typography } from '@mui/material';
+import ConfigHeader from '../ConfigHeader/ConfigHeader';
 
 const TimerManager = () => {
   const isRunning = useRecoilValue(isRunningAtom);
@@ -35,6 +39,8 @@ const TimerManager = () => {
         flexGrow: 1
       }}
     >
+      <ConfigHeader />
+
       {isRunning ? (
         <ShowCounter />
       ) : !countersConfigSet.length || !countersConfigSet[0].round ? (
