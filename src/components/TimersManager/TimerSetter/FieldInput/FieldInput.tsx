@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { IconButton, Modal, Paper, TextField, Typography } from '@mui/material';
+import { IconButton, Modal, Paper, TextField, Typography, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
@@ -12,7 +12,9 @@ const FieldInput = (props: {
   onTenMore: () => void;
   onInput: (e: ChangeEvent<HTMLInputElement>) => string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSecondView?: boolean;
 }) => {
+  const theme = useTheme();
   const [modal, setModal] = useState<boolean>(false);
   const toggleModal = () => setModal((prev) => !prev);
 
@@ -20,31 +22,55 @@ const FieldInput = (props: {
     <>
       <div style={{ display: 'flex', flexDirection: 'column', width: 'fit-content' }}>
         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-          <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-            <IconButton onClick={props.onTenMore} color='secondary'>
-              <AddIcon />
+          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
+            <IconButton
+              onClick={props.onTenMore}
+              sx={{ color: props.onSecondView ? '#0d174d' : theme.palette.common.white, padding: 0 }}
+            >
+              <AddIcon fontSize='large' />
             </IconButton>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-            <IconButton onClick={props.onMore} color='secondary'>
-              <AddIcon />
+          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
+            <IconButton
+              size='large'
+              onClick={props.onMore}
+              sx={{ color: props.onSecondView ? '#0d174d' : theme.palette.common.white, padding: 0 }}
+            >
+              <AddIcon fontSize='large' />
             </IconButton>
           </div>
         </div>
 
-        <Typography variant='h1' component='div' onClick={toggleModal} style={{ lineHeight: 1 }}>
+        <Typography
+          variant='h1'
+          component='div'
+          onClick={toggleModal}
+          style={{
+            lineHeight: 1,
+            color: props.onSecondView ? '#0d174d' : theme.palette.common.white,
+            fontWeight: 'lighter',
+            fontSize: 150,
+            margin: theme.spacing(1)
+          }}
+        >
           {(props.value > 9 ? '' : '0') + props.value}
         </Typography>
 
         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-          <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-            <IconButton onClick={props.onTenLess} color='primary'>
-              <RemoveIcon />
+          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
+            <IconButton
+              onClick={props.onTenLess}
+              sx={{ color: props.onSecondView ? '#0d174d' : theme.palette.common.white, padding: 0 }}
+            >
+              <RemoveIcon fontSize='large' />
             </IconButton>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-            <IconButton onClick={props.onLess} color='primary'>
-              <RemoveIcon />
+          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
+            <IconButton
+              onClick={props.onLess}
+              sx={{ color: props.onSecondView ? '#0d174d' : theme.palette.common.white, padding: 0 }}
+            >
+              <RemoveIcon fontSize='large' />
             </IconButton>
           </div>
         </div>

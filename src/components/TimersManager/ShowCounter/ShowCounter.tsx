@@ -79,7 +79,7 @@ const ShowCounter = () => {
     <CountdownCircleTimer
       key={currentIndex}
       isPlaying
-      size={300}
+      size={350}
       duration={currentDuration}
       colors={colors}
       colorsTime={[30, 15, 5, 0]}
