@@ -104,14 +104,25 @@ const Header = (): JSX.Element => {
                     works better as App
                   </Typography>
                 </Box>
-                <Button sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
+                <Button
+                  sx={{ textTransform: 'none', fontWeight: 'bold' }}
+                  size='x-large'
+                  disabled
+                  disabledMessage='Coming soon...'
+                >
                   Get APP
                 </Button>
               </Box>
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'block' }, margin: theme.spacing() }}>
               {navItemsLarge.map((item) => (
-                <Button key={item} sx={{ color: '#fff', padding: theme.spacing(4), width: 150 }} variant='text'>
+                <Button
+                  key={item}
+                  sx={{ color: '#fff', padding: theme.spacing(4), width: 150 }}
+                  variant='text'
+                  disabled
+                  disabledMessage='Coming soon...'
+                >
                   <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
                     {item}
                   </Typography>

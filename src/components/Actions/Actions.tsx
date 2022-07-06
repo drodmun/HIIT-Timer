@@ -12,6 +12,7 @@ import {
 import { CounterConfig } from 'types/CounterConfig';
 
 import Button from '../Button/Button';
+import { useCallback } from 'react';
 
 const Actions = () => {
   const theme = useTheme();
@@ -21,20 +22,20 @@ const Actions = () => {
   const addCounterConfig = useSetRecoilState(addCounterSelector);
 
   const [isRunning, setIsRunning] = useRecoilState(isRunningAtom);
-  const toggleTuning = () => setIsRunning((pIsRunning) => !pIsRunning);
+  const toggleTuning = useCallback(() => setIsRunning((pIsRunning) => !pIsRunning), [setIsRunning]);
 
   const resetMinutes = useResetRecoilState(minutesAtom);
   const resetSeconds = useResetRecoilState(secondsAtom);
-  const handleOnReset = () => {
+  const handleOnReset = useCallback(() => {
     resetCountersConfigSet();
     resetMinutes();
     resetSeconds();
-  };
+  }, [resetCountersConfigSet, resetMinutes, resetSeconds]);
 
-  const handleOnStart = () => {
-    if (!countersConfigSet.length) addCounterConfig({} as CounterConfig);
+  const handleOnStart = useCallback(() => {
+    if (countersConfigSet.length <= 1) addCounterConfig({} as CounterConfig);
     toggleTuning();
-  };
+  }, [addCounterConfig, countersConfigSet.length, toggleTuning]);
 
   return (
     <div
@@ -46,12 +47,6 @@ const Actions = () => {
           borderLeftColor: '#FF5FF4',
           borderBottomColor: '#FF5FF4',
           color: '#ffffff',
-          '&.Mui-disabled': {
-            color: theme.palette.grey.A200,
-            borderColor: theme.palette.grey.A200,
-            backgroundColor: theme.palette.grey[50],
-            opacity: 0.4
-          },
           '&:hover': {
             color: '#ffffff'
           }

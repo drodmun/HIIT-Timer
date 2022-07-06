@@ -11,6 +11,7 @@ import SideMenu from '../components/SideMenu/SideMenu';
 
 import { isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
+import About from './About';
 
 const Index = () => {
   const theme = useTheme();
@@ -62,6 +63,7 @@ const Index = () => {
       <SideMenu />
 
       {openDialog === 'Configurator' && <SetsConfigurator onFinish={toggleSetOpenDialog('none')} />}
+      {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
 
       <Footer />
     </Container>

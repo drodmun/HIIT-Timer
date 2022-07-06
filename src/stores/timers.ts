@@ -26,12 +26,12 @@ export const countersConfigSetAtom = atom<CounterConfig[]>({
   default: [] // default value (aka initial value)
 });
 
-export const addCounterSelector = selector({
+export const addCounterSelector = selector<CounterConfig>({
   key: 'addCounterSelector',
   get: () => ({} as CounterConfig),
-  set: ({ get, set }) =>
+  set: ({ get, set }, config) =>
     set(countersConfigSetAtom, [
-      ...get(countersConfigSetAtom),
+      ...(!('minutes' in config) ? ([] as CounterConfig[]) : get(countersConfigSetAtom)),
       { minutes: get(minutesAtom), seconds: get(secondsAtom), type: 'countdown' } as CounterConfig
     ])
 });

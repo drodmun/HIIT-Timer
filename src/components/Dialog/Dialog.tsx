@@ -23,8 +23,8 @@ const Dialog = ({ onClose, title, content }: { onClose: () => void; title: strin
           </Grid>
         </DialogTitle>
 
-        <Grid container spacing={0}>
-          <Grid item xs={12} style={{ margin: fullScreen ? 32 : 64, marginTop: 0 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
             {content}
           </Grid>
         </Grid>
