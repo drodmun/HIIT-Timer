@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react';
-
+import { Link } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -20,7 +20,7 @@ import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
 import Divider from '../Divider/Divider';
 
-const navItemsLarge = ['Login', 'Sign Up'];
+const navItemsLarge = ['Login', 'Signup'];
 const navItemsMobile = ['Login / Sign Up', 'Settings', 'Dark/Light Mode', 'Feedback'];
 const container = window !== undefined ? () => window.document.body : undefined;
 
@@ -116,17 +116,20 @@ const Header = (): JSX.Element => {
             </Box>
             <Box sx={{ display: { xs: 'none', md: 'block' }, margin: theme.spacing() }}>
               {navItemsLarge.map((item) => (
+
+                <Link key={item} to ={`/${item}`}>
                 <Button
-                  key={item}
+                  
                   sx={{ color: '#fff', padding: theme.spacing(4), width: 150 }}
                   variant='text'
-                  disabled
+                  
                   disabledMessage='Coming soon...'
                 >
                   <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
                     {item}
                   </Typography>
                 </Button>
+                </Link>
               ))}
             </Box>
           </Box>
