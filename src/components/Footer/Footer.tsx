@@ -1,7 +1,9 @@
 import { memo } from 'react';
 import { Link, Typography } from '@mui/material';
-
-const Footer = () => (
+import { useGlobalContext } from 'darkModeContext';
+const Footer = () => {
+  const { darkMode} = useGlobalContext()
+  return(
   <div
     style={{
       position: 'absolute',
@@ -12,7 +14,7 @@ const Footer = () => (
       transformOrigin: '0 100%'
     }}
   >
-    <Typography sx={{ wordWrap: 'nowrap', color: '#ffffff' }}>
+    <Typography sx={{ wordWrap: 'nowrap', color: darkMode? '#000000' : '#ffffff'}}>
       Created and maintained by
       <Link href='https://github.com/drodmun' underline='none'>
         &nbsp; Damian Rodriguez (drodmun)&nbsp;
@@ -21,5 +23,6 @@ const Footer = () => (
     </Typography>
   </div>
 );
+}
 
 export default memo(Footer);

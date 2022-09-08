@@ -2,10 +2,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'components/Button/Button';
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import {auth} from 'firebaseConf';
-
+import { auth } from '../../firebase/firebaseConf'
+import { Navigate } from "react-router-dom";
 function LoginForm() {
-
+  const [redirect, setRedirect] = useState<boolean>(false)
   const [formData, setFormData] = useState(
     {
       email: "",
@@ -26,14 +26,15 @@ function LoginForm() {
   const login = async() =>{
     try {
       await signInWithEmailAndPassword(auth,formData.email,formData.password)
+      setRedirect(!redirect)
     } catch(error){
-      console.log(error)
+      alert('User not found')
     }
     
   }
   return (
     <div>
-      
+      {redirect && <Navigate replace to="/" />}
       <div>
         <h5>Welcome !</h5>
         <p>Login to continue</p>

@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 
 import FieldInput from 'components/TimersManager/TimerSetter/FieldInput/FieldInput';
 import { minutesAtom, secondsAtom } from 'stores/timers';
-import { useGlobalContext } from 'GlobalContext';
+import { useGlobalContext } from 'darkModeContext';
 
 const TimerSetter = () => {
   const [mins, setMins] = useRecoilState(minutesAtom);

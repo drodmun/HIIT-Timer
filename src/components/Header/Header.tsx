@@ -19,7 +19,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
 import Divider from '../Divider/Divider';
-import { useGlobalContext } from 'GlobalContext';
+import { useGlobalContext } from 'darkModeContext';
 
 const navItemsLarge = ['Login', 'Signup'];
 const navItemsMobile = ['Login / Sign Up', 'Settings', 'Dark/Light Mode', 'Feedback'];

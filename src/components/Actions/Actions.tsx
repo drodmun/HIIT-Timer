@@ -13,7 +13,7 @@ import { CounterConfig } from 'types/CounterConfig';
 
 import Button from '../Button/Button';
 import { useCallback } from 'react';
-import { useGlobalContext } from 'GlobalContext';
+import { useGlobalContext } from 'darkModeContext';
 
 const Actions = () => {
   const theme = useTheme();

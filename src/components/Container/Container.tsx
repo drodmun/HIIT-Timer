@@ -6,7 +6,7 @@ import GenericSecondaryBackgroundMobile from 'assets/images/background/login-bac
 const Container = ({ isSecondary, children }: { isSecondary?: boolean; children: ReactNode }) => (
   <div
     style={{
-      height: `100${isSecondary ? '%' : 'vh'}`,
+      height: `100${isSecondary ? 'vh' : 'vh'}`,
       background: `url('${isSecondary ? GenericSecondaryBackgroundMobile : GenericBackgroundMobile}')`,
       backgroundSize: isSecondary ? '100% 100%' : 'cover',
       backgroundColor: `${isSecondary ? '#ffffff' : '#0d174d'}`, /*060c29*/  // '#0d174d'

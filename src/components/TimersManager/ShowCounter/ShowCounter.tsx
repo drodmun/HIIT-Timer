@@ -6,7 +6,7 @@ import { Typography } from '@mui/material';
 
 import { countersConfigSetAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
 
-import { useGlobalContext } from 'GlobalContext';
+import { useGlobalContext } from 'darkModeContext';
 
 const mmss = (seconds: number) => {
   const mm = Math.floor(seconds / 60);

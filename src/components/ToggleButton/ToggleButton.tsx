@@ -1,7 +1,7 @@
 import Button from 'components/Button/Button';
 import Switch from '@mui/material/Switch';
 
-import { useGlobalContext } from 'GlobalContext';
+import { useGlobalContext } from 'darkModeContext';
 export default function ToggleButton(){
    
     const { darkMode, setDarkMode } = useGlobalContext()

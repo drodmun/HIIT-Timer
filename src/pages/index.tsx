@@ -13,7 +13,7 @@ import { isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
 import About from './About';
 import Settings from './Settings'
-import { MyGlobalContext } from 'GlobalContext';
+import { MyGlobalContext } from 'darkModeContext';
 import { useState } from 'react';
 const Index = () => {
   const theme = useTheme();
