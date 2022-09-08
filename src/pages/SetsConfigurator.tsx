@@ -228,6 +228,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   return (
     <Dialog
       onClose={onFinish}
+      
       title='Configure ROUNDS/SETS'
       content={
         <Grid container spacing={0}>

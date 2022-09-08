@@ -12,15 +12,18 @@ import SideMenu from '../components/SideMenu/SideMenu';
 import { isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
 import About from './About';
-
+import Settings from './Settings'
+import { MyGlobalContext } from 'GlobalContext';
+import { useState } from 'react';
 const Index = () => {
   const theme = useTheme();
-
+  const [darkMode, setDarkMode] = useState<boolean>(true)
   const isRunning = useRecoilValue(isRunningAtom);
   const { openDialog, toggleSetOpenDialog } = useUIConfig();
 
   return (
-    <Container>
+    <MyGlobalContext.Provider value= {{ darkMode, setDarkMode }}>
+    <Container isSecondary={darkMode}>
       <Header />
       <Grid
         container
@@ -33,7 +36,8 @@ const Index = () => {
           alignContent: 'center',
           justifyContent: 'center',
           alignItems: 'center',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          
         }}
       >
         <Grid item xs={12} lg={8}>
@@ -47,6 +51,7 @@ const Index = () => {
               alignItems: 'center',
               justifyContent: 'center',
               background: 'transparent'
+              
             }}
           >
             <TimersManager />
@@ -64,9 +69,10 @@ const Index = () => {
 
       {openDialog === 'Configurator' && <SetsConfigurator onFinish={toggleSetOpenDialog('none')} />}
       {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
-
+      {openDialog === 'Settings' && <Settings onClose={toggleSetOpenDialog('none')} />}
       <Footer />
     </Container>
+    </MyGlobalContext.Provider>
   );
 };
 

@@ -18,7 +18,7 @@ const SideMenu = () => {
         { icon: <BookmarkBorderIcon />, name: 'Save' },
         { icon: <ShareIcon />, name: 'Share' },
         { icon: <CommentIcon />, name: 'Feedback' },
-        { icon: <SettingsIcon />, name: 'Settings' },
+        { icon: <SettingsIcon />, name: 'Settings' , action: toggleSetOpenDialog('Settings')},
         { icon: <InfoIcon />, name: 'About', action: toggleSetOpenDialog('About') }
       ].reverse(),
     [toggleSetOpenDialog]
@@ -42,16 +42,18 @@ const SideMenu = () => {
           tooltipTitle={
             <Box
               sx={{
-                color: !('action' in action) ? 'grey.A200' : 'primary.main'
+                // color: !('action' in action) ? 'grey.A200' : 'primary.main'
+                color: 'primary.main'
               }}
             >
-              {!('action' in action) ? 'Soon...' : action.name}
+              {/* {!('action' in action) ? 'Soon...' : action.name} */}
+              {action.name}
             </Box>
           }
           tooltipOpen
           onClick={action.action}
           FabProps={{
-            disabled: !('action' in action),
+            // disabled: !('action' in action),
             sx: {
               color: 'primary.main',
               '&:hover': {

@@ -9,7 +9,8 @@ const Container = ({ isSecondary, children }: { isSecondary?: boolean; children:
       height: `100${isSecondary ? '%' : 'vh'}`,
       background: `url('${isSecondary ? GenericSecondaryBackgroundMobile : GenericBackgroundMobile}')`,
       backgroundSize: isSecondary ? '100% 100%' : 'cover',
-      backgroundColor: `${isSecondary ? '#ffffff' : '#0d174d'}` /*060c29*/
+      backgroundColor: `${isSecondary ? '#ffffff' : '#0d174d'}`, /*060c29*/  // '#0d174d'
+      
     }}
   >
     {children}

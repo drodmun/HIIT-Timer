@@ -19,6 +19,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
 import Divider from '../Divider/Divider';
+import { useGlobalContext } from 'GlobalContext';
 
 const navItemsLarge = ['Login', 'Signup'];
 const navItemsMobile = ['Login / Sign Up', 'Settings', 'Dark/Light Mode', 'Feedback'];
@@ -27,7 +28,7 @@ const container = window !== undefined ? () => window.document.body : undefined;
 const Header = (): JSX.Element => {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  const { darkMode} = useGlobalContext()
   const handleDrawerToggle = useCallback(() => setMobileOpen((pMobileOpen) => !pMobileOpen), [setMobileOpen]);
 
   const drawer = useMemo(
@@ -100,14 +101,14 @@ const Header = (): JSX.Element => {
               >
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Logo />
-                  <Typography variant='body1' sx={{ marginLeft: theme.spacing(2) }}>
+                  <Typography variant='body1' sx={{ marginLeft: theme.spacing(2) , color:darkMode? 'black':'white' }}>
                     works better as App
                   </Typography>
                 </Box>
                 <Button
                   sx={{ textTransform: 'none', fontWeight: 'bold' }}
                   size='x-large'
-                  disabled
+                  // disabled
                   disabledMessage='Coming soon...'
                 >
                   Get APP
@@ -120,7 +121,7 @@ const Header = (): JSX.Element => {
                 <Link key={item} to ={`/${item}`}>
                 <Button
                   
-                  sx={{ color: '#fff', padding: theme.spacing(4), width: 150 }}
+                  sx={{ color: darkMode ? 'black': '#fff', padding: theme.spacing(4), width: 150 }}
                   variant='text'
                   
                   disabledMessage='Coming soon...'

@@ -9,6 +9,7 @@ import Dialog from 'components/Dialog/Dialog';
 
 const About = ({ onClose }: { onClose: () => void }) => (
   <Dialog
+  
     onClose={onClose}
     title='About the App & Me'
     content={

@@ -4,11 +4,12 @@ import { Typography } from '@mui/material';
 
 import FieldInput from 'components/TimersManager/TimerSetter/FieldInput/FieldInput';
 import { minutesAtom, secondsAtom } from 'stores/timers';
+import { useGlobalContext } from 'GlobalContext';
 
 const TimerSetter = () => {
   const [mins, setMins] = useRecoilState(minutesAtom);
   const [secs, setSecs] = useRecoilState(secondsAtom);
-
+  const { darkMode} = useGlobalContext()
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) =>
     (e.target.value = Math.max(0, Math.min(Number(e.target.value), 59)).toString());
   const handleOnChange = (setter: SetterOrUpdater<number>) => (e: ChangeEvent<HTMLInputElement>) =>
@@ -29,7 +30,8 @@ const TimerSetter = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 300
+        height: 300,
+        
       }}
     >
       <FieldInput
@@ -43,7 +45,7 @@ const TimerSetter = () => {
         onChange={handleOnChange(setMins)}
       />
 
-      <Typography variant='h1' component='div' style={{ margin: 16, color: '#ffffff' }}>
+      <Typography variant='h1' component='div' style={{ margin: 16, color: darkMode? 'black' : '#ffffff' }}>
         :
       </Typography>
 

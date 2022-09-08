@@ -6,7 +6,7 @@ import { Typography } from '@mui/material';
 
 import { countersConfigSetAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
 
-import styles from './ShowCounter.styles';
+import { useGlobalContext } from 'GlobalContext';
 
 const mmss = (seconds: number) => {
   const mm = Math.floor(seconds / 60);
@@ -43,7 +43,7 @@ const ShowCounter = () => {
       setIsRunning(false);
     }
   };
-
+  const { darkMode} = useGlobalContext()
   const colors: { 0: ColorHex } & { 1: ColorHex } & ColorHex[] = useMemo(() => {
     switch (currentConfig.type) {
       case 'preparation':
@@ -66,6 +66,11 @@ const ShowCounter = () => {
     }
   }, [currentConfig.type]);
 
+  const myStyles = {
+    fontWeight: 400,
+    fontSize: '7.5rem',
+    color: darkMode? 'black':'white'
+  };
   console.log(
     new Date().getMinutes() + ':' + new Date().getSeconds(),
     currentIndex,
@@ -102,7 +107,7 @@ const ShowCounter = () => {
               {`Round ${currentConfig.round}, Set ${currentConfig.set}`}
             </Typography>
           )}
-          <Typography variant='h2' component='span' style={styles.valueStyles}>
+          <Typography variant='h2' component='span' style={myStyles}  >
             {mmss(remainingTime)}
           </Typography>
 
