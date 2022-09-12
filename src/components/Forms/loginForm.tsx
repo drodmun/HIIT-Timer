@@ -3,7 +3,7 @@ import Button from 'components/Button/Button';
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../firebase/firebaseConf'
-import { Navigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 import { useGlobalContext } from 'globalStateContext';
 function LoginForm() {
   const [redirect, setRedirect] = useState<boolean>(false)
@@ -38,7 +38,7 @@ function LoginForm() {
   }
   return (
     <div>
-      {redirect && <Navigate replace to="/" />}
+      {/* {redirect && <Navigate replace to="/" />} */}
       <div>
         <h5>Welcome !</h5>
         <p>Login to continue</p>
