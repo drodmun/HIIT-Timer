@@ -2,8 +2,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'components/Button/Button';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../firebase/firebaseConf'
+import { auth, db } from '../../firebase/firebaseConf'
 import { Navigate } from "react-router-dom";
+import {addDoc, collection} from "firebase/firestore";
 function SignUpForm() {
   const [redirect, setRedirect] = useState<boolean>(false)
   const [formData, setFormData] = useState(
@@ -28,10 +29,19 @@ function SignUpForm() {
 
   const register = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+      const res = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+      const user = res.user;
+      await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        name: formData.name,
+        contact: formData.contact,
+        authProvider: "local",
+        email: formData.email,
+        password: formData.password
+      });
       setRedirect(!redirect)
     } catch (error) {
-      alert('User not found')
+      console.log(error);
     }
 
   }

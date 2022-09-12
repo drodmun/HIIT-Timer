@@ -4,7 +4,7 @@ import { Grid, Link, Typography } from '@mui/material';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 import PaidIcon from '@mui/icons-material/Paid';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { useGlobalContext } from 'darkModeContext';
+import { useGlobalContext } from 'globalStateContext';
 import Dialog from 'components/Dialog/Dialog';
 
 const About = ({ onClose }: { onClose: () => void }) => {

@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
+import { ChangeEvent, Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import {
   Box,
@@ -19,6 +19,7 @@ import { CounterConfig } from 'types/CounterConfig';
 
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
+import { useGlobalContext } from '../globalStateContext';
 
 const steps: {
   label: string;
@@ -63,25 +64,45 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
+
+  
+
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
   const [activeStep, setActiveStep] = useState(0);
 
   const [rounds, setRounds] = useState(1);
+  //Rest minutes, seconds
   const [rMinutes, setRMinutes] = useState(0);
   const [rSeconds, setRSeconds] = useState(0);
 
   const [sets, setSets] = useState(1);
-
+  //cooldown minutes, seconds
   const [cdMinutes, setCdMinutes] = useState(0);
   const [cdSeconds, setCdSeconds] = useState(0);
-
+  //prep minutes, seconds
   const [pMinutes, setPMinutes] = useState(0);
   const [pSeconds, setPSeconds] = useState(0);
 
+  //countdown minutes, seconds
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  
+  const {setPresetObj} = useGlobalContext();
 
+  //might change this later, working yet but a bit redundant
+  useEffect(() => {(
+    setPresetObj({
+    rounds: rounds,
+    rMinutes: rMinutes,
+    rSeconds: rSeconds,
+    sets: sets,
+    cdMinutes: cdMinutes,
+    cdSeconds: cdSeconds,
+    pMinutes: pMinutes,
+    pSeconds: pSeconds
+  })),[rounds,rMinutes, rSeconds, sets, cdMinutes, cdSeconds, pMinutes, pSeconds]})
+  
   const handleOnInput =
     (min = 0, max = 59) =>
     (e: ChangeEvent<HTMLInputElement>) =>

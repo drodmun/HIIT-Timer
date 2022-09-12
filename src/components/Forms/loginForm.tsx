@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../firebase/firebaseConf'
 import { Navigate } from "react-router-dom";
+import { useGlobalContext } from 'globalStateContext';
 function LoginForm() {
   const [redirect, setRedirect] = useState<boolean>(false)
+  const {loggedIn,setLoggedIn} = useGlobalContext()
   const [formData, setFormData] = useState(
     {
       email: "",
@@ -26,6 +28,8 @@ function LoginForm() {
   const login = async() =>{
     try {
       await signInWithEmailAndPassword(auth,formData.email,formData.password)
+      setLoggedIn(true)
+      console.log(loggedIn)
       setRedirect(!redirect)
     } catch(error){
       alert('User not found')

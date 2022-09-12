@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link, Typography } from '@mui/material';
-import { useGlobalContext } from 'darkModeContext';
+import { useGlobalContext } from 'globalStateContext';
 const Footer = () => {
   const { darkMode} = useGlobalContext()
   return(

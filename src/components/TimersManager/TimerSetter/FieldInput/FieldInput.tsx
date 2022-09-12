@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { IconButton, Modal, Paper, TextField, Typography, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { useGlobalContext } from 'darkModeContext';
+import { useGlobalContext } from 'globalStateContext';
 
 const FieldInput = (props: {
   label: string;

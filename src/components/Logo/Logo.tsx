@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Box, Typography } from '@mui/material';
-import { useGlobalContext } from 'darkModeContext';
+import { useGlobalContext } from 'globalStateContext';
 const Logo = (): JSX.Element => {
   const { darkMode} = useGlobalContext()
   return (

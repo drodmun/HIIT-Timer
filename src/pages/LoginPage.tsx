@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import ContainerS from 'components/Container/Container';
-import LoginForm from '../components/Forms/loginForm';
+import LoginForm from '../components/Forms/LoginForm';
 import { Link } from "react-router-dom";
 function LoginPage() {
 

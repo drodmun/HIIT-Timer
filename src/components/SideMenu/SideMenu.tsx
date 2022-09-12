@@ -15,7 +15,7 @@ const SideMenu = () => {
   const actions: { icon: JSX.Element; name: Omit<typeof openDialog, 'none'>; action?: () => void }[] = useMemo(
     () =>
       [
-        { icon: <BookmarkBorderIcon />, name: 'Save' },
+        { icon: <BookmarkBorderIcon />, name: 'Save', action: toggleSetOpenDialog('Save') },
         { icon: <ShareIcon />, name: 'Share' },
         { icon: <CommentIcon />, name: 'Feedback' },
         { icon: <SettingsIcon />, name: 'Settings' , action: toggleSetOpenDialog('Settings')},

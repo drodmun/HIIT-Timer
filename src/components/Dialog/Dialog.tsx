@@ -4,7 +4,7 @@ import { Dialog as MUIDialog, DialogTitle, Grid, IconButton, Typography, useMedi
 import CloseIcon from '@mui/icons-material/Close';
 
 import Container from 'components/Container/Container';
-import { useGlobalContext } from 'darkModeContext';
+import { useGlobalContext } from 'globalStateContext';
 const Dialog = ({ onClose, title, content, }: { onClose: () => void; title: string; content: ReactNode;  }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));

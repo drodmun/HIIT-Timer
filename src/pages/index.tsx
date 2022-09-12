@@ -8,21 +8,20 @@ import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Button from 'components/Button/Button';
 import SideMenu from '../components/SideMenu/SideMenu';
+import { useGlobalContext } from 'globalStateContext';
 
 import { isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
 import About from './About';
 import Settings from './Settings'
-import { MyGlobalContext } from 'darkModeContext';
-import { useState } from 'react';
+import Saved from './Saved';
 const Index = () => {
   const theme = useTheme();
-  const [darkMode, setDarkMode] = useState<boolean>(true)
   const isRunning = useRecoilValue(isRunningAtom);
   const { openDialog, toggleSetOpenDialog } = useUIConfig();
+  const {darkMode} = useGlobalContext()
 
   return (
-    <MyGlobalContext.Provider value= {{ darkMode, setDarkMode }}>
     <Container isSecondary={darkMode}>
       <Header />
       <Grid
@@ -70,9 +69,9 @@ const Index = () => {
       {openDialog === 'Configurator' && <SetsConfigurator onFinish={toggleSetOpenDialog('none')} />}
       {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Settings' && <Settings onClose={toggleSetOpenDialog('none')} />}
+      {openDialog === 'Save' && <Saved onClose={toggleSetOpenDialog('none')} />}
       <Footer />
     </Container>
-    </MyGlobalContext.Provider>
   );
 };
 
