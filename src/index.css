@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* reboot overrides css so cant place a tag here, have to inline*/
+a:hover {
+  text-decoration:none; 
+}

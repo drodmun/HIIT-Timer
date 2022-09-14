@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import {
   Box,
@@ -64,9 +64,6 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-
-  
-
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
   const [activeStep, setActiveStep] = useState(0);
@@ -89,19 +86,6 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const [seconds, setSeconds] = useState(0);
   
   const {setPresetObj} = useGlobalContext();
-
-  //might change this later, working yet but a bit redundant
-  useEffect(() => {(
-    setPresetObj({
-    rounds: rounds,
-    rMinutes: rMinutes,
-    rSeconds: rSeconds,
-    sets: sets,
-    cdMinutes: cdMinutes,
-    cdSeconds: cdSeconds,
-    pMinutes: pMinutes,
-    pSeconds: pSeconds
-  })),[rounds,rMinutes, rSeconds, sets, cdMinutes, cdSeconds, pMinutes, pSeconds]})
   
   const handleOnInput =
     (min = 0, max = 59) =>
@@ -131,6 +115,17 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
       }
 
       setCountersConfig(countersConfig);
+      setPresetObj({
+        rounds: rounds,
+        rMinutes: rMinutes,
+        rSeconds: rSeconds,
+        sets: sets,
+        cdMinutes: cdMinutes,
+        cdSeconds: cdSeconds,
+        pMinutes: pMinutes,
+        pSeconds: pSeconds
+      })
+      console.log(rounds)
       onFinish();
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);

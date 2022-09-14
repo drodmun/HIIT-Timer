@@ -134,10 +134,10 @@ navItemsLogged = loggedIn ? navItemsLargeLoggedIn : navItemsLarge
                 </Button>
               </Box>
             </Box>
-            <Box sx={{ display: { xs: 'none', md: 'block' }, margin: theme.spacing() }}>
+            <Box sx={{ display: { xs: 'none', md: 'block' }, margin: theme.spacing() }} >
               {navItemsLogged.map((item) => (
 
-                <Link key={item} to ={`/${item}`}>
+                <Link key={item} to ={`/${item}`} style={{textDecoration:'none'}}>
                 <Button
                   sx={{ color: darkMode ? 'black': '#fff', padding: theme.spacing(4), width: 150 }}
                   variant='text'

@@ -3,10 +3,13 @@ import Button from 'components/Button/Button';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from '../../firebase/firebaseConf'
-//import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import {addDoc, collection} from "firebase/firestore";
+import { useGlobalContext } from 'globalStateContext';
 function SignUpForm() {
   const [redirect, setRedirect] = useState<boolean>(false)
+  const {darkMode} = useGlobalContext()
+
   const [formData, setFormData] = useState(
     {
       name: "",
@@ -46,32 +49,32 @@ function SignUpForm() {
 
   }
   return (
-    <div>
-      {/* {redirect && <Navigate replace to="/login" />} */}
+    <div style={{color: darkMode? 'black': 'white'}}>
+      {redirect && <Navigate replace to="/login" />}
       <div>
         <h5>Signup</h5>
       </div>
 
       <div>
-        <Form>
+        <Form className='py-4'>
           <Form.Group className="mb-3" controlId="formName">
-            <Form.Control required type="text" placeholder="Full Name"
+            <Form.Control className='rounded-5' required type="text" placeholder="Full Name"
               onChange={handleChange}
               name='name'
               value={formData.name} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formContact">
-            <Form.Label>Contact Number</Form.Label>
-            <Form.Control type="text" placeholder="Contact No."
+            
+            <Form.Control className='rounded-5' type="text" placeholder="Contact No."
               onChange={handleChange}
               name='contact'
               value={formData.contact} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email"
+           
+            <Form.Control className='rounded-5' required type="email" placeholder="Enter email"
               onChange={handleChange}
               name='email'
               value={formData.email} />
@@ -81,16 +84,16 @@ function SignUpForm() {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password"
+           
+            <Form.Control className='rounded-5' type="password" placeholder="Password"
               onChange={handleChange}
               name='password'
               value={formData.password} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formConfirmPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Confirm Password"
+            
+            <Form.Control className='rounded-5' type="password" placeholder="Confirm Password"
               onChange={handleChange}
               name='confirmPassword'
               value={formData.confirmPassword} />

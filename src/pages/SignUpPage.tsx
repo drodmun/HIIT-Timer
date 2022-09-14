@@ -3,28 +3,34 @@ import Navbar from 'react-bootstrap/Navbar';
 import ContainerS from 'components/Container/Container';
 import SignUpForm from '../components/Forms/SignUpForm';
 import { Link } from "react-router-dom";
+import { useGlobalContext } from 'globalStateContext';
+
 function SignUpPage() {
+    const {darkMode} = useGlobalContext()
 
     return (
-        <ContainerS isSecondary={true}>
+        <ContainerS isSecondary={darkMode}>
             <Navbar expand="lg" >
                 <Container>
-                <Link to="/">
-                    <Navbar.Brand>HIIT timer</Navbar.Brand>
+                    <Link to="/" style={{textDecoration:'none'}}>
+                        <Navbar.Brand >
+                            <b style={{ color: '#11c1f4' }}>HIIT</b>
+                            <b style={{ color: darkMode ? '#000000' : 'white' }}> timer</b>
+                        </Navbar.Brand>
                     </Link>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 </Container>
             </Navbar>
-            <Container>
-                <div className='min-vh-100 d-flex justify-content-end'>
-                    <div className='d-inline-flex flex-column w-50'>
-                        <SignUpForm/>
-                        
-                        <h4>Already a member? <Link to="/login">Login</Link></h4>
-                      
-                        
+            <Container style={{color: darkMode? 'black': 'white'}}>
+                <div className='min-vh-100 d-flex justify-content-center'>
+                    <div className='d-inline-flex flex-column'>
+                        <SignUpForm />
+
+                        <h4>Already a member? <Link to="/login" style={{textDecoration:'none'}}>Login</Link></h4>
+
+
                     </div>
-                    
+
                 </div>
             </Container>
         </ContainerS>
