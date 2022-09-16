@@ -18,7 +18,7 @@ const FieldInput = (props: {
   const theme = useTheme();
   const [modal, setModal] = useState<boolean>(false);
   const toggleModal = () => setModal((prev) => !prev);
-  const { darkMode} = useGlobalContext()
+  const { darkMode } = useGlobalContext();
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', width: 'fit-content' }}>
@@ -35,7 +35,7 @@ const FieldInput = (props: {
             <IconButton
               size='large'
               onClick={props.onMore}
-              sx={{ color: darkMode? '#0d174d' : theme.palette.common.white, padding: 0 }}
+              sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
               <AddIcon fontSize='large' />
             </IconButton>
@@ -100,7 +100,6 @@ const FieldInput = (props: {
             value={props.value}
             onInput={props.onInput}
             onChange={props.onChange}
-            
           />
         </Paper>
       </Modal>

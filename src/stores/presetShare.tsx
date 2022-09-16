@@ -1,19 +1,9 @@
 import { db } from '../firebase/firebaseConf';
 import { doc } from 'firebase/firestore';
 import { updateDoc, arrayUnion } from 'firebase/firestore';
-import { auth } from '../firebase/firebaseConf';
-import { onAuthStateChanged } from 'firebase/auth';
-let uid: string;
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    uid = user.uid;
-    // ...
-  } else {
-    // ...
-  }
-});
 
-const save = async (
+const sharePreset = async (
+  user: string,
   name: string,
   rounds: number,
   rMinutes: number,
@@ -26,7 +16,7 @@ const save = async (
 ) => {
   //const presetName: string = name + uid;
   try {
-    await updateDoc(doc(db, 'users', uid), {
+    await updateDoc(doc(db, 'users', user), {
       presets: arrayUnion({
         name: name,
         rounds: rounds,
@@ -44,4 +34,4 @@ const save = async (
   }
 };
 
-export { save };
+export { sharePreset };

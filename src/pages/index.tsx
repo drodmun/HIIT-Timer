@@ -13,13 +13,14 @@ import { useGlobalContext } from 'globalStateContext';
 import { isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
 import About from './About';
-import Settings from './Settings'
+import Settings from './Settings';
 import Saved from './Saved';
+import Share from './Share';
 const Index = () => {
   const theme = useTheme();
   const isRunning = useRecoilValue(isRunningAtom);
   const { openDialog, toggleSetOpenDialog } = useUIConfig();
-  const {darkMode} = useGlobalContext()
+  const { darkMode } = useGlobalContext();
 
   return (
     <Container isSecondary={darkMode}>
@@ -35,8 +36,7 @@ const Index = () => {
           alignContent: 'center',
           justifyContent: 'center',
           alignItems: 'center',
-          overflow: 'hidden',
-          
+          overflow: 'hidden'
         }}
       >
         <Grid item xs={12} lg={8}>
@@ -50,7 +50,6 @@ const Index = () => {
               alignItems: 'center',
               justifyContent: 'center',
               background: 'transparent'
-              
             }}
           >
             <TimersManager />
@@ -70,6 +69,7 @@ const Index = () => {
       {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Settings' && <Settings onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Save' && <Saved onClose={toggleSetOpenDialog('none')} />}
+      {openDialog === 'Share' && <Share onClose={toggleSetOpenDialog('none')} />}
       <Footer />
     </Container>
   );

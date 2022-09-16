@@ -15,9 +15,9 @@ import { MyGlobalContext } from 'globalStateContext';
 import { useState } from 'react';
 const App = () => {
   useGaTracker();
-  const [loggedIn, setLoggedIn] = useState<boolean>(false)
-  const [darkMode, setDarkMode] = useState<boolean>(true)
-  const [savePreset, setSavePreset] = useState<boolean>(true)
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(true);
+  const [savePreset, setSavePreset] = useState<boolean>(true);
   const [presetObj, setPresetObj] = useState<object>({
     presetName: '',
     rounds: 0,
@@ -28,27 +28,24 @@ const App = () => {
     cdSeconds: 0,
     pMinutes: 0,
     pSeconds: 0
-  })
+  });
   return (
     <ThemeProvider theme={theme}>
       <RecoilRoot>
-    <MyGlobalContext.Provider value= {{ darkMode, setDarkMode, loggedIn, setLoggedIn, savePreset, setSavePreset,presetObj,setPresetObj }}>
-
-        <Routes>
-          <Route path='/' element={<Index />} />
-          <Route path='Login' element={<LoginPage />} />
-          <Route path='Logout' element={<Navigate replace to="/" />} />
-         
-          <Route path='Signup' element={<SignUpPage />} />
-          <Route path='*' element={<NotFoundPage />} />
-        </Routes>
-        <AdWords />
-    </MyGlobalContext.Provider>
-
+        <MyGlobalContext.Provider
+          value={{ darkMode, setDarkMode, loggedIn, setLoggedIn, savePreset, setSavePreset, presetObj, setPresetObj }}
+        >
+          <Routes>
+            <Route path='/' element={<Index />} />
+            <Route path='Login' element={<LoginPage />} />
+            <Route path='Logout' element={<Navigate replace to='/' />} />
+            <Route path='Signup' element={<SignUpPage />} />
+            <Route path='*' element={<NotFoundPage />} />
+          </Routes>
+          <AdWords />
+        </MyGlobalContext.Provider>
       </RecoilRoot>
-     
     </ThemeProvider>
   );
 };
-
 export default App;
