@@ -17,12 +17,12 @@ function SignUpPage() {
               <b style={{ color: darkMode ? '#000000' : 'white' }}> timer</b>
             </Navbar.Brand>
           </Link>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Toggle aria-controls='navbar-nav' />
         </Container>
       </Navbar>
       <Container style={{ color: darkMode ? 'black' : 'white' }}>
-        <div className='min-vh-100 d-flex justify-content-center'>
-          <div className='d-inline-flex flex-column'>
+        <div className='d-flex justify-content-center'>
+          <div>
             <SignUpForm />
             <h4>
               Already a member?{' '}

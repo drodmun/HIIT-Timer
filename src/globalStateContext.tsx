@@ -4,9 +4,8 @@ export type GlobalContent = {
   setDarkMode: (c: boolean) => void;
   loggedIn: boolean;
   setLoggedIn: (c: boolean) => void;
-  //redundant, remove later
-  savePreset: boolean;
-  setSavePreset: (c: boolean) => void;
+  isPopup: boolean;
+  setIsPopup: (c: boolean) => void;
   presetObj: any;
   setPresetObj: (c: any) => void;
 };
@@ -16,8 +15,8 @@ export const MyGlobalContext = createContext<GlobalContent>({
   setDarkMode: () => {},
   loggedIn: false,
   setLoggedIn: () => {},
-  savePreset: false,
-  setSavePreset: () => {},
+  isPopup: false,
+  setIsPopup: () => {},
   presetObj: {},
   setPresetObj: () => {}
 });

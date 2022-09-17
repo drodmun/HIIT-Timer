@@ -12,6 +12,7 @@ function LoginForm() {
   const [redirect, setRedirect] = useState<boolean>(false);
   const { loggedIn, setLoggedIn } = useGlobalContext();
   const { darkMode } = useGlobalContext();
+  const formElements = ['Email', 'Password'];
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -42,45 +43,35 @@ function LoginForm() {
     <div style={{ color: darkMode ? 'black' : 'white' }}>
       {redirect && <Navigate replace to='/' />}
       <div>
-        <h5>Welcome !</h5>
-        <p className='fw-light'>Login to continue</p>
+        <h2>Welcome !</h2>
+        <h5 className='fw-light'>Login to continue</h5>
+        <br></br>
       </div>
 
       <div>
-        <Form>
-          <Form.Group className='mb-3 py-2' controlId='loginEmail'>
-            <Form.Control
-              className='rounded-5'
-              type='email'
-              placeholder='Enter email'
-              onChange={handleChange}
-              name='email'
-              value={formData.email}
-            />
-          </Form.Group>
-
-          <Form.Group className='mb-3 py-2' controlId='loginPassword'>
-            <Form.Control
-              className='rounded-5'
-              type='password'
-              placeholder='Password'
-              onChange={handleChange}
-              name='password'
-              value={formData.password}
-            />
-          </Form.Group>
-
-          <Button onClick={login} sx={{ textTransform: 'none' }} size='x-large'>
+        <Form className=' d-flex flex-column'>
+          {formElements.map((element, index) => {
+            return (
+              <Form.Group key={index} className='mb-3' controlId={`Loginform${element}`}>
+                <Form.Label>{element}</Form.Label>
+                <Form.Control
+                  className='rounded-3'
+                  type={element === 'Password' ? 'password' : 'text'}
+                  placeholder={element}
+                  name={element.toLowerCase()}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            );
+          })}
+          <Button onClick={login} sx={{ textTransform: 'none' }} size='large'>
             Login
           </Button>
 
-          {/* login with group */}
-          <div className='pt-5 text-center fw-bold'>
-            <p>OR login with </p>
-            {/* google */}
+          <div className='pt-5 text-center'>
+            <h5> OR login with </h5>
             <div className='d-flex justify-content-center' style={{ gap: '30px' }}>
               <GoogleIcon sx={{ color: red[500], fontSize: 50, cursor: 'pointer' }} />
-              {/* facebook */}
               <FacebookIcon color='primary' sx={{ fontSize: 50, cursor: 'pointer' }} />
             </div>
           </div>

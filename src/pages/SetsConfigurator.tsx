@@ -84,9 +84,10 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   //countdown minutes, seconds
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
-  
-  const {setPresetObj} = useGlobalContext();
-  
+
+  const { setPresetObj } = useGlobalContext();
+  const { darkMode } = useGlobalContext();
+
   const handleOnInput =
     (min = 0, max = 59) =>
     (e: ChangeEvent<HTMLInputElement>) =>
@@ -124,8 +125,8 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
         cdSeconds: cdSeconds,
         pMinutes: pMinutes,
         pSeconds: pSeconds
-      })
-      console.log(rounds)
+      });
+      console.log(rounds);
       onFinish();
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -170,7 +171,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setRMinutes, rMinutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16, color: '#0d174d' }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: darkMode ? 'black' : 'white' }}>
                 :
               </Typography>
 
@@ -191,7 +192,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setCdMinutes, cdMinutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16 }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: darkMode ? 'black' : 'white' }}>
                 :
               </Typography>
 
@@ -210,7 +211,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setPMinutes, pMinutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16 }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: darkMode ? 'black' : 'white' }}>
                 :
               </Typography>
 
@@ -229,7 +230,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setMinutes, minutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16 }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: darkMode ? 'black' : 'white' }}>
                 :
               </Typography>
 
@@ -244,7 +245,6 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   return (
     <Dialog
       onClose={onFinish}
-      
       title='Configure ROUNDS/SETS'
       content={
         <Grid container spacing={0}>
@@ -254,16 +254,20 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
                 <Step key={step.label}>
                   <StepButton onClick={handleStep(index)}>
                     <StepLabel>
-                      <Typography variant='h6' component='span'>
+                      <Typography variant='h6' component='span' style={{ color: darkMode ? 'black' : 'white' }}>
                         {step.label}
                       </Typography>
                     </StepLabel>
                   </StepButton>
                   <StepContent>
                     <>
-                      {!!step?.description && <Typography>{step.description}</Typography>}
+                      {!!step?.description && (
+                        <Typography style={{ color: darkMode ? 'black' : 'white' }}>{step.description}</Typography>
+                      )}
 
-                      {!!step?.example && <Typography>ie: {step.example}</Typography>}
+                      {!!step?.example && (
+                        <Typography style={{ color: darkMode ? 'black' : 'white' }}>ie: {step.example}</Typography>
+                      )}
 
                       {renderContent(step.field)}
 

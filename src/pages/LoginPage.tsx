@@ -32,8 +32,7 @@ function LoginPage() {
       </Navbar>
       <Container>
         <div className='d-flex justify-content-center'>
-          <div className='d-inline-flex flex-column'>
-            <br></br>
+          <div>
             <LoginForm />
           </div>
         </div>

@@ -3,14 +3,21 @@ import { memo, ReactNode } from 'react';
 import GenericBackgroundMobile from 'assets/images/background/generic-background-mobile.webp';
 import GenericSecondaryBackgroundMobile from 'assets/images/background/login-background.webp';
 
-const Container = ({ isSecondary, children }: { isSecondary?: boolean; children: ReactNode }) => (
+const Container = ({
+  isSecondary,
+  isPopup,
+  children
+}: {
+  isSecondary?: boolean;
+  isPopup?: boolean;
+  children: ReactNode;
+}) => (
   <div
     style={{
-      height: `100${isSecondary ? 'vh' : 'vh'}`,
+      height: `100${isPopup ? '%' : 'vh'}`,
       background: `url('${isSecondary ? GenericSecondaryBackgroundMobile : GenericBackgroundMobile}')`,
       backgroundSize: isSecondary ? '100% 100%' : 'cover',
-      backgroundColor: `${isSecondary ? '#ffffff' : '#0d174d'}`, /*060c29*/  // '#0d174d'
-      
+      backgroundColor: `${isSecondary ? '#ffffff' : '#0d174d'}`
     }}
   >
     {children}

@@ -17,7 +17,7 @@ const App = () => {
   useGaTracker();
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [darkMode, setDarkMode] = useState<boolean>(true);
-  const [savePreset, setSavePreset] = useState<boolean>(true);
+  const [isPopup, setIsPopup] = useState<boolean>(true);
   const [presetObj, setPresetObj] = useState<object>({
     presetName: '',
     rounds: 0,
@@ -33,7 +33,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <RecoilRoot>
         <MyGlobalContext.Provider
-          value={{ darkMode, setDarkMode, loggedIn, setLoggedIn, savePreset, setSavePreset, presetObj, setPresetObj }}
+          value={{ darkMode, setDarkMode, loggedIn, setLoggedIn, isPopup, setIsPopup, presetObj, setPresetObj }}
         >
           <Routes>
             <Route path='/' element={<Index />} />

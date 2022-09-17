@@ -6,15 +6,17 @@ import { auth, db } from '../../firebase/firebaseConf';
 import { Navigate } from 'react-router-dom';
 import { setDoc, doc } from 'firebase/firestore';
 import { useGlobalContext } from 'globalStateContext';
+
 function SignUpForm() {
   const [redirect, setRedirect] = useState<boolean>(false);
+  const formElements = ['Name', 'Contact', 'Email', 'Password', 'Confirm_Password'];
   const { darkMode } = useGlobalContext();
   const [formData, setFormData] = useState({
     name: '',
     contact: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirm_password: ''
   });
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -26,7 +28,6 @@ function SignUpForm() {
       };
     });
   }
-
   const register = async () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
@@ -40,76 +41,42 @@ function SignUpForm() {
         userID: user.uid,
         presets: []
       });
-      setRedirect(!redirect);
+      setRedirect(true);
     } catch (error) {
-      console.log(error);
+      alert('Enter all fields correctly.');
     }
   };
+  function handleRegister() {
+    if (formData.password === formData.confirm_password) {
+      register();
+    } else {
+      alert("Passwords don't match");
+    }
+  }
+
   return (
     <div style={{ color: darkMode ? 'black' : 'white' }}>
       {redirect && <Navigate replace to='/login' />}
+
+      <h2>Signup</h2>
       <div>
-        <h5>Signup</h5>
-      </div>
-
-      <div>
-        <Form className='py-4'>
-          <Form.Group className='mb-3' controlId='formName'>
-            <Form.Control
-              className='rounded-5'
-              required
-              type='text'
-              placeholder='Full Name'
-              onChange={handleChange}
-              name='name'
-              value={formData.name}
-            />
-          </Form.Group>
-
-          <Form.Group className='mb-3' controlId='formContact'>
-            <Form.Control
-              className='rounded-5'
-              type='text'
-              placeholder='Contact No.'
-              onChange={handleChange}
-              name='contact'
-              value={formData.contact}
-            />
-          </Form.Group>
-
-          <Form.Group className='mb-3' controlId='formEmail'>
-            <Form.Control
-              className='rounded-5'
-              required
-              type='email'
-              placeholder='Enter email'
-              onChange={handleChange}
-              name='email'
-              value={formData.email}
-            />
-          </Form.Group>
-          <Form.Group className='mb-3' controlId='formPassword'>
-            <Form.Control
-              className='rounded-5'
-              type='password'
-              placeholder='Password'
-              onChange={handleChange}
-              name='password'
-              value={formData.password}
-            />
-          </Form.Group>
-          <Form.Group className='mb-3' controlId='formConfirmPassword'>
-            <Form.Control
-              className='rounded-5'
-              type='password'
-              placeholder='Confirm Password'
-              onChange={handleChange}
-              name='confirmPassword'
-              value={formData.confirmPassword}
-            />
-          </Form.Group>
-
-          <Button onClick={register} sx={{ textTransform: 'none' }} size='x-large'>
+        <Form className='py-4 d-flex flex-column'>
+          {formElements.map((element, index) => {
+            return (
+              <Form.Group key={index} className='mb-3' controlId={`Regform${element}`}>
+                {/* <Form.Label>{element}</Form.Label> */}
+                <Form.Control
+                  className='rounded-3'
+                  type={element === 'password' || element === 'confirmPassword' ? 'password' : 'text'}
+                  required
+                  placeholder={`${element.replace('_', ' ')}`}
+                  name={element.toLowerCase()}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            );
+          })}
+          <Button onClick={handleRegister} sx={{ textTransform: 'none' }} size='large'>
             SignUp
           </Button>
         </Form>
