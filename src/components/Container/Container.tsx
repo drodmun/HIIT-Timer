@@ -14,7 +14,7 @@ const Container = ({
 }) => (
   <div
     style={{
-      height: `100${isPopup ? '%' : 'vh'}`,
+      height: `${isPopup ? '100%' : '100vh'}`,
       background: `url('${isSecondary ? GenericSecondaryBackgroundMobile : GenericBackgroundMobile}')`,
       backgroundSize: isSecondary ? '100% 100%' : 'cover',
       backgroundColor: `${isSecondary ? '#ffffff' : '#0d174d'}`

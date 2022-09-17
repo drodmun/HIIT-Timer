@@ -38,49 +38,52 @@ const Share = ({ onClose }: { onClose: () => void }) => {
       title=''
       content={
         <div className='text-center pb-5'>
-          <Grid item xs={12}>
+          <Grid>
             {/* change handleSave */}
             <Button sx={{ textTransform: 'none' }} size='x-large' onClick={toggleModal}>
               Share preset
             </Button>
-            <Modal
-              open={modal}
-              onClose={toggleModal}
-              aria-labelledby='modal-modal-title'
-              aria-describedby='modal-modal-description'
-            >
-              <Paper
-                sx={{
-                  position: 'absolute' as const,
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  boxShadow: 24,
-                  p: 4
-                }}
+            <div className='py-5'>
+              <Modal
+                open={modal}
+                onClose={toggleModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
               >
-                <TextField
-                  type='text'
-                  variant='outlined'
-                  label='Preset Name'
-                  value={label}
-                  onChange={(e) => setLabel(e.target.value)}
-                />
-                <TextField
-                  type='text'
-                  variant='outlined'
-                  label='Share To'
-                  value={shareToUser}
-                  onChange={(e) => setShareToUser(e.target.value)}
-                />
+                <Paper
+                  sx={{
+                    position: 'absolute' as const,
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    boxShadow: 24,
+                    p: 4
+                  }}
+                >
+                  <TextField
+                    type='text'
+                    variant='outlined'
+                    label='Preset Name'
+                    value={label}
+                    onChange={(e) => setLabel(e.target.value)}
+                  />
+                  <div className='py-2'></div>
+                  <TextField
+                    type='text'
+                    variant='outlined'
+                    label='Share To'
+                    value={shareToUser}
+                    onChange={(e) => setShareToUser(e.target.value)}
+                  />
 
-                <div className='pt-4'>
-                  <Button sx={{ textTransform: 'none' }} size='large' onClick={handleShare}>
-                    Share
-                  </Button>
-                </div>
-              </Paper>
-            </Modal>
+                  <div className='px-5 pt-3'>
+                    <Button sx={{ textTransform: 'none' }} size='large' onClick={handleShare}>
+                      Share
+                    </Button>
+                  </div>
+                </Paper>
+              </Modal>
+            </div>
           </Grid>
         </div>
       }

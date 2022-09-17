@@ -127,6 +127,8 @@ const Save = ({ onClose }: { onClose: () => void }) => {
             <Button sx={{ textTransform: 'none' }} size='x-large' onClick={toggleModal}>
               Save preset
             </Button>
+            <br />
+            <br />
             <Button sx={{ textTransform: 'none' }} size='x-large' onClick={toggleModal1}>
               Load preset
             </Button>
