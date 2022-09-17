@@ -9,9 +9,9 @@ import SignUpPage from 'pages/SignUpPage';
 import theme from 'mui-theme/theme';
 import Index from 'pages/index';
 import NotFoundPage from 'pages/404';
-//import AdWords from './components/AdWords/AdWords';
 import { Navigate } from 'react-router-dom';
 import { MyGlobalContext } from 'globalStateContext';
+import { Adsense } from '@ctrl/react-adsense';
 import { useState } from 'react';
 const App = () => {
   useGaTracker();
@@ -42,7 +42,13 @@ const App = () => {
             <Route path='Signup' element={<SignUpPage />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
-          {/* <AdWords /> */}
+          <Adsense
+            client="ca-pub-2028740631579572"
+            slot="7259870550"
+            style={{ display: 'block' }}
+            layout="in-article"
+            format="fluid"
+          />
         </MyGlobalContext.Provider>
       </RecoilRoot>
     </ThemeProvider>
