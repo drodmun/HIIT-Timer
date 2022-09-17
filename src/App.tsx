@@ -9,7 +9,7 @@ import SignUpPage from 'pages/SignUpPage';
 import theme from 'mui-theme/theme';
 import Index from 'pages/index';
 import NotFoundPage from 'pages/404';
-import AdWords from './components/AdWords/AdWords';
+//import AdWords from './components/AdWords/AdWords';
 import { Navigate } from 'react-router-dom';
 import { MyGlobalContext } from 'globalStateContext';
 import { useState } from 'react';
@@ -42,7 +42,7 @@ const App = () => {
             <Route path='Signup' element={<SignUpPage />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
-          <AdWords />
+          {/* <AdWords /> */}
         </MyGlobalContext.Provider>
       </RecoilRoot>
     </ThemeProvider>
