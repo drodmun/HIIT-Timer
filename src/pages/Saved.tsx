@@ -32,11 +32,11 @@ const Save = ({ onClose }: { onClose: () => void }) => {
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
   //get user from firebase here
-  let uid: any;
+  let uid: string;
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      uid = user.email;
-    } else {
+      uid = user.email ?? '';
+      // } else {
     }
   });
 
@@ -108,11 +108,8 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     });
   };
 
-  const LoadPreset = () => {
-    retrievePreset();
-    //onFinish();
-  };
-
+  const LoadPreset = () => retrievePreset();
+  //onFinish();
   const handleSave = () => {
     save(
       label,
@@ -127,14 +124,14 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     );
     toggleModal();
     setLabel('');
-  }
+  };
 
   const handleLoad = () => {
     LoadPreset();
     toggleModal1();
     setLabel('');
     //alert here
-  }
+  };
 
   return (
     <Dialog
