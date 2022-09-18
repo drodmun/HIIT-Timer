@@ -8,7 +8,16 @@ import { useGlobalContext } from 'globalStateContext';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { red } from '@mui/material/colors';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { forwardRef } from 'react';
+
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
+});
+
 function LoginForm() {
+  const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
   const { loggedIn, setLoggedIn } = useGlobalContext();
   const { darkMode } = useGlobalContext();
@@ -35,7 +44,7 @@ function LoginForm() {
       console.log(loggedIn);
       setRedirect(!redirect);
     } catch (error) {
-      alert('User not found');
+      setOpen(true);
     }
   };
 
@@ -77,6 +86,23 @@ function LoginForm() {
           </div>
         </Form>
       </div>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={() => {
+          setOpen(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setOpen(false);
+          }}
+          severity='error'
+          sx={{ width: '100%' }}
+        >
+          No user found against this email and password!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

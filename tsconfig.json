@@ -27,7 +27,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
   },
-  "include": [ "**/*.ts", "**/*.tsx"],
+  "include": [ "**/*.ts", "**/*.tsx", "public/service-worker.js", "public/serviceWorkerRegistration.ts"],
   "exclude": [
     "node_modules",
     "build",

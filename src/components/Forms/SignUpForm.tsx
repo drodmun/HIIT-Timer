@@ -6,8 +6,16 @@ import { auth, db } from '../../firebase/firebaseConf';
 import { Navigate } from 'react-router-dom';
 import { setDoc, doc } from 'firebase/firestore';
 import { useGlobalContext } from 'globalStateContext';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { forwardRef } from 'react';
+
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
+});
 
 function SignUpForm() {
+  const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
   const formElements = ['Name', 'Contact', 'Email', 'Password', 'Confirm_Password'];
   const { darkMode } = useGlobalContext();
@@ -43,14 +51,14 @@ function SignUpForm() {
       });
       setRedirect(true);
     } catch (error) {
-      alert('Enter all fields correctly.');
+      setOpen(true);
     }
   };
   function handleRegister() {
     if (formData.password === formData.confirm_password) {
       register();
     } else {
-      alert("Passwords don't match");
+      setOpen(true);
     }
   }
 
@@ -81,6 +89,24 @@ function SignUpForm() {
           </Button>
         </Form>
       </div>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={() => {
+          setOpen(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setOpen(false);
+          }}
+          severity='error'
+          sx={{ width: '100%' }}
+        >
+          An error occured! Please enter all fields correctly. Check email, password length and make sure password and
+          confirm password match.
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { useRecoilValue } from 'recoil';
 import { Grid, useTheme, Box } from '@mui/material';
-
 import TimersManager from 'components/TimersManager/TimersManager';
 import SetsConfigurator from 'pages/SetsConfigurator';
 import Container from 'components/Container/Container';
@@ -9,13 +8,13 @@ import Footer from 'components/Footer/Footer';
 import Button from 'components/Button/Button';
 import SideMenu from '../components/SideMenu/SideMenu';
 import { useGlobalContext } from 'globalStateContext';
-
 import { isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
 import About from './About';
 import Settings from './Settings';
 import Saved from './Saved';
 import Share from './Share';
+import { Adsense } from '@ctrl/react-adsense';
 const Index = () => {
   const theme = useTheme();
   const isRunning = useRecoilValue(isRunningAtom);
@@ -64,13 +63,19 @@ const Index = () => {
       </Grid>
 
       <SideMenu />
-
       {openDialog === 'Configurator' && <SetsConfigurator onFinish={toggleSetOpenDialog('none')} />}
       {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Settings' && <Settings onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Save' && <Saved onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Share' && <Share onClose={toggleSetOpenDialog('none')} />}
       <Footer />
+      <Adsense
+        client='ca-pub-2028740631579572'
+        slot='7259870550'
+        style={{ display: 'block' }}
+        layout='in-article'
+        format='fluid'
+      />
     </Container>
   );
 };

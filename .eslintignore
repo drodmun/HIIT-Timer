@@ -8,3 +8,5 @@ public
 # Since it is a TS project, ignore JS compiled
 **/*.js
 **/*.js.map
+# Valid
+globalStateContext.tsx

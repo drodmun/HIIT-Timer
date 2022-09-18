@@ -12,11 +12,17 @@ export type GlobalContent = {
 
 export const MyGlobalContext = createContext<GlobalContent>({
   darkMode: false,
-  setDarkMode: () => {},
+  setDarkMode: (darkMode) => {
+    !darkMode;
+  },
   loggedIn: false,
-  setLoggedIn: () => {},
+  setLoggedIn: (loggedIn) => {
+    !loggedIn;
+  },
   isPopup: false,
-  setIsPopup: () => {},
+  setIsPopup: (isPopup) => {
+    !isPopup;
+  },
   presetObj: {},
   setPresetObj: () => {}
 });

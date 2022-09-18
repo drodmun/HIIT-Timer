@@ -13,15 +13,16 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConf';
 import { auth } from '../firebase/firebaseConf';
 import { onAuthStateChanged } from 'firebase/auth';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { forwardRef } from 'react';
+
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
+});
 const Save = ({ onClose }: { onClose: () => void }) => {
-  //get from firebase here
-  let uid: string;
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      uid = user.uid;
-    } else {
-    }
-  });
+  const [openAlert, setOpenAlert] = useState(false);
+  const [loadSuccess, setloadSuccess] = useState(false);
   const { presetObj } = useGlobalContext();
   const [label, setLabel] = useState<string>('');
   const [modal, setModal] = useState<boolean>(false);
@@ -30,60 +31,79 @@ const Save = ({ onClose }: { onClose: () => void }) => {
   const toggleModal1 = () => setModal1(!modal1);
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
+  //get user from firebase here
+  let uid: any;
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      uid = user.email;
+    } else {
+    }
+  });
+
   //let docRef = doc(db, 'presets', label);
   let presetData = presetObj;
 
   const retrievePreset = async () => {
-    onSnapshot(doc(db, 'users', uid), (doc) => {
+    await onSnapshot(doc(db, 'users', uid), (doc) => {
       const data: any = doc.data();
-      if (data.presets.length) {
-        presetData = data;
-        const len: number = presetData.presets.length;
-        let preset;
-        for (let i = 0; i < len; i++) {
-          if (presetData.presets[i].name == label) {
-            preset = presetData.presets[i];
-            console.log(preset);
-            break;
+      try {
+        if (data.presets.length) {
+          presetData = data;
+          const len: number = presetData.presets.length;
+          let preset;
+          for (let i = 0; i < len; i++) {
+            if (presetData.presets[i].name == label) {
+              preset = presetData.presets[i];
+              console.log(preset);
+              break;
+            }
           }
-        }
-        const countersConfig: CounterConfig[] = [];
-        const hasCooldown = !!preset.cdMinutes || !!preset.cdSeconds;
-        const hasPreparation = !!preset.pMinutes || !!preset.pSeconds;
-        for (let round = 1; round <= preset.rounds; round++) {
-          for (let set = 1; set <= preset.sets; set++) {
-            if (hasPreparation)
+          setOpenAlert(true);
+          setloadSuccess(true);
+          const countersConfig: CounterConfig[] = [];
+          const hasCooldown = !!preset.cdMinutes || !!preset.cdSeconds;
+          const hasPreparation = !!preset.pMinutes || !!preset.pSeconds;
+          for (let round = 1; round <= preset.rounds; round++) {
+            for (let set = 1; set <= preset.sets; set++) {
+              if (hasPreparation)
+                countersConfig.push({
+                  round,
+                  set,
+                  minutes: preset.pMinutes,
+                  seconds: preset.pSeconds,
+                  type: 'preparation'
+                });
+
               countersConfig.push({
                 round,
                 set,
-                minutes: preset.pMinutes,
-                seconds: preset.pSeconds,
-                type: 'preparation'
+                minutes: preset.rMinutes,
+                seconds: preset.rSeconds,
+                type: 'countdown'
               });
 
-            countersConfig.push({
-              round,
-              set,
-              minutes: preset.rMinutes,
-              seconds: preset.rSeconds,
-              type: 'countdown'
-            });
-
-            if (hasCooldown)
-              countersConfig.push({
-                round,
-                set,
-                minutes: preset.cdMinutes,
-                seconds: preset.cdSeconds,
-                type: 'cooldown'
-              });
+              if (hasCooldown)
+                countersConfig.push({
+                  round,
+                  set,
+                  minutes: preset.cdMinutes,
+                  seconds: preset.cdSeconds,
+                  type: 'cooldown'
+                });
+            }
           }
+          setCountersConfig(countersConfig);
+          console.log(countersConfig);
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('No such document!');
+          setloadSuccess(false);
+          setOpenAlert(true);
         }
-        setCountersConfig(countersConfig);
-        console.log(countersConfig);
-      } else {
-        // doc.data() will be undefined in this case
+      } catch {
         console.log('No such document!');
+        setloadSuccess(false);
+        setOpenAlert(true);
       }
     });
   };
@@ -107,7 +127,6 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     );
     toggleModal();
     setLabel('');
-    //alert here
   }
 
   function handleLoad() {
@@ -116,6 +135,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     setLabel('');
     //alert here
   }
+
   return (
     <Dialog
       onClose={onClose}
@@ -196,6 +216,23 @@ const Save = ({ onClose }: { onClose: () => void }) => {
               </Paper>
             </Modal>
           </Grid>
+          <Snackbar
+            open={openAlert}
+            autoHideDuration={6000}
+            onClose={() => {
+              setOpenAlert(false);
+            }}
+          >
+            <Alert
+              onClose={() => {
+                setOpenAlert(false);
+              }}
+              severity={loadSuccess ? 'success' : 'error'}
+              sx={{ width: '100%' }}
+            >
+              {loadSuccess ? `Preset Loaded.` : `User not logged in / No preset found.`}
+            </Alert>
+          </Snackbar>
         </div>
       }
     />

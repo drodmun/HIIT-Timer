@@ -37,7 +37,7 @@ const Actions = () => {
     if (countersConfigSet.length <= 1) addCounterConfig({} as CounterConfig);
     toggleTuning();
   }, [addCounterConfig, countersConfigSet.length, toggleTuning]);
-  const { darkMode} = useGlobalContext()
+  const { darkMode } = useGlobalContext();
   return (
     <div
       style={{ margin: '64px 0', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}
@@ -47,9 +47,9 @@ const Actions = () => {
           margin: `0 ${theme.spacing(2)}`,
           borderLeftColor: '#FF5FF4',
           borderBottomColor: '#FF5FF4',
-          color: darkMode? '11c1f4':'#ffffff',
+          color: darkMode ? '11c1f4' : '#ffffff',
           '&:hover': {
-            color: darkMode? 'black':'#ffffff'
+            color: darkMode ? 'black' : '#ffffff'
           }
         }}
         fullWidth
@@ -69,13 +69,13 @@ const Actions = () => {
         disabled={!isRunning && !isTimerSet && !countersConfigSet.length}
         sx={{
           margin: `0 ${theme.spacing(2)}`,
-          backgroundColor: darkMode? 'black':'#ffffff',
+          backgroundColor: darkMode ? 'black' : '#ffffff',
           border: 0,
-          color: darkMode? '#ffffff':'#0d174d',
+          color: darkMode ? '#ffffff' : '#0d174d',
           '&:hover': {
-            color: darkMode? '#0d174d':'#ffffff',
+            color: darkMode ? '#0d174d' : '#ffffff',
             borderColor: '#ffffff',
-            backgroundColor:'#11c1f4'
+            backgroundColor: '#11c1f4'
           }
         }}
       >
