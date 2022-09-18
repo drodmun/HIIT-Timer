@@ -10,8 +10,7 @@ import { countersConfigSetAtom } from '../stores/timers';
 import { Modal, Paper, TextField } from '@mui/material';
 import { useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase/firebaseConf';
-import { auth } from '../firebase/firebaseConf';
+import { db, auth } from '../config/firebase/firebaseConf';
 import { onAuthStateChanged } from 'firebase/auth';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -20,6 +19,7 @@ import { forwardRef } from 'react';
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
+
 const Save = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [loadSuccess, setloadSuccess] = useState(false);
@@ -108,12 +108,12 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     });
   };
 
-  function LoadPreset() {
+  const LoadPreset = () => {
     retrievePreset();
     //onFinish();
-  }
+  };
 
-  function handleSave() {
+  const handleSave = () => {
     save(
       label,
       presetObj.rounds,
@@ -129,7 +129,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     setLabel('');
   }
 
-  function handleLoad() {
+  const handleLoad = () => {
     LoadPreset();
     toggleModal1();
     setLabel('');

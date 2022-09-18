@@ -27,6 +27,7 @@ const TimerManager = () => {
         <Typography variant='h4' component='span'>
           <AccessAlarmIcon /> {` SET${sets > 1 ? 's' : ''}: ${sets}`}
         </Typography>
+
         <Typography variant='h4' component='span'>{`Are you READY?`}</Typography>
       </>
     );
