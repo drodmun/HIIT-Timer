@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Grid } from '@mui/material';
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
@@ -11,11 +11,11 @@ const Share = ({ onClose }: { onClose: () => void }) => {
   const [label, setLabel] = useState<string>('');
   const [shareToUser, setShareToUser] = useState<string>('');
   const [modal, setModal] = useState<boolean>(false);
-  const toggleModal = () => setModal(!modal);
+  const toggleModal = useCallback(() => setModal((prevModal) => !prevModal), [setModal]);
 
   //let docRef = doc(db, 'presets', label);
   //const presetData = presetObj;
-  function handleShare() {
+  const handleShare = useCallback(() => {
     sharePreset(
       shareToUser,
       label,
@@ -31,7 +31,20 @@ const Share = ({ onClose }: { onClose: () => void }) => {
     toggleModal();
     setLabel('');
     //alert here
-  }
+  }, [
+    label,
+    presetObj.cdMinutes,
+    presetObj.cdSeconds,
+    presetObj.pMinutes,
+    presetObj.pSeconds,
+    presetObj.rMinutes,
+    presetObj.rSeconds,
+    presetObj.rounds,
+    presetObj.sets,
+    shareToUser,
+    toggleModal
+  ]);
+
   return (
     <Dialog
       onClose={onClose}

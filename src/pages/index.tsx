@@ -6,7 +6,7 @@ import Container from 'components/Container/Container';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Button from 'components/Button/Button';
-import SideMenu from '../components/SideMenu/SideMenu';
+import SideMenu from 'components/SideMenu/SideMenu';
 import { useGlobalContext } from 'globalStateContext';
 import { isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';

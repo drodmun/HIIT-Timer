@@ -1,9 +1,8 @@
-import { db } from '../firebase/firebaseConf';
-import { doc } from 'firebase/firestore';
-import { updateDoc, arrayUnion } from 'firebase/firestore';
-import { auth } from '../firebase/firebaseConf';
+import { db, auth } from '../config/firebase/firebaseConf';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-let uid: any;
+
+let uid: string;
 onAuthStateChanged(auth, (user) => {
   if (user) {
     uid = user.email;

@@ -27,7 +27,7 @@ const ConfigHeader = () => {
         size='small'
         aria-label='sound'
         onClick={togglePlaySound}
-        sx={{ color: '#ffffff', background: 'linear-gradient(90deg, #FF5FF4 20%, #11C1F4 70%)' }}
+        sx={{ color: '#ffffff', background: 'linear-gradient(90deg, #FF5FF4 20%, #11C1F4 70%)', zIndex: '99999' }}
       >
         {isPlaySound ? <VolumeUpOutlinedIcon /> : <VolumeOffIcon />}
       </Fab>

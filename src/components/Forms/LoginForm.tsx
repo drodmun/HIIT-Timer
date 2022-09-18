@@ -2,7 +2,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'components/Button/Button';
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase/firebaseConf';
+import { auth } from '../../config/firebase/firebaseConf';
 import { Navigate } from 'react-router-dom';
 import { useGlobalContext } from 'globalStateContext';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -27,15 +27,13 @@ function LoginForm() {
     password: ''
   });
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        [name]: type === 'checkbox' ? checked : value
-      };
-    });
-  }
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
   const login = async () => {
     try {
@@ -59,20 +57,18 @@ function LoginForm() {
 
       <div>
         <Form className=' d-flex flex-column'>
-          {formElements.map((element, index) => {
-            return (
-              <Form.Group key={index} className='mb-3' controlId={`Loginform${element}`}>
-                <Form.Label>{element}</Form.Label>
-                <Form.Control
-                  className='rounded-3'
-                  type={element === 'Password' ? 'password' : 'text'}
-                  placeholder={element}
-                  name={element.toLowerCase()}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            );
-          })}
+          {formElements.map((element, index) => (
+            <Form.Group key={index} className='mb-3' controlId={`Loginform${element}`}>
+              <Form.Label>{element}</Form.Label>
+              <Form.Control
+                className='rounded-3'
+                type={element === 'Password' ? 'password' : 'text'}
+                placeholder={element}
+                name={element.toLowerCase()}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          ))}
           <Button onClick={login} sx={{ textTransform: 'none' }} size='large'>
             Login
           </Button>
@@ -86,20 +82,8 @@ function LoginForm() {
           </div>
         </Form>
       </div>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
-        <Alert
-          onClose={() => {
-            setOpen(false);
-          }}
-          severity='error'
-          sx={{ width: '100%' }}
-        >
+      <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+        <Alert onClose={() => setOpen(false)} severity='error' sx={{ width: '100%' }}>
           No user found against this email and password!
         </Alert>
       </Snackbar>

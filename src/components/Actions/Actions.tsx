@@ -37,7 +37,9 @@ const Actions = () => {
     if (countersConfigSet.length <= 1) addCounterConfig({} as CounterConfig);
     toggleTuning();
   }, [addCounterConfig, countersConfigSet.length, toggleTuning]);
+
   const { darkMode } = useGlobalContext();
+
   return (
     <div
       style={{ margin: '64px 0', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}

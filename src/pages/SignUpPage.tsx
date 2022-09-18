@@ -5,8 +5,9 @@ import SignUpForm from '../components/Forms/SignUpForm';
 import { Link } from 'react-router-dom';
 import { useGlobalContext } from 'globalStateContext';
 
-function SignUpPage() {
+const SignUpPage = () => {
   const { darkMode } = useGlobalContext();
+
   return (
     <ContainerS isSecondary={darkMode}>
       <Navbar expand='lg'>
@@ -35,5 +36,5 @@ function SignUpPage() {
       </Container>
     </ContainerS>
   );
-}
+};
 export default SignUpPage;
