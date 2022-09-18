@@ -8,7 +8,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
 import { db } from '../firebase/firebaseConf';
-import { doc, setDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
@@ -18,12 +18,13 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
 
   const sendFeedback = async () => {
     try {
-      await setDoc(doc(db, 'feedback'), {
+      await addDoc(collection(db, 'feedback'), {
         feedback: feedback
       });
     } catch (error) {
       alert('User not logged in.');
     }
+    setOpenAlert(true);
   };
 
   return (

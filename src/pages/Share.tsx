@@ -25,24 +25,24 @@ const Share = ({ onClose }: { onClose: () => void }) => {
   //let docRef = doc(db, 'presets', label);
   //const presetData = presetObj;
   function handleShare() {
-    if(shareToUser !== '' && label !== '')
-    {sharePreset(
-      shareToUser,
-      label,
-      presetObj.rounds,
-      presetObj.rMinutes,
-      presetObj.rSeconds,
-      presetObj.sets,
-      presetObj.cdMinutes,
-      presetObj.cdSeconds,
-      presetObj.pMinutes,
-      presetObj.pSeconds
-    );
-    toggleModal();
-    setOpenAlert(true);
-    setloadSuccess(true);
-    setLabel('');}
-    else{
+    if (shareToUser !== '' && label !== '') {
+      sharePreset(
+        shareToUser,
+        label,
+        presetObj.rounds,
+        presetObj.rMinutes,
+        presetObj.rSeconds,
+        presetObj.sets,
+        presetObj.cdMinutes,
+        presetObj.cdSeconds,
+        presetObj.pMinutes,
+        presetObj.pSeconds
+      );
+      toggleModal();
+      setOpenAlert(true);
+      setloadSuccess(true);
+      setLabel('');
+    } else {
       setloadSuccess(false);
       setOpenAlert(true);
     }

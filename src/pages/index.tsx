@@ -60,9 +60,13 @@ const Index = () => {
               </Button>
             )}
           </Box>
+          <Box>
+            <div className='w-50'>
+              <Adsense client='ca-pub-2028740631579572' slot='7259870550' layout='in-article' format='fluid' />
+            </div>
+          </Box>
         </Grid>
       </Grid>
-
       <SideMenu />
       {openDialog === 'Configurator' && <SetsConfigurator onFinish={toggleSetOpenDialog('none')} />}
       {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
@@ -71,13 +75,6 @@ const Index = () => {
       {openDialog === 'Save' && <Saved onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Share' && <Share onClose={toggleSetOpenDialog('none')} />}
       <Footer />
-      <Adsense
-        client='ca-pub-2028740631579572'
-        slot='7259870550'
-        style={{ margin: 'auto 0' }}
-        layout='in-article'
-        format='fluid'
-      />
     </Container>
   );
 };

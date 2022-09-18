@@ -1,8 +1,8 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'components/Button/Button';
 import { useState } from 'react';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider, db, facebookProvider } from '../../firebase/firebaseConf';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth, db, facebookProvider } from '../../firebase/firebaseConf';
 import { Navigate } from 'react-router-dom';
 import { useGlobalContext } from 'globalStateContext';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -18,6 +18,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 });
 
 function LoginForm() {
+  const googleProvider = new GoogleAuthProvider();
   const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
   const { darkMode } = useGlobalContext();
@@ -55,6 +56,7 @@ function LoginForm() {
           //const token = credential.accessToken;
           // The signed-in user info
           const user = result.user;
+          console.log(user);
           let mail: any = '';
           if (user) {
             mail = user.email;
@@ -66,23 +68,14 @@ function LoginForm() {
               presets: []
             });
           } else {
-            console.log('error');
+            console.log('error doc no sent');
           }
         })
         .catch((error) => {
           console.log(error);
-          // Handle Errors here.
-          //const errorCode = error.code;
-          //const errorMessage = error.message;
-          // The email of the user's account used.
-          //const email = error.customData.email;
-          // The AuthCredential type that was used.
-          //const credential = GoogleAuthProvider.credentialFromError(error);
-          // ...
         });
-      setRedirect(!redirect);
     } catch (error) {
-      setOpen(true);
+      //setOpen(true);
     }
   };
   const facebookLogin = async () => {
@@ -90,7 +83,7 @@ function LoginForm() {
       await signInWithPopup(auth, facebookProvider)
         .then((result) => {
           // This gives you a Google Access Token. You can use it to access the Google API.
-          //const credential = GoogleAuthProvider.credentialFromResult(result);
+          //const credential:any = GoogleAuthProvider.credentialFromResult(result);
           //const token = credential.accessToken;
           // The signed-in user info
           const user = result.user;

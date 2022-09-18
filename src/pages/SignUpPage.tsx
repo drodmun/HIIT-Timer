@@ -19,13 +19,13 @@ function SignUpPage() {
             </Navbar.Brand>
           </Link>
           <Nav>
-              <Nav.Item style={{fontSize:'20px'}}>
-                {`New User  ?  `}
-                <Link to='/login' style={{ color: '#11c1f4', fontWeight: 'bold', textDecoration: 'none'}}>
-                  Log in
-                </Link>
-              </Nav.Item>
-            </Nav>
+            <Nav.Item style={{ fontSize: '20px' }}>
+              {`New User  ?  `}
+              <Link to='/login' style={{ color: '#11c1f4', fontWeight: 'bold', textDecoration: 'none' }}>
+                Log in
+              </Link>
+            </Nav.Item>
+          </Nav>
         </Container>
       </Navbar>
       <Container style={{ color: darkMode ? 'black' : 'white' }}>

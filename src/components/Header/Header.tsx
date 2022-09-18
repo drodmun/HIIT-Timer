@@ -21,7 +21,7 @@ import Divider from '../Divider/Divider';
 import { useGlobalContext } from 'globalStateContext';
 import { auth } from '../../firebase/firebaseConf';
 import { signOut } from 'firebase/auth';
-import { onAuthStateChanged } from 'firebase/auth';
+//import { onAuthStateChanged } from 'firebase/auth';
 
 let navItemsLogged: string[] = [];
 const navItemsMobile = ['Login', 'SignUp'];
@@ -32,21 +32,12 @@ const Header = (): JSX.Element => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { darkMode } = useGlobalContext();
   const handleDrawerToggle = useCallback(() => setMobileOpen((pMobileOpen) => !pMobileOpen), [setMobileOpen]);
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUid(user.email);
-    }
-  });
+
   if (uid == 'nonexisting') {
     navItemsLogged = ['Login', 'Signup'];
   } else {
     navItemsLogged = ['Logout'];
   }
-
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    deferredPrompt = e;
-  });
   const drawer = useMemo(
     () => (
       <Box onClick={handleDrawerToggle}>
@@ -126,7 +117,7 @@ const Header = (): JSX.Element => {
                     works better as App
                   </Typography>
                 </Box>
-                <Button sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large' onClick={deferredPrompt}>
+                <Button sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
                   Get APP
                 </Button>
               </Box>
