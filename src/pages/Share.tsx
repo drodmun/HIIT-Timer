@@ -29,10 +29,10 @@ const Share = ({ onClose }: { onClose: () => void }) => {
       sharePreset(
         shareToUser,
         label,
-        presetObj.rounds,
+        1,
         presetObj.rMinutes,
         presetObj.rSeconds,
-        presetObj.sets,
+        1,
         presetObj.cdMinutes,
         presetObj.cdSeconds,
         presetObj.pMinutes,

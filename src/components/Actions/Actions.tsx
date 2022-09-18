@@ -10,10 +10,11 @@ import {
   secondsAtom
 } from 'stores/timers';
 import { CounterConfig } from 'types/CounterConfig';
-
 import Button from '../Button/Button';
 import { useCallback } from 'react';
 import { useGlobalContext } from 'globalStateContext';
+import useSound from 'use-sound';
+import boopSfx from '../../assets/sounds/beep.mp3';
 
 const Actions = () => {
   const theme = useTheme();
@@ -21,12 +22,12 @@ const Actions = () => {
   const countersConfigSet = useRecoilValue(countersConfigSetAtom);
   const resetCountersConfigSet = useResetRecoilState(countersConfigSetAtom);
   const addCounterConfig = useSetRecoilState(addCounterSelector);
-
   const [isRunning, setIsRunning] = useRecoilState(isRunningAtom);
   const toggleTuning = useCallback(() => setIsRunning((pIsRunning) => !pIsRunning), [setIsRunning]);
-
   const resetMinutes = useResetRecoilState(minutesAtom);
   const resetSeconds = useResetRecoilState(secondsAtom);
+  const [play] = useSound(boopSfx);
+
   const handleOnReset = useCallback(() => {
     resetCountersConfigSet();
     resetMinutes();
@@ -36,6 +37,7 @@ const Actions = () => {
   const handleOnStart = useCallback(() => {
     if (countersConfigSet.length <= 1) addCounterConfig({} as CounterConfig);
     toggleTuning();
+    play();
   }, [addCounterConfig, countersConfigSet.length, toggleTuning]);
   const { darkMode } = useGlobalContext();
   return (
