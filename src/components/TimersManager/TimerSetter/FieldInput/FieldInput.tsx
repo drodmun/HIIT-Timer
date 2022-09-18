@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { IconButton, Modal, Paper, TextField, Typography, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useGlobalContext } from 'globalStateContext';
 
 const FieldInput = (props: {
   label: string;
@@ -17,7 +18,7 @@ const FieldInput = (props: {
   const theme = useTheme();
   const [modal, setModal] = useState<boolean>(false);
   const toggleModal = () => setModal((prev) => !prev);
-
+  const { darkMode } = useGlobalContext();
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', width: 'fit-content' }}>
@@ -25,7 +26,7 @@ const FieldInput = (props: {
           <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
             <IconButton
               onClick={props.onTenMore}
-              sx={{ color: props.onSecondView ? '#0d174d' : theme.palette.common.white, padding: 0 }}
+              sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
               <AddIcon fontSize='large' />
             </IconButton>
@@ -34,7 +35,7 @@ const FieldInput = (props: {
             <IconButton
               size='large'
               onClick={props.onMore}
-              sx={{ color: props.onSecondView ? '#0d174d' : theme.palette.common.white, padding: 0 }}
+              sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
               <AddIcon fontSize='large' />
             </IconButton>
@@ -47,7 +48,7 @@ const FieldInput = (props: {
           onClick={toggleModal}
           style={{
             lineHeight: 1,
-            color: props.onSecondView ? '#0d174d' : theme.palette.common.white,
+            color: darkMode ? '#0d174d' : theme.palette.common.white,
             fontWeight: 'lighter',
             fontSize: 150,
             margin: theme.spacing(1)
@@ -60,7 +61,7 @@ const FieldInput = (props: {
           <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
             <IconButton
               onClick={props.onTenLess}
-              sx={{ color: props.onSecondView ? '#0d174d' : theme.palette.common.white, padding: 0 }}
+              sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
               <RemoveIcon fontSize='large' />
             </IconButton>
@@ -68,7 +69,7 @@ const FieldInput = (props: {
           <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
             <IconButton
               onClick={props.onLess}
-              sx={{ color: props.onSecondView ? '#0d174d' : theme.palette.common.white, padding: 0 }}
+              sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
               <RemoveIcon fontSize='large' />
             </IconButton>

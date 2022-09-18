@@ -1,12 +1,10 @@
 import { memo, useMemo } from 'react';
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
-
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import CommentIcon from '@mui/icons-material/Comment';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
-
 import { useUIConfig } from 'hooks/useUIConfig';
 
 const SideMenu = () => {
@@ -15,10 +13,10 @@ const SideMenu = () => {
   const actions: { icon: JSX.Element; name: Omit<typeof openDialog, 'none'>; action?: () => void }[] = useMemo(
     () =>
       [
-        { icon: <BookmarkBorderIcon />, name: 'Save' },
-        { icon: <ShareIcon />, name: 'Share' },
+        { icon: <BookmarkBorderIcon />, name: 'Save', action: toggleSetOpenDialog('Save') },
+        { icon: <ShareIcon />, name: 'Share', action: toggleSetOpenDialog('Share') },
         { icon: <CommentIcon />, name: 'Feedback' },
-        { icon: <SettingsIcon />, name: 'Settings' },
+        { icon: <SettingsIcon />, name: 'Settings', action: toggleSetOpenDialog('Settings') },
         { icon: <InfoIcon />, name: 'About', action: toggleSetOpenDialog('About') }
       ].reverse(),
     [toggleSetOpenDialog]
@@ -42,16 +40,18 @@ const SideMenu = () => {
           tooltipTitle={
             <Box
               sx={{
-                color: !('action' in action) ? 'grey.A200' : 'primary.main'
+                // color: !('action' in action) ? 'grey.A200' : 'primary.main'
+                color: 'primary.main'
               }}
             >
-              {!('action' in action) ? 'Soon...' : action.name}
+              {/* {!('action' in action) ? 'Soon...' : action.name} */}
+              {action.name}
             </Box>
           }
           tooltipOpen
           onClick={action.action}
           FabProps={{
-            disabled: !('action' in action),
+            // disabled: !('action' in action),
             sx: {
               color: 'primary.main',
               '&:hover': {
