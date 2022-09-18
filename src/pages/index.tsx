@@ -15,6 +15,7 @@ import Settings from './Settings';
 import Saved from './Saved';
 import Share from './Share';
 import { Adsense } from '@ctrl/react-adsense';
+import Feedback from './Feedback';
 const Index = () => {
   const theme = useTheme();
   const isRunning = useRecoilValue(isRunningAtom);
@@ -65,6 +66,7 @@ const Index = () => {
       <SideMenu />
       {openDialog === 'Configurator' && <SetsConfigurator onFinish={toggleSetOpenDialog('none')} />}
       {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
+      {openDialog === 'Feedback' && <Feedback onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Settings' && <Settings onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Save' && <Saved onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Share' && <Share onClose={toggleSetOpenDialog('none')} />}
@@ -72,7 +74,7 @@ const Index = () => {
       <Adsense
         client='ca-pub-2028740631579572'
         slot='7259870550'
-        style={{ display: 'block' }}
+        style={{ margin: 'auto 0' }}
         layout='in-article'
         format='fluid'
       />

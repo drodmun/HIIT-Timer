@@ -23,31 +23,30 @@ import { auth } from '../../firebase/firebaseConf';
 import { signOut } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 
-let uid: string | null = 'nonexisting';
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    uid = user.email;
-  }
-});
-
-//const navItemsLarge = ['Login', 'Signup'];
-//const navItemsLargeLoggedIn = ['Logout'];
 let navItemsLogged: string[] = [];
-if (uid !== 'nonexisting') {
-  navItemsLogged = ['Logout'];
-} else {
-  navItemsLogged = ['Login', 'Signup'];
-}
 const navItemsMobile = ['Login', 'SignUp'];
 const container = window !== undefined ? () => window.document.body : undefined;
-
 const Header = (): JSX.Element => {
+  const [uid, setUid] = useState<string | null>('nonexisting');
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { darkMode } = useGlobalContext();
   const handleDrawerToggle = useCallback(() => setMobileOpen((pMobileOpen) => !pMobileOpen), [setMobileOpen]);
-  const { loggedIn, setLoggedIn } = useGlobalContext();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUid(user.email);
+    }
+  });
+  if (uid == 'nonexisting') {
+    navItemsLogged = ['Login', 'Signup'];
+  } else {
+    navItemsLogged = ['Logout'];
+  }
 
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    deferredPrompt = e;
+  });
   const drawer = useMemo(
     () => (
       <Box onClick={handleDrawerToggle}>
@@ -90,7 +89,7 @@ const Header = (): JSX.Element => {
             aria-label='open drawer'
             edge='start'
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: 'none' }, color: darkMode ? 'black' : 'white' }}
+            sx={{ mr: 2, mt: 1, display: { md: 'none' }, color: darkMode ? 'black' : 'white' }}
           >
             <MenuIcon />
           </IconButton>
@@ -127,7 +126,7 @@ const Header = (): JSX.Element => {
                     works better as App
                   </Typography>
                 </Box>
-                <Button sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
+                <Button sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large' onClick={deferredPrompt}>
                   Get APP
                 </Button>
               </Box>
@@ -143,14 +142,13 @@ const Header = (): JSX.Element => {
                         signOut(auth)
                           .then(() => {
                             // Sign-out successful.
+                            setUid('nonexisting');
                             console.log('Sign-out successful.');
                           })
                           .catch((error) => {
                             // An error happened.
                             console.log(error, 'fail');
                           });
-                        setLoggedIn(false);
-                        console.log(loggedIn);
                         //set to live auth instead of state
                       }
                     }}

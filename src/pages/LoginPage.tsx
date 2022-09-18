@@ -12,22 +12,19 @@ function LoginPage() {
       <Navbar expand='lg' className='pb-5' style={{ color: darkMode ? 'black' : 'white' }}>
         <Container>
           <Link to='/' style={{ textDecoration: 'none' }}>
-            <Navbar.Brand>
+            <Navbar.Brand style={{fontSize:'30px'}}>
               <b style={{ color: '#11c1f4' }}>HIIT</b>
               <b style={{ color: darkMode ? '#000000' : 'white' }}> timer</b>
             </Navbar.Brand>
           </Link>
-          <Navbar.Toggle aria-controls='loginNav' />
-          <Navbar.Collapse id='loginNav' className='justify-content-end'>
             <Nav>
-              <Nav.Item>
+              <Nav.Item style={{fontSize:'20px'}}>
                 {`New User  ?  `}
                 <Link to='/signup' style={{ color: '#11c1f4', fontWeight: 'bold', textDecoration: 'none' }}>
                   Sign Up
                 </Link>
               </Nav.Item>
             </Nav>
-          </Navbar.Collapse>
         </Container>
       </Navbar>
       <Container>

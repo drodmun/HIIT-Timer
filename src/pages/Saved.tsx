@@ -39,10 +39,8 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     } else {
     }
   });
-
   //let docRef = doc(db, 'presets', label);
   let presetData = presetObj;
-
   const retrievePreset = async () => {
     await onSnapshot(doc(db, 'users', uid), (doc) => {
       const data: any = doc.data();

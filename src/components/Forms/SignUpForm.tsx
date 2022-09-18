@@ -17,11 +17,10 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 function SignUpForm() {
   const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
-  const formElements = ['Name', 'Contact', 'Email', 'Password', 'Confirm_Password'];
+  const formElements = ['Name', 'Email', 'Password', 'Confirm_Password'];
   const { darkMode } = useGlobalContext();
   const [formData, setFormData] = useState({
     name: '',
-    contact: '',
     email: '',
     password: '',
     confirm_password: ''
@@ -42,7 +41,6 @@ function SignUpForm() {
       const user = res.user;
       await setDoc(doc(db, 'users', formData.email), {
         name: formData.name,
-        contact: formData.contact,
         authProvider: 'local',
         email: formData.email,
         password: formData.password,
@@ -75,7 +73,7 @@ function SignUpForm() {
                 {/* <Form.Label>{element}</Form.Label> */}
                 <Form.Control
                   className='rounded-3'
-                  type={element === 'password' || element === 'confirmPassword' ? 'password' : 'text'}
+                  type={element == 'Password' || element == 'Confirm_Password' ? 'password' : 'text'}
                   required
                   placeholder={`${element.replace('_', ' ')}`}
                   name={element.toLowerCase()}
