@@ -5,7 +5,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 let uid: string;
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    uid = user.email;
+    uid = user.email ?? '';
     // ...
   } else {
     // ...

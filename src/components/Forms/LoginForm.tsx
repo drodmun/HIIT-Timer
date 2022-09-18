@@ -1,6 +1,6 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'components/Button/Button';
-import { useState } from 'react';
+import { memo, useState, forwardRef } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase/firebaseConf';
 import { Navigate } from 'react-router-dom';
@@ -10,13 +10,12 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import { red } from '@mui/material/colors';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { forwardRef } from 'react';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-function LoginForm() {
+const LoginForm = () => {
   const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
   const { loggedIn, setLoggedIn } = useGlobalContext();
@@ -58,7 +57,7 @@ function LoginForm() {
       <div>
         <Form className=' d-flex flex-column'>
           {formElements.map((element, index) => (
-            <Form.Group key={index} className='mb-3' controlId={`Loginform${element}`}>
+            <Form.Group key={`Group_Loginform_${index}`} className='mb-3' controlId={`Loginform${element}`}>
               <Form.Label>{element}</Form.Label>
               <Form.Control
                 className='rounded-3'
@@ -89,5 +88,6 @@ function LoginForm() {
       </Snackbar>
     </div>
   );
-}
-export default LoginForm;
+};
+
+export default memo(LoginForm);

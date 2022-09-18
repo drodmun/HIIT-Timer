@@ -92,13 +92,18 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
     (min = 0, max = 59) =>
     (e: ChangeEvent<HTMLInputElement>) =>
       (e.target.value = Math.max(min, Math.min(Number(e.target.value), max)).toString());
-  const handleOnChange = (setter: Dispatch<SetStateAction<number>>) => (e: ChangeEvent<HTMLInputElement>) =>
-    setter(Number(e.target.value));
+  const handleOnChange = useCallback(
+    (setter: Dispatch<SetStateAction<number>>) => (e: ChangeEvent<HTMLInputElement>) => setter(Number(e.target.value)),
+    []
+  );
 
-  const handleOnValueChange = (setter: Dispatch<SetStateAction<number>>, value: number) => () =>
-    setter((prev) => Number(Math.max(0, Math.min(prev + value, 59))));
+  const handleOnValueChange = useCallback(
+    (setter: Dispatch<SetStateAction<number>>, value: number) => () =>
+      setter((prev) => Number(Math.max(0, Math.min(prev + value, 59)))),
+    []
+  );
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (activeStep == steps.length - 1) {
       const countersConfig: CounterConfig[] = [];
       const hasCooldown = !!cdMinutes || !!cdSeconds;
@@ -126,32 +131,46 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
         pMinutes: pMinutes,
         pSeconds: pSeconds
       });
-      console.log(rounds);
+
+      // console.log(rounds);
       onFinish();
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
-  };
-  const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  const handleStep = (step: number) => () => setActiveStep(step);
+  }, [
+    activeStep,
+    cdMinutes,
+    cdSeconds,
+    minutes,
+    onFinish,
+    pMinutes,
+    pSeconds,
+    rMinutes,
+    rSeconds,
+    rounds,
+    seconds,
+    setCountersConfig,
+    setPresetObj,
+    sets
+  ]);
+  const handleBack = useCallback(() => setActiveStep((prevActiveStep) => prevActiveStep - 1), [setActiveStep]);
+  const handleStep = useCallback((step: number) => () => setActiveStep(step), [setActiveStep]);
 
   const renderFieldInput = useCallback(
-    (setter: Dispatch<SetStateAction<number>>, value: number, label: string, isTime = false) => {
-      return (
-        <FieldInput
-          label={label}
-          value={value}
-          onLess={handleOnValueChange(setter, -1)}
-          onTenLess={handleOnValueChange(setter, -10)}
-          onMore={handleOnValueChange(setter, 1)}
-          onTenMore={handleOnValueChange(setter, 10)}
-          onInput={isTime ? handleOnInput() : handleOnInput(1, 99)}
-          onChange={handleOnChange(setter)}
-          onSecondView
-        />
-      );
-    },
-    []
+    (setter: Dispatch<SetStateAction<number>>, value: number, label: string, isTime = false) => (
+      <FieldInput
+        label={label}
+        value={value}
+        onLess={handleOnValueChange(setter, -1)}
+        onTenLess={handleOnValueChange(setter, -10)}
+        onMore={handleOnValueChange(setter, 1)}
+        onTenMore={handleOnValueChange(setter, 10)}
+        onInput={isTime ? handleOnInput() : handleOnInput(1, 99)}
+        onChange={handleOnChange(setter)}
+        onSecondView
+      />
+    ),
+    [handleOnChange, handleOnValueChange]
   );
 
   const renderContent = useCallback(
@@ -239,7 +258,20 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
           );
       }
     },
-    [cdMinutes, cdSeconds, minutes, pMinutes, pSeconds, rMinutes, rSeconds, renderFieldInput, rounds, seconds, sets]
+    [
+      cdMinutes,
+      cdSeconds,
+      darkMode,
+      minutes,
+      pMinutes,
+      pSeconds,
+      rMinutes,
+      rSeconds,
+      renderFieldInput,
+      rounds,
+      seconds,
+      sets
+    ]
   );
 
   return (

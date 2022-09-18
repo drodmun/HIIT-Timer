@@ -15,6 +15,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 });
 
 const SignUpForm = () => {
+  const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
   const formElements = ['Name', 'Contact', 'Email', 'Password', 'Confirm_Password'];
   const { darkMode } = useGlobalContext();
