@@ -4,7 +4,7 @@ import { ChangeEvent, useCallback, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../config/firebase/firebaseConf';
 import { Navigate } from 'react-router-dom';
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { useGlobalContext } from 'globalStateContext';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -16,12 +16,12 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 
 const SignUpForm = () => {
   const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [redirect, setRedirect] = useState<boolean>(false);
-  const formElements = ['Name', 'Contact', 'Email', 'Password', 'Confirm_Password'];
+  const formElements = ['Name', 'Email', 'Password', 'Confirm_Password'];
   const { darkMode } = useGlobalContext();
   const [formData, setFormData] = useState({
     name: '',
-    contact: '',
     email: '',
     password: '',
     confirm_password: ''
@@ -44,7 +44,6 @@ const SignUpForm = () => {
       const user = res.user;
       await setDoc(doc(db, 'users', formData.email), {
         name: formData.name,
-        contact: formData.contact,
         authProvider: 'local',
         email: formData.email,
         password: formData.password,
@@ -53,17 +52,38 @@ const SignUpForm = () => {
       });
       setRedirect(true);
     } catch (error) {
+      setErrorMessage('An error occured. Please try again.');
       setOpen(true);
     }
-  }, [formData.contact, formData.email, formData.name, formData.password]);
-
-  const handleRegister = useCallback(() => {
-    if (formData.password === formData.confirm_password) {
-      register();
-    } else {
-      setOpen(true);
-    }
-  }, [formData.confirm_password, formData.password, register]);
+  };
+  
+  function handleRegister() {
+    const docRef = doc(db, 'users', formData.email);
+    getDoc(docRef)
+      .then((doc) => {
+        if (doc.exists()) {
+          setErrorMessage('Email already exists.');
+          setOpen(true);
+        } else {
+          if (formData.password === formData.confirm_password) {
+            register();
+          } else {
+            setErrorMessage('Passwords do not match.');
+            setOpen(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log('Error getting document:', error);
+      });
+  }
+  // function handleRegister() {
+  //   if (formData.password === formData.confirm_password) {
+  //     register();
+  //   } else {
+  //     setOpen(true);
+  //   }
+  // }
 
   return (
     <div style={{ color: darkMode ? 'black' : 'white' }}>
@@ -73,18 +93,19 @@ const SignUpForm = () => {
       <div>
         <Form className='py-4 d-flex flex-column'>
           {formElements.map((element, index) => (
-            <Form.Group key={index} className='mb-3' controlId={`Regform${element}`}>
-              {/* <Form.Label>{element}</Form.Label> */}
-              <Form.Control
-                className='rounded-3'
-                type={element === 'password' || element === 'confirmPassword' ? 'password' : 'text'}
-                required
-                placeholder={`${element.replace('_', ' ')}`}
-                name={element.toLowerCase()}
-                onChange={handleChange}
-              />
-            </Form.Group>
-          ))}
+              <Form.Group key={index} className='mb-3' controlId={`Regform${element}`}>
+                {/* <Form.Label>{element}</Form.Label> */}
+                <Form.Control
+                  className='rounded-3'
+                  type={element == 'Password' || element == 'Confirm_Password' ? 'password' : 'text'}
+                  required
+                  placeholder={`${element.replace('_', ' ')}`}
+                  name={element.toLowerCase()}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            ))}
+            
           <Button onClick={handleRegister} sx={{ textTransform: 'none' }} size='large'>
             SignUp
           </Button>
@@ -104,8 +125,7 @@ const SignUpForm = () => {
           severity='error'
           sx={{ width: '100%' }}
         >
-          An error occured! Please enter all fields correctly. Check email, password length and make sure password and
-          confirm password match.
+          {errorMessage}
         </Alert>
       </Snackbar>
     </div>

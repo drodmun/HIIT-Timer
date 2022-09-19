@@ -2,15 +2,15 @@ import { db, auth } from '../config/firebase/firebaseConf';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
-let uid: string;
+let uid: string | null;
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    uid = user.email ?? '';
-    // ...
+    uid = user.email;
   } else {
-    // ...
+    uid = null;
   }
 });
+
 const save = async (
   name: string,
   rounds: number,
@@ -38,7 +38,7 @@ const save = async (
       })
     });
   } catch (error) {
-    alert('User not logged in.');
+    alert('An error occured while saving.');
   }
 };
 
