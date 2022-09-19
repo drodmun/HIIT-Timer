@@ -1,12 +1,11 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'components/Button/Button';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider, db, facebookProvider } from '../../firebase/firebaseConf';
+import { auth, googleProvider, db, facebookProvider } from '../../config/firebase/firebaseConf';
 import { Navigate } from 'react-router-dom';
 import { useGlobalContext } from 'globalStateContext';
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { Google, Facebook } from '@mui/icons-material';
 import { red } from '@mui/material/colors';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -28,15 +27,18 @@ function LoginForm() {
     password: ''
   });
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value, type, checked } = event.target;
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        [name]: type === 'checkbox' ? checked : value
-      };
-    });
-  }
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value, type, checked } = event.target;
+      setFormData((prevFormData) => {
+        return {
+          ...prevFormData,
+          [name]: type === 'checkbox' ? checked : value
+        };
+      });
+    },
+    [setFormData]
+  );
 
   const login = async () => {
     try {
@@ -50,7 +52,7 @@ function LoginForm() {
     }
   };
 
-  function externalProvider(provider: any, providerName: string) {
+  const externalProvider = (provider: any, providerName: string) => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
@@ -91,13 +93,10 @@ function LoginForm() {
         setErrorMessage('There was an issue while logging in. Please try again by refreshing.');
         setOpen(true);
       });
-  }
-  function facebookLogin() {
-    externalProvider(facebookProvider, 'facebook');
-  }
-  function googleLogin() {
-    externalProvider(googleProvider, 'google');
-  }
+  };
+
+  const facebookLogin = () => externalProvider(facebookProvider, 'facebook');
+  const googleLogin = () => externalProvider(googleProvider, 'google');
 
   return (
     <div style={{ color: darkMode ? 'black' : 'white' }}>
@@ -110,38 +109,36 @@ function LoginForm() {
 
       <div>
         <Form className=' d-flex flex-column'>
-          {formElements.map((element, index) => {
-            return (
-              <Form.Group key={index} className='mb-3' controlId={`Loginform${element}`}>
-                <Form.Label>{element}</Form.Label>
-                <Form.Control
-                  className='rounded-3'
-                  type={element === 'Password' ? 'password' : 'text'}
-                  placeholder={element}
-                  name={element.toLowerCase()}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            );
-          })}
+          {formElements.map((element, index) => (
+            <Form.Group key={`Loginform${index}`} className='mb-3' controlId={`Loginform${element}`}>
+              <Form.Label>{element}</Form.Label>
+              <Form.Control
+                className='rounded-3'
+                type={element === 'Password' ? 'password' : 'text'}
+                placeholder={element}
+                name={element.toLowerCase()}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          ))}
           <Form.Group className='mb-3' controlId='formRemember'>
             <Form.Check type='checkbox' label='Remember me' />
           </Form.Group>
           <Button onClick={login} sx={{ textTransform: 'none' }} size='large'>
             Login
           </Button>
-          {redirect ? (
+
+          {redirect && (
             <div className='py-3' style={{ margin: '0 auto' }}>
               <CircularProgress />
             </div>
-          ) : (
-            <></>
           )}
+
           <div className='pt-5 text-center'>
             <h5> OR login with </h5>
             <div className='d-flex justify-content-center' style={{ gap: '30px' }}>
-              <GoogleIcon sx={{ color: red[500], fontSize: 50, cursor: 'pointer' }} onClick={googleLogin} />
-              <FacebookIcon color='primary' sx={{ fontSize: 50, cursor: 'pointer' }} onClick={facebookLogin} />
+              <Google sx={{ color: red[500], fontSize: 50, cursor: 'pointer' }} onClick={googleLogin} />
+              <Facebook color='primary' sx={{ fontSize: 50, cursor: 'pointer' }} onClick={facebookLogin} />
             </div>
           </div>
         </Form>

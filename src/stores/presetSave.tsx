@@ -1,8 +1,8 @@
-import { db, auth } from '../firebase/firebaseConf';
+import { db, auth } from '../config/firebase/firebaseConf';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
-let uid: any;
+let uid: string | null;
 onAuthStateChanged(auth, (user) => {
   if (user) {
     uid = user.email;
@@ -24,7 +24,7 @@ const save = async (
 ) => {
   //const presetName: string = name + uid;
   try {
-    await updateDoc(doc(db, 'users', uid), {
+    await updateDoc(doc(db, 'users', uid ?? ''), {
       presets: arrayUnion({
         name: name,
         rounds: rounds,

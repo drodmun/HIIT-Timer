@@ -7,23 +7,25 @@ import { useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
-import { db } from '../firebase/firebaseConf';
+import { db, auth } from '../config/firebase/firebaseConf';
 import { collection, addDoc } from 'firebase/firestore';
-import { auth } from '../firebase/firebaseConf';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
+
 const Feedback = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [feedback, setFeedback] = useState<string>('');
-  const current_user: any = auth.currentUser;
-  let uid: any;
+
+  const current_user = auth.currentUser;
+  let uid: string | null;
   if (current_user) {
     uid = current_user.email;
   } else {
     uid = null;
   }
+
   const sendFeedback = async () => {
     try {
       await addDoc(collection(db, 'feedback'), {
@@ -67,13 +69,7 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
               setOpenAlert(false);
             }}
           >
-            <Alert
-              onClose={() => {
-                setOpenAlert(false);
-              }}
-              severity='success'
-              sx={{ width: '100%' }}
-            >
+            <Alert onClose={() => setOpenAlert(false)} severity='success' sx={{ width: '100%' }}>
               Feedback Submitted.
             </Alert>
           </Snackbar>
