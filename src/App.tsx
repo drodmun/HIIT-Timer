@@ -14,7 +14,7 @@ import { MyGlobalContext } from 'globalStateContext';
 import { useState } from 'react';
 const App = () => {
   useGaTracker();
-  const [darkMode, setDarkMode] = useState<boolean>(true);
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('dark-mode') === 'true');
   const [isPopup, setIsPopup] = useState<boolean>(true);
   const [presetObj, setPresetObj] = useState<object>({
     presetName: '',
