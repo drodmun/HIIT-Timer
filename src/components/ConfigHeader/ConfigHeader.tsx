@@ -26,14 +26,16 @@ const ConfigHeader = () => {
     //     cursror: 'pointer'
     //   }}
     // >
-    <Fab
-      size='small'
-      aria-label='sound'
-      onClick={handleClick}
-      sx={{ color: '#ffffff', background: 'linear-gradient(90deg, #FF5FF4 20%, #11C1F4 70%)' }}
-    >
-      {isPlaySound ? <VolumeUpOutlinedIcon /> : <VolumeOffIcon />}
-    </Fab>
+    <div className='py-5' style={{ zIndex: '1200' }}>
+      <Fab
+        size='small'
+        aria-label='sound'
+        onClick={handleClick}
+        sx={{ color: '#ffffff', background: 'linear-gradient(90deg, #FF5FF4 20%, #11C1F4 70%)' }}
+      >
+        {isPlaySound ? <VolumeUpOutlinedIcon /> : <VolumeOffIcon />}
+      </Fab>
+    </div>
     // </Box>
   );
 };

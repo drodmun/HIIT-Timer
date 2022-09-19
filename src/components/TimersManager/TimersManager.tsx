@@ -17,18 +17,18 @@ const TimerManager = () => {
   const SetMessage = useMemo(() => {
     return (
       <>
-        <div className='d-flex flex-column pt-2'>
-          <Typography variant='h4' component='span'>
+        <div className='d-flex flex-column rounded-5 px-5 py-2' style={{ backgroundColor: 'white' }}>
+          <Typography variant='h4' component='span' style={{ fontWeight: 'bold' }}>
             <img src='https://img.icons8.com/external-filled-outline-icons-maxicons/85/000000/external-exercise-fitness-filled-outline-filled-outline-icons-maxicons.png' />
             {`  ${presetObj.pMinutes}:${presetObj.pSeconds} Prep `}
           </Typography>
 
-          <Typography variant='h4' component='span'>
+          <Typography variant='h4' component='span' style={{ fontWeight: 'bold' }}>
             <img src={pushUp} alt={'pushupgif'} height='85px' />
             {` ${presetObj.sets} Sets`}
           </Typography>
 
-          <Typography variant='h4' component='span'>
+          <Typography variant='h4' component='span' style={{ fontWeight: 'bold' }}>
             <img src={timerSand} alt={'timerSand'} height='85px' />
             {` ${presetObj.cdMinutes}:${presetObj.cdSeconds} Cooldown`}
           </Typography>
@@ -42,8 +42,8 @@ const TimerManager = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
+        alignItems: 'end',
+        justifyContent: 'center',
         flexGrow: 1
       }}
     >

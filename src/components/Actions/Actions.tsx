@@ -1,6 +1,5 @@
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { useTheme } from '@mui/material';
-
 import {
   addCounterSelector,
   countersConfigSetAtom,

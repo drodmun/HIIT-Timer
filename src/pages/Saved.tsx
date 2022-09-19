@@ -12,7 +12,6 @@ import { useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConf';
 import { auth } from '../firebase/firebaseConf';
-import { onAuthStateChanged } from 'firebase/auth';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
@@ -27,18 +26,19 @@ const Save = ({ onClose }: { onClose: () => void }) => {
   const [label, setLabel] = useState<string>('');
   const [modal, setModal] = useState<boolean>(false);
   const [modal1, setModal1] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const toggleModal = () => setModal(!modal);
   const toggleModal1 = () => setModal1(!modal1);
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
   //get user from firebase here
   let uid: any;
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      uid = user.email;
-    } else {
-    }
-  });
+  const current_user: any = auth.currentUser;
+  if (current_user) {
+    uid = current_user.email;
+  } else {
+    uid = null;
+  }
   //let docRef = doc(db, 'presets', label);
   let presetData = presetObj;
   const retrievePreset = async () => {
@@ -56,6 +56,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
               break;
             }
           }
+          setErrorMessage('Preset loaded successfully!');
           setOpenAlert(true);
           setloadSuccess(true);
           const countersConfig: CounterConfig[] = [];
@@ -95,11 +96,13 @@ const Save = ({ onClose }: { onClose: () => void }) => {
         } else {
           // doc.data() will be undefined in this case
           console.log('No such document!');
+          setErrorMessage('No such preset!');
           setloadSuccess(false);
           setOpenAlert(true);
         }
       } catch {
         console.log('No such document!');
+        setErrorMessage('No such preset!');
         setloadSuccess(false);
         setOpenAlert(true);
       }
@@ -107,26 +110,40 @@ const Save = ({ onClose }: { onClose: () => void }) => {
   };
 
   function LoadPreset() {
-    retrievePreset();
+    if (uid) {
+      retrievePreset();
+    } else {
+      setErrorMessage('Please login to load presets!');
+      setloadSuccess(false);
+      setOpenAlert(true);
+    }
     //onFinish();
   }
 
   function handleSave() {
-    save(
-      label,
-      presetObj.rounds,
-      presetObj.rMinutes,
-      presetObj.rSeconds,
-      presetObj.sets,
-      presetObj.cdMinutes,
-      presetObj.cdSeconds,
-      presetObj.pMinutes,
-      presetObj.pSeconds
-    );
-    toggleModal();
-    setLabel('');
+    if (uid) {
+      save(
+        label,
+        presetObj.rounds,
+        presetObj.rMinutes,
+        presetObj.rSeconds,
+        presetObj.sets,
+        presetObj.cdMinutes,
+        presetObj.cdSeconds,
+        presetObj.pMinutes,
+        presetObj.pSeconds
+      );
+      toggleModal();
+      setLabel('');
+      setErrorMessage('Preset saved successfully!');
+      setloadSuccess(true);
+      setOpenAlert(true);
+    } else {
+      setErrorMessage('Please login to save presets!');
+      setloadSuccess(false);
+      setOpenAlert(true);
+    }
   }
-
   function handleLoad() {
     LoadPreset();
     toggleModal1();
@@ -228,7 +245,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
               severity={loadSuccess ? 'success' : 'error'}
               sx={{ width: '100%' }}
             >
-              {loadSuccess ? `Preset Loaded.` : `User not logged in / No preset found.`}
+              {errorMessage}
             </Alert>
           </Snackbar>
         </div>

@@ -44,7 +44,6 @@ const Index = () => {
             id='BOXXXXXXXXX'
             sx={{
               padding: { xs: theme.spacing(4), lg: theme.spacing(8) },
-              height: '100%',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -61,7 +60,7 @@ const Index = () => {
             )}
           </Box>
           <Box>
-            <div className='w-50'>
+            <div className='w-50 h-50' style={{ zIndex: '100' }}>
               <Adsense client='ca-pub-2028740631579572' slot='7259870550' layout='in-article' format='fluid' />
             </div>
           </Box>

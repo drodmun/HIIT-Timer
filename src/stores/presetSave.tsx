@@ -1,17 +1,16 @@
-import { db } from '../firebase/firebaseConf';
-import { doc } from 'firebase/firestore';
-import { updateDoc, arrayUnion } from 'firebase/firestore';
-import { auth } from '../firebase/firebaseConf';
+import { db, auth } from '../firebase/firebaseConf';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+
 let uid: any;
 onAuthStateChanged(auth, (user) => {
   if (user) {
     uid = user.email;
-    // ...
   } else {
-    // ...
+    uid = null;
   }
 });
+
 const save = async (
   name: string,
   rounds: number,
@@ -39,7 +38,7 @@ const save = async (
       })
     });
   } catch (error) {
-    alert('User not logged in.');
+    alert('An error occured while saving.');
   }
 };
 

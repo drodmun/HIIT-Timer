@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AppBar,
@@ -21,18 +21,45 @@ import Divider from '../Divider/Divider';
 import { useGlobalContext } from 'globalStateContext';
 import { auth } from '../../firebase/firebaseConf';
 import { signOut } from 'firebase/auth';
-//import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 
 let navItemsLogged: string[] = [];
 const navItemsMobile = ['Login', 'SignUp'];
 const container = window !== undefined ? () => window.document.body : undefined;
 const Header = (): JSX.Element => {
-  const [uid, setUid] = useState<string | null>('nonexisting');
+  const [uid, setUid] = useState<string | null>('no');
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { darkMode } = useGlobalContext();
   const handleDrawerToggle = useCallback(() => setMobileOpen((pMobileOpen) => !pMobileOpen), [setMobileOpen]);
 
+  // This variable will save the event for later use.
+  let deferredPrompt: any;
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.email);
+        console.log(uid, 'hehe');
+      } else {
+        setUid('nonexisting');
+        console.log(uid, 'pft');
+      }
+    });
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      console.log(deferredPrompt, 'PWA3');
+    });
+  }, [auth.currentUser]);
+  const installApp = async () => {
+    if (deferredPrompt !== null) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        deferredPrompt = null;
+      }
+    }
+  };
   if (uid == 'nonexisting') {
     navItemsLogged = ['Login', 'Signup'];
   } else {
@@ -117,7 +144,7 @@ const Header = (): JSX.Element => {
                     works better as App
                   </Typography>
                 </Box>
-                <Button sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
+                <Button onClick={installApp} sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
                   Get APP
                 </Button>
               </Box>
