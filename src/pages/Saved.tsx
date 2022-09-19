@@ -22,7 +22,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 const Save = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [loadSuccess, setloadSuccess] = useState(false);
-  const { presetObj } = useGlobalContext();
+  const { presetObj, setPresetObj } = useGlobalContext();
   const [label, setLabel] = useState<string>('');
   const [modal, setModal] = useState<boolean>(false);
   const [modal1, setModal1] = useState<boolean>(false);
@@ -52,7 +52,17 @@ const Save = ({ onClose }: { onClose: () => void }) => {
           for (let i = 0; i < len; i++) {
             if (presetData.presets[i].name == label) {
               preset = presetData.presets[i];
-              console.log(preset);
+              setPresetObj({
+                presetName: presetData.name,
+                rounds: 1,
+                rMinutes: presetData.rMinutes,
+                rSeconds: presetData.rSeconds,
+                sets: 1,
+                cdMinutes: presetData.cdMinutes,
+                cdSeconds: presetData.cdSeconds,
+                pMinutes: presetData.pMinutes,
+                pSeconds: presetData.pSeconds
+              });
               break;
             }
           }
