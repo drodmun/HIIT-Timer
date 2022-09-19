@@ -13,7 +13,7 @@ import Button from '../Button/Button';
 import { useCallback } from 'react';
 import { useGlobalContext } from 'globalStateContext';
 import useSound from 'use-sound';
-import boopSfx from '../../assets/sounds/beep.mp3';
+import eyeOfTheTiger from '../../assets/sounds/eyeofTheTIger.mp3';
 
 const Actions = () => {
   const theme = useTheme();
@@ -25,20 +25,21 @@ const Actions = () => {
   const toggleTuning = useCallback(() => setIsRunning((pIsRunning) => !pIsRunning), [setIsRunning]);
   const resetMinutes = useResetRecoilState(minutesAtom);
   const resetSeconds = useResetRecoilState(secondsAtom);
-  const [play] = useSound(boopSfx);
+  const [play, { stop }] = useSound(eyeOfTheTiger, { volume: 0.4 });
 
   const handleOnReset = useCallback(() => {
     resetCountersConfigSet();
     resetMinutes();
     resetSeconds();
-  }, [resetCountersConfigSet, resetMinutes, resetSeconds]);
+    stop();
+  }, [resetCountersConfigSet, resetMinutes, resetSeconds, stop]);
 
   const handleOnStart = useCallback(() => {
     if (countersConfigSet.length <= 1) addCounterConfig({} as CounterConfig);
     toggleTuning();
-    play();
   }, [addCounterConfig, countersConfigSet.length, toggleTuning]);
   const { darkMode } = useGlobalContext();
+  isRunning ? play() : stop();
   return (
     <div
       style={{ margin: '64px 0', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}

@@ -11,7 +11,7 @@ import { red } from '@mui/material/colors';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
 import CircularProgress from '@mui/material/CircularProgress';
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -54,17 +54,29 @@ function LoginForm() {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        console.log(user);
         let mail: any = '';
         if (user.email) {
           mail = user.email;
-          setDoc(doc(db, 'users', mail), {
-            name: user.displayName,
-            authProvider: providerName,
-            email: user.email,
-            userID: user.uid,
-            presets: []
-          });
+          //check if user exists in db
+          const docRef = doc(db, 'users', mail);
+          getDoc(docRef)
+            .then((doc) => {
+              if (doc.exists()) {
+                setRedirect(!redirect);
+              } else {
+                // doc.data() will be undefined in this case
+                setDoc(docRef, {
+                  name: user.displayName,
+                  authProvider: providerName,
+                  email: user.email,
+                  userID: user.uid,
+                  presets: []
+                });
+              }
+            })
+            .catch((error) => {
+              console.log('Error getting document:', error);
+            });
           setRedirect(!redirect);
         } else {
           console.log('error doc no sent');

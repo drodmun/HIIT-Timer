@@ -35,7 +35,7 @@ const TimerManager = () => {
         </div>
       </>
     );
-  }, [countersConfigSet]);
+  }, [presetObj]);
 
   return (
     <div

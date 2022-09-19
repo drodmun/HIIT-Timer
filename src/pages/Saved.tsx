@@ -53,15 +53,14 @@ const Save = ({ onClose }: { onClose: () => void }) => {
             if (presetData.presets[i].name == label) {
               preset = presetData.presets[i];
               setPresetObj({
-                presetName: presetData.name,
-                rounds: 1,
-                rMinutes: presetData.rMinutes,
-                rSeconds: presetData.rSeconds,
-                sets: 1,
-                cdMinutes: presetData.cdMinutes,
-                cdSeconds: presetData.cdSeconds,
-                pMinutes: presetData.pMinutes,
-                pSeconds: presetData.pSeconds
+                rounds: preset.rounds,
+                rMinutes: preset.rMinutes,
+                rSeconds: preset.rSeconds,
+                sets: preset.sets,
+                cdMinutes: preset.cdMinutes,
+                cdSeconds: preset.cdSeconds,
+                pMinutes: preset.pMinutes,
+                pSeconds: preset.pSeconds
               });
               break;
             }

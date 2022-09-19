@@ -10,7 +10,7 @@ function SignUpPage() {
   const { darkMode } = useGlobalContext();
   return (
     <ContainerS isSecondary={darkMode}>
-      <Navbar expand='lg'>
+      <Navbar expand='lg' style={{ color: darkMode ? 'black' : 'white' }}>
         <Container>
           <Link to='/' style={{ textDecoration: 'none' }}>
             <Navbar.Brand style={{ fontSize: '30px' }}>
