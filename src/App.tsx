@@ -14,8 +14,7 @@ import { MyGlobalContext } from 'globalStateContext';
 import { useState } from 'react';
 const App = () => {
   useGaTracker();
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [darkMode, setDarkMode] = useState<boolean>(true);
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('dark-mode') === 'true');
   const [isPopup, setIsPopup] = useState<boolean>(true);
   const [presetObj, setPresetObj] = useState<object>({
     presetName: '',
@@ -26,15 +25,14 @@ const App = () => {
     cdMinutes: 0,
     cdSeconds: 0,
     pMinutes: 0,
-    pSeconds: 0
+    pSeconds: 0,
+    countDownMinutes: 0,
+    countDownSeconds: 0
   });
-
   return (
     <ThemeProvider theme={theme}>
       <RecoilRoot>
-        <MyGlobalContext.Provider
-          value={{ darkMode, setDarkMode, loggedIn, setLoggedIn, isPopup, setIsPopup, presetObj, setPresetObj }}
-        >
+        <MyGlobalContext.Provider value={{ darkMode, setDarkMode, isPopup, setIsPopup, presetObj, setPresetObj }}>
           <Routes>
             <Route path='/' element={<Index />} />
             <Route path='Login' element={<LoginPage />} />

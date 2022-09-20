@@ -21,6 +21,7 @@ const ShowCounter = () => {
   const setIsRunning = useSetRecoilState(isRunningAtom);
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentConfig = useMemo(() => countersConfigSet[currentIndex], [countersConfigSet, currentIndex]);
+  const { darkMode } = useGlobalContext();
   const currentDuration = useMemo(
     () => (currentConfig.minutes || 0) * 60 + (currentConfig.seconds || 0),
     [currentConfig.minutes, currentConfig.seconds]
@@ -39,7 +40,6 @@ const ShowCounter = () => {
       setIsRunning(false);
     }
   };
-  const { darkMode } = useGlobalContext();
   const colors: { 0: ColorHex } & { 1: ColorHex } & ColorHex[] = useMemo(() => {
     switch (currentConfig.type) {
       case 'preparation':
@@ -99,7 +99,11 @@ const ShowCounter = () => {
           }}
         >
           {!!currentConfig.round && (
-            <Typography variant='caption' component='span' style={{ fontSize: '0.6rem' }}>
+            <Typography
+              variant='caption'
+              component='span'
+              style={{ fontSize: '0.6rem', color: darkMode ? 'black' : 'white' }}
+            >
               {`Round ${currentConfig.round}, Set ${currentConfig.set}`}
             </Typography>
           )}
@@ -107,7 +111,7 @@ const ShowCounter = () => {
             {mmss(remainingTime)}
           </Typography>
 
-          <Typography variant='body1' component='span' style={{ marginTop: 8 }}>
+          <Typography variant='body1' component='span' style={{ marginTop: 8, color: darkMode ? 'black' : 'white' }}>
             {message.toUpperCase()}
           </Typography>
         </div>

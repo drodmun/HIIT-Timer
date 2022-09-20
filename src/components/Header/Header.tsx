@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AppBar,
@@ -22,30 +22,45 @@ import { useGlobalContext } from 'globalStateContext';
 import { auth } from '../../config/firebase/firebaseConf';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 
-let uid: string | null = 'nonexisting';
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    uid = user.email;
-  }
-});
-
-//const navItemsLarge = ['Login', 'Signup'];
-//const navItemsLargeLoggedIn = ['Logout'];
-let navItemsLogged: string[] = [];
-if (uid !== 'nonexisting') {
-  navItemsLogged = ['Logout'];
-} else {
-  navItemsLogged = ['Login', 'Signup'];
-}
 const navItemsMobile = ['Login', 'SignUp'];
 const container = window !== undefined ? () => window.document.body : undefined;
-
 const Header = (): JSX.Element => {
+  const [uid, setUid] = useState<string | null>('no');
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const { darkMode } = useGlobalContext();
   const handleDrawerToggle = useCallback(() => setMobileOpen((pMobileOpen) => !pMobileOpen), [setMobileOpen]);
-  const { loggedIn, setLoggedIn } = useGlobalContext();
+
+  // This variable will save the event for later use.
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.email);
+        //console.log(uid, 'hehe');
+      } else {
+        setUid('nonexisting');
+        //console.log(uid, 'pft');
+      }
+    });
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      console.log(deferredPrompt, 'PWA3');
+    });
+  }, [deferredPrompt]);
+
+  const installApp = async () => {
+    if (!!deferredPrompt) {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    }
+  };
+
+  const navItemsLogged = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
 
   const drawer = useMemo(
     () => (
@@ -89,7 +104,7 @@ const Header = (): JSX.Element => {
             aria-label='open drawer'
             edge='start'
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: 'none' }, color: darkMode ? 'black' : 'white' }}
+            sx={{ mr: 2, mt: 1, display: { md: 'none' }, color: darkMode ? 'black' : 'white' }}
           >
             <MenuIcon />
           </IconButton>
@@ -126,7 +141,7 @@ const Header = (): JSX.Element => {
                     works better as App
                   </Typography>
                 </Box>
-                <Button sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
+                <Button onClick={installApp} sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
                   Get APP
                 </Button>
               </Box>
@@ -142,14 +157,13 @@ const Header = (): JSX.Element => {
                         signOut(auth)
                           .then(() => {
                             // Sign-out successful.
+                            setUid('nonexisting');
                             console.log('Sign-out successful.');
                           })
                           .catch((error) => {
                             // An error happened.
                             console.log(error, 'fail');
                           });
-                        setLoggedIn(false);
-                        console.log(loggedIn);
                         //set to live auth instead of state
                       }
                     }}

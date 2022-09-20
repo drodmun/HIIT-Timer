@@ -129,7 +129,9 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
         cdMinutes: cdMinutes,
         cdSeconds: cdSeconds,
         pMinutes: pMinutes,
-        pSeconds: pSeconds
+        pSeconds: pSeconds,
+        countDownMinutes: minutes,
+        countDownSeconds: seconds
       });
 
       // console.log(rounds);
@@ -280,7 +282,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
       title='Configure ROUNDS/SETS'
       content={
         <Grid container spacing={0}>
-          <Grid item xs={12} style={{ padding: fullScreen ? 32 : 64, paddingTop: 0 }}>
+          <Grid item xs={12} style={{ padding: fullScreen ? 10 : 64, paddingTop: 0, margin: 0 }}>
             <Stepper nonLinear activeStep={activeStep} orientation='vertical'>
               {steps.map((step, index) => (
                 <Step key={step.label}>

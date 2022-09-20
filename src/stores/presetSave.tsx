@@ -2,15 +2,15 @@ import { db, auth } from '../config/firebase/firebaseConf';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
-let uid: string;
+let uid: string | null;
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    uid = user.email ?? '';
-    // ...
+    uid = user.email;
   } else {
-    // ...
+    uid = null;
   }
 });
+
 const save = async (
   name: string,
   rounds: number,
@@ -20,11 +20,13 @@ const save = async (
   cdMinutes: number,
   cdSeconds: number,
   pMinutes: number,
-  pSeconds: number
+  pSeconds: number,
+  countDownMinutes: number,
+  countDownSeconds: number
 ) => {
   //const presetName: string = name + uid;
   try {
-    await updateDoc(doc(db, 'users', uid), {
+    await updateDoc(doc(db, 'users', uid ?? ''), {
       presets: arrayUnion({
         name: name,
         rounds: rounds,
@@ -34,11 +36,13 @@ const save = async (
         cdMinutes: cdMinutes,
         cdSeconds: cdSeconds,
         pMinutes: pMinutes,
-        pSeconds: pSeconds
+        pSeconds: pSeconds,
+        countDownMinutes: countDownMinutes,
+        countDownSeconds: countDownSeconds
       })
     });
   } catch (error) {
-    alert('User not logged in.');
+    alert('An error occured while saving.');
   }
 };
 

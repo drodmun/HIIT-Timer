@@ -11,7 +11,7 @@ const SideMenu = () => {
       [
         { icon: <BookmarkBorder />, name: 'Save', action: toggleSetOpenDialog('Save') },
         { icon: <Share />, name: 'Share', action: toggleSetOpenDialog('Share') },
-        { icon: <Comment />, name: 'Feedback' },
+        { icon: <Comment />, name: 'Feedback', action: toggleSetOpenDialog('Feedback') },
         { icon: <Settings />, name: 'Settings', action: toggleSetOpenDialog('Settings') },
         { icon: <Info />, name: 'About', action: toggleSetOpenDialog('About') }
       ].reverse(),

@@ -1,12 +1,16 @@
 import { memo } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+
 import { useGlobalContext } from 'globalStateContext';
 const Logo = (): JSX.Element => {
   const { darkMode } = useGlobalContext();
   return (
-    <Typography variant='h4' component='h1' sx={{ fontFamily: 'Arial', display: 'flex' }}>
-      <Box sx={{ color: '#11c1f4' }}>HIIT</Box> &nbsp;<Box sx={{ color: darkMode ? '#000000' : '#fff' }}>timer</Box>
-    </Typography>
+    <Link to='/' style={{ textDecoration: 'none' }}>
+      <div style={{ fontSize: '30px' }}>
+        <b style={{ color: '#11c1f4' }}>HIIT</b>
+        <b style={{ color: darkMode ? '#000000' : 'white' }}> timer</b>
+      </div>
+    </Link>
   );
 };
 

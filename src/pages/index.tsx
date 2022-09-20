@@ -15,6 +15,7 @@ import Settings from './Settings';
 import Saved from './Saved';
 import Share from './Share';
 import { Adsense } from '@ctrl/react-adsense';
+import Feedback from './Feedback';
 const Index = () => {
   const theme = useTheme();
   const isRunning = useRecoilValue(isRunningAtom);
@@ -43,7 +44,6 @@ const Index = () => {
             id='BOXXXXXXXXX'
             sx={{
               padding: { xs: theme.spacing(4), lg: theme.spacing(8) },
-              height: '100%',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -59,23 +59,21 @@ const Index = () => {
               </Button>
             )}
           </Box>
+          <Box>
+            <div className='w-75 h-50' style={{ zIndex: '100', margin: '0 auto' }}>
+              <Adsense client='ca-pub-2028740631579572' slot='7259870550' layout='in-article' format='fluid' />
+            </div>
+          </Box>
         </Grid>
       </Grid>
-
       <SideMenu />
       {openDialog === 'Configurator' && <SetsConfigurator onFinish={toggleSetOpenDialog('none')} />}
       {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
+      {openDialog === 'Feedback' && <Feedback onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Settings' && <Settings onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Save' && <Saved onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Share' && <Share onClose={toggleSetOpenDialog('none')} />}
       <Footer />
-      <Adsense
-        client='ca-pub-2028740631579572'
-        slot='7259870550'
-        style={{ display: 'block' }}
-        layout='in-article'
-        format='fluid'
-      />
     </Container>
   );
 };

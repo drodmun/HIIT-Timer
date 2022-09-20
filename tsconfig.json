@@ -39,6 +39,7 @@
     "example"
   ],
   "typeRoots": [
-    "node_modules/@types"
+    "node_modules/@types",
+    "src/custom_typings/"
   ]
 }
