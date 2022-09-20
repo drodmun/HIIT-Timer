@@ -49,7 +49,20 @@ const Share = ({ onClose }: { onClose: () => void }) => {
       setOpenAlert(true);
     }
     //alert here
-  }
+  }, [
+    label,
+    presetObj.cdMinutes,
+    presetObj.cdSeconds,
+    presetObj.countDownMinutes,
+    presetObj.countDownSeconds,
+    presetObj.pMinutes,
+    presetObj.pSeconds,
+    presetObj.rMinutes,
+    presetObj.rSeconds,
+    shareToUser,
+    toggleModal
+  ]);
+
   return (
     <Dialog
       onClose={onClose}

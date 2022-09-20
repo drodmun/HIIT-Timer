@@ -23,18 +23,17 @@ import { auth } from '../../firebase/firebaseConf';
 import { signOut } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 
-let navItemsLogged: string[] = [];
 const navItemsMobile = ['Login', 'SignUp'];
 const container = window !== undefined ? () => window.document.body : undefined;
 const Header = (): JSX.Element => {
   const [uid, setUid] = useState<string | null>('no');
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const { darkMode } = useGlobalContext();
   const handleDrawerToggle = useCallback(() => setMobileOpen((pMobileOpen) => !pMobileOpen), [setMobileOpen]);
 
   // This variable will save the event for later use.
-  let deferredPrompt: any;
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -47,24 +46,23 @@ const Header = (): JSX.Element => {
     });
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
-      deferredPrompt = e;
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       console.log(deferredPrompt, 'PWA3');
     });
-  }, [auth.currentUser]);
+  }, [deferredPrompt]);
+
   const installApp = async () => {
-    if (deferredPrompt !== null) {
-      deferredPrompt.prompt();
+    if (!!deferredPrompt) {
+      await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
-        deferredPrompt = null;
+        setDeferredPrompt(null);
       }
     }
   };
-  if (uid == 'nonexisting') {
-    navItemsLogged = ['Login', 'Signup'];
-  } else {
-    navItemsLogged = ['Logout'];
-  }
+
+  const navItemsLogged = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
+
   const drawer = useMemo(
     () => (
       <Box onClick={handleDrawerToggle}>

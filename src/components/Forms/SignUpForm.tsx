@@ -1,41 +1,44 @@
+import { ChangeEvent, useCallback, useState, forwardRef } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'components/Button/Button';
-import { useState } from 'react';
+import { Navigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../firebase/firebaseConf';
-import { Navigate } from 'react-router-dom';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
-import { useGlobalContext } from 'globalStateContext';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { forwardRef } from 'react';
+import Button from 'components/Button/Button';
+import { auth, db } from '../../config/firebase/firebaseConf';
+import { useGlobalContext } from 'globalStateContext';
 import ExternalAuth from './ExternalAuth';
-import { Link } from 'react-router-dom';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-function SignUpForm() {
+const SignUpForm = () => {
+  const { darkMode } = useGlobalContext();
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [redirect, setRedirect] = useState<boolean>(false);
   const formElements = ['Name', 'Email', 'Password', 'Confirm_Password'];
-  const { darkMode } = useGlobalContext();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirm_password: ''
   });
-  function handleErrorMessage(message: string) {
-    setErrorMessage(message);
-    setOpen(true);
-  }
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value, type, checked } = event.target;
-    setFormData((prevFormData) => {
-      return {
+
+  const handleErrorMessage = useCallback(
+    (message: string) => {
+      setErrorMessage(message);
+      setOpen(true);
+    },
+    [setErrorMessage, setOpen]
+  );
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value, type, checked } = event.target;
+      setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: type === 'checkbox' ? checked : value
       };
@@ -75,10 +78,9 @@ function SignUpForm() {
           }
         }
       })
-      .catch((error) => {
-        console.log('Error getting document:', error);
-      });
-  }
+      .catch((error) => console.log('Error getting document:', error));
+  };
+
   return (
     <div style={{ color: darkMode ? 'black' : 'white' }}>
       {redirect && <Navigate replace to='/login' />}
@@ -86,21 +88,20 @@ function SignUpForm() {
       <h2>Signup</h2>
       <div>
         <Form className='py-4 d-flex flex-column'>
-          {formElements.map((element, index) => {
-            return (
-              <Form.Group key={index} className='mb-3' controlId={`Regform${element}`}>
-                {/* <Form.Label>{element}</Form.Label> */}
-                <Form.Control
-                  className='rounded-3'
-                  type={element == 'Password' || element == 'Confirm_Password' ? 'password' : 'text'}
-                  required
-                  placeholder={`${element.replace('_', ' ')}`}
-                  name={element.toLowerCase()}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            );
-          })}
+          {formElements.map((element, index) => (
+            <Form.Group key={`Regform${index}`} className='mb-3' controlId={`Regform${element}`}>
+              {/* <Form.Label>{element}</Form.Label> */}
+              <Form.Control
+                className='rounded-3'
+                type={element == 'Password' || element == 'Confirm_Password' ? 'password' : 'text'}
+                required
+                placeholder={`${element.replace('_', ' ')}`}
+                name={element.toLowerCase()}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          ))}
+
           <Button onClick={handleRegister} sx={{ textTransform: 'none' }} size='large'>
             SignUp
           </Button>
@@ -108,34 +109,15 @@ function SignUpForm() {
           <Link to='/' style={{ textDecoration: 'none', margin: '0 auto' }}>
             <Button variant='contained'> Continue as a guest </Button>
           </Link>
-          <ExternalAuth
-            setRedirect={() => {
-              setRedirect(!redirect);
-            }}
-            redirect={redirect}
-            errorMessage={handleErrorMessage}
-          />
+          <ExternalAuth setRedirect={setRedirect} redirect={redirect} errorMessage={handleErrorMessage} />
         </Form>
       </div>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
-        <Alert
-          onClose={() => {
-            setOpen(false);
-          }}
-          severity='error'
-          sx={{ width: '100%' }}
-        >
+      <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+        <Alert onClose={() => setOpen(false)} severity='error' sx={{ width: '100%' }}>
           {errorMessage}
         </Alert>
       </Snackbar>
     </div>
   );
-}
-
+};
 export default SignUpForm;

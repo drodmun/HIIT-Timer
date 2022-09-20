@@ -58,13 +58,7 @@ const Index = () => {
             )}
           </Box>
           <div>
-            <Adsense
-              client='ca-pub-7640562161899788'
-              slot='7259870550'
-              style={{ zIndex: 1000, display: 'block' }}
-              layout='in-article'
-              format='fluid'
-            />
+              <Adsense client='ca-pub-5863549596591756' slot='8341210551' layout='in-article' format='fluid' />
           </div>
         </Grid>
       </Grid>

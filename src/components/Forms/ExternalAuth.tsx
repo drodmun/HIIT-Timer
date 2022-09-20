@@ -1,25 +1,32 @@
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider, db, facebookProvider } from '../../firebase/firebaseConf';
+import { Dispatch, SetStateAction } from 'react';
+import { FacebookAuthProvider, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { auth, googleProvider, db, facebookProvider } from '../../config/firebase/firebaseConf';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { red } from '@mui/material/colors';
-import { setDoc, doc, getDoc } from 'firebase/firestore';
 
-function ExternalAuth(props: any) {
-  function externalProvider(provider: any, providerName: string) {
+const ExternalAuth = ({
+  errorMessage,
+  redirect,
+  setRedirect
+}: {
+  errorMessage: (message: string) => void;
+  redirect?: boolean;
+  setRedirect: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const externalProvider = (provider: FacebookAuthProvider | GoogleAuthProvider, providerName: string) => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-        let mail: any = '';
-        if (user.email) {
-          mail = user.email;
+        if (!!user.email) {
           //check if user exists in db
-          const docRef = doc(db, 'users', mail);
+          const docRef = doc(db, 'users', user.email);
           getDoc(docRef)
             .then((doc) => {
               if (doc.exists()) {
                 //setRedirect(!redirect);
-                props.setRedirect(!props.redirect);
+                setRedirect(!redirect);
               } else {
                 // doc.data() will be undefined in this case
                 setDoc(docRef, {
@@ -35,25 +42,23 @@ function ExternalAuth(props: any) {
               console.log('Error getting document:', error);
             });
           //setRedirect(!redirect);
-          props.setRedirect(!props.redirect);
+          setRedirect(!redirect);
         } else {
           console.log('error doc no sent');
-          props.errorMessage(
+          errorMessage(
             `There was an issue while saving your information. Please try again or sign up if you don't have an account.`
           );
         }
       })
       .catch((error) => {
         console.log(error);
-        props.errorMessage('There was an issue while logging in. Please try again by refreshing.');
+        errorMessage('There was an issue while logging in. Please try again by refreshing.');
       });
-  }
-  function facebookLogin() {
-    externalProvider(facebookProvider, 'facebook');
-  }
-  function googleLogin() {
-    externalProvider(googleProvider, 'google');
-  }
+  };
+
+  const facebookLogin = () => externalProvider(facebookProvider, 'facebook');
+  const googleLogin = () => externalProvider(googleProvider, 'google');
+
   return (
     <div className='pt-5 text-center'>
       <h5>
@@ -66,6 +71,6 @@ function ExternalAuth(props: any) {
       </div>
     </div>
   );
-}
+};
 
 export default ExternalAuth;

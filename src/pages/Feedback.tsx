@@ -9,20 +9,20 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
 import { db } from '../firebase/firebaseConf';
 import { collection, addDoc } from 'firebase/firestore';
-import { auth } from '../firebase/firebaseConf';
 import { useGlobalContext } from 'globalStateContext';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 const Feedback = ({ onClose }: { onClose: () => void }) => {
+  const { darkMode } = useGlobalContext();
   const [openAlert, setOpenAlert] = useState(false);
   const [loadSuccess, setLoadSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [feedback, setFeedback] = useState<string>('');
-  const { darkMode } = useGlobalContext();
-  const current_user: any = auth.currentUser;
-  let uid: any;
+
+  const current_user = auth.currentUser;
+  let uid: string | null;
   if (current_user) {
     uid = current_user.email;
   } else {
@@ -80,17 +80,9 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
               </Button>
             </div>
           </Grid>
-          <Snackbar
-            open={openAlert}
-            autoHideDuration={6000}
-            onClose={() => {
-              setOpenAlert(false);
-            }}
-          >
+          <Snackbar open={openAlert} autoHideDuration={6000} onClose={() => setOpenAlert(false)}>
             <Alert
-              onClose={() => {
-                setOpenAlert(false);
-              }}
+              onClose={() => setOpenAlert(false)}
               severity={loadSuccess ? 'success' : 'error'}
               sx={{ width: '100%' }}
             >
