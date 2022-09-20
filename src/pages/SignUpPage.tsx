@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 import { useGlobalContext } from 'globalStateContext';
 import Nav from 'react-bootstrap/Nav';
 
-function SignUpPage() {
+const SignUpPage = () => {
   const { darkMode } = useGlobalContext();
+
   return (
     <ContainerS isSecondary={darkMode}>
       <Navbar expand='lg' className='py-4' style={{ color: darkMode ? 'black' : 'white' }}>
@@ -37,5 +38,5 @@ function SignUpPage() {
       </Container>
     </ContainerS>
   );
-}
+};
 export default SignUpPage;

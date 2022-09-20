@@ -7,27 +7,38 @@ import { useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
-import { db } from '../firebase/firebaseConf';
+import { db, auth } from '../config/firebase/firebaseConf';
 import { collection, addDoc } from 'firebase/firestore';
+<<<<<<< HEAD
 import { auth } from '../firebase/firebaseConf';
 import { useGlobalContext } from 'globalStateContext';
+=======
+>>>>>>> e43095b8c2e29b95de59f900350ab8b8ea4b1693
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
+
 const Feedback = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [loadSuccess, setLoadSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [feedback, setFeedback] = useState<string>('');
+<<<<<<< HEAD
   const { darkMode } = useGlobalContext();
   const current_user: any = auth.currentUser;
   let uid: any;
+=======
+
+  const current_user = auth.currentUser;
+  let uid: string | null;
+>>>>>>> e43095b8c2e29b95de59f900350ab8b8ea4b1693
   if (current_user) {
     uid = current_user.email;
   } else {
     uid = null;
   }
+
   const sendFeedback = async () => {
     if (uid) {
       try {
@@ -87,6 +98,7 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
               setOpenAlert(false);
             }}
           >
+<<<<<<< HEAD
             <Alert
               onClose={() => {
                 setOpenAlert(false);
@@ -95,6 +107,10 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
               sx={{ width: '100%' }}
             >
               {errorMessage}
+=======
+            <Alert onClose={() => setOpenAlert(false)} severity='success' sx={{ width: '100%' }}>
+              Feedback Submitted.
+>>>>>>> e43095b8c2e29b95de59f900350ab8b8ea4b1693
             </Alert>
           </Snackbar>
         </div>

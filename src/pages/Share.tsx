@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Grid } from '@mui/material';
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
@@ -19,12 +19,12 @@ const Share = ({ onClose }: { onClose: () => void }) => {
   const { presetObj } = useGlobalContext();
   const [label, setLabel] = useState<string>('');
   const [shareToUser, setShareToUser] = useState<string>('');
-  const [modal, setModal] = useState<boolean>(false);
-  const toggleModal = () => setModal(!modal);
+  const [, setModal] = useState<boolean>(false);
+  const toggleModal = useCallback(() => setModal((prevModal) => !prevModal), [setModal]);
 
   //let docRef = doc(db, 'presets', label);
   //const presetData = presetObj;
-  function handleShare() {
+  const handleShare = useCallback(() => {
     if (shareToUser !== '' && label !== '') {
       sharePreset(
         shareToUser,
@@ -49,7 +49,18 @@ const Share = ({ onClose }: { onClose: () => void }) => {
       setOpenAlert(true);
     }
     //alert here
-  }
+  }, [
+    label,
+    presetObj.cdMinutes,
+    presetObj.cdSeconds,
+    presetObj.pMinutes,
+    presetObj.pSeconds,
+    presetObj.rMinutes,
+    presetObj.rSeconds,
+    shareToUser,
+    toggleModal
+  ]);
+
   return (
     <Dialog
       onClose={onClose}
@@ -89,9 +100,7 @@ const Share = ({ onClose }: { onClose: () => void }) => {
             }}
           >
             <Alert
-              onClose={() => {
-                setOpenAlert(false);
-              }}
+              onClose={() => setOpenAlert(false)}
               severity={loadSuccess ? 'success' : 'error'}
               sx={{ width: '100%' }}
             >
