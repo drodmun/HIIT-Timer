@@ -1,31 +1,28 @@
-import { memo } from 'react';
+import { memo, useState, useCallback, forwardRef } from 'react';
 import { Grid } from '@mui/material';
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
 import { useGlobalContext } from '../globalStateContext';
 import { sharePreset } from '../stores/presetShare';
 import { TextField } from '@mui/material';
-import { useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { forwardRef } from 'react';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
+
 const Share = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [loadSuccess, setloadSuccess] = useState(false);
   const { presetObj } = useGlobalContext();
   const [label, setLabel] = useState<string>('');
   const [shareToUser, setShareToUser] = useState<string>('');
-  const [modal, setModal] = useState<boolean>(false);
-  const toggleModal = () => setModal(!modal);
 
   //let docRef = doc(db, 'presets', label);
   //const presetData = presetObj;
-  function handleShare() {
-    if (shareToUser !== '' && label !== '') {
+  const handleShare = useCallback(() => {
+    if (!!shareToUser.trim() && !!label.trim()) {
       sharePreset(
         shareToUser,
         label,
@@ -39,11 +36,11 @@ const Share = ({ onClose }: { onClose: () => void }) => {
         presetObj.pSeconds,
         presetObj.countDownMinutes,
         presetObj.countDownSeconds
-      );
-      toggleModal();
-      setOpenAlert(true);
-      setloadSuccess(true);
-      setLabel('');
+      ).then(() => {
+        setOpenAlert(true);
+        setloadSuccess(true);
+        setLabel('');
+      });
     } else {
       setloadSuccess(false);
       setOpenAlert(true);
@@ -59,8 +56,7 @@ const Share = ({ onClose }: { onClose: () => void }) => {
     presetObj.pSeconds,
     presetObj.rMinutes,
     presetObj.rSeconds,
-    shareToUser,
-    toggleModal
+    shareToUser
   ]);
 
   return (
@@ -94,17 +90,9 @@ const Share = ({ onClose }: { onClose: () => void }) => {
               </Button>
             </div>
           </Grid>
-          <Snackbar
-            open={openAlert}
-            autoHideDuration={6000}
-            onClose={() => {
-              setOpenAlert(false);
-            }}
-          >
+          <Snackbar open={openAlert} autoHideDuration={6000} onClose={() => setOpenAlert(false)}>
             <Alert
-              onClose={() => {
-                setOpenAlert(false);
-              }}
+              onClose={() => setOpenAlert(false)}
               severity={loadSuccess ? 'success' : 'error'}
               sx={{ width: '100%' }}
             >

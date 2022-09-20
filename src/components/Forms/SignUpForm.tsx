@@ -41,9 +41,11 @@ const SignUpForm = () => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: type === 'checkbox' ? checked : value
-      };
-    });
-  }
+      }));
+    },
+    [setFormData]
+  );
+
   const register = async () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
@@ -62,7 +64,8 @@ const SignUpForm = () => {
       setOpen(true);
     }
   };
-  function handleRegister() {
+
+  const handleRegister = () => {
     const docRef = doc(db, 'users', formData.email);
     getDoc(docRef)
       .then((doc) => {

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState, useCallback, forwardRef } from 'react';
 import { Grid } from '@mui/material';
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
@@ -8,13 +8,11 @@ import { CounterConfig } from '../types/CounterConfig';
 import { useSetRecoilState } from 'recoil';
 import { countersConfigSetAtom } from '../stores/timers';
 import { Modal, Paper, TextField } from '@mui/material';
-import { useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConf';
 import { auth } from '../firebase/firebaseConf';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { forwardRef } from 'react';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -119,7 +117,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     });
   }, [label, setCountersConfig, setPresetObj, uid]);
 
-  function LoadPreset() {
+  const loadPreset = () => {
     if (uid) {
       retrievePreset();
     } else {
@@ -128,9 +126,9 @@ const Save = ({ onClose }: { onClose: () => void }) => {
       setOpenAlert(true);
     }
     //onFinish();
-  }
+  };
 
-  function handleSave() {
+  const handleSave = useCallback(() => {
     if (uid) {
       save(
         label,
@@ -176,7 +174,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     toggleModal1();
     setLabel('');
     //alert here
-  }
+  }, [loadPreset, toggleModal1]);
 
   return (
     <Dialog

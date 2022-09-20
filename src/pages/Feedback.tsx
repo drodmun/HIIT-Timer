@@ -7,13 +7,14 @@ import { useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
-import { db } from '../firebase/firebaseConf';
+import { db, auth } from '../firebase/firebaseConf';
 import { collection, addDoc } from 'firebase/firestore';
 import { useGlobalContext } from 'globalStateContext';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
+
 const Feedback = ({ onClose }: { onClose: () => void }) => {
   const { darkMode } = useGlobalContext();
   const [openAlert, setOpenAlert] = useState(false);
