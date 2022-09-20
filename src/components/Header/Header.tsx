@@ -23,7 +23,6 @@ import { auth } from '../../firebase/firebaseConf';
 import { signOut } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 
-const navItemsMobile = ['Login', 'SignUp'];
 const container = window !== undefined ? () => window.document.body : undefined;
 const Header = (): JSX.Element => {
   const [uid, setUid] = useState<string | null>('no');
@@ -38,10 +37,8 @@ const Header = (): JSX.Element => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUid(user.email);
-        //console.log(uid, 'hehe');
       } else {
         setUid('nonexisting');
-        //console.log(uid, 'pft');
       }
     });
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -62,6 +59,7 @@ const Header = (): JSX.Element => {
   };
 
   const navItemsLogged = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
+  const navItemsMobile = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
 
   const drawer = useMemo(
     () => (

@@ -15,7 +15,7 @@ const Footer = () => {
       }}
     >
       <Typography sx={{ wordWrap: 'nowrap', color: darkMode ? '#000000' : '#ffffff' }}>
-        Created and maintained by
+        By
         <Link href='https://github.com/drodmun' underline='none'>
           &nbsp; Damian Rodriguez (drodmun)&nbsp;
         </Link>
