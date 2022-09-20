@@ -35,8 +35,7 @@ const Index = () => {
           height: '100%',
           alignContent: 'center',
           justifyContent: 'center',
-          alignItems: 'center',
-          overflow: 'hidden'
+          alignItems: 'center'
         }}
       >
         <Grid item xs={12} lg={8}>
@@ -52,18 +51,21 @@ const Index = () => {
             }}
           >
             <TimersManager />
-
             {!isRunning && (
               <Button sx={{ textTransform: 'none' }} size='x-large' onClick={toggleSetOpenDialog('Configurator')}>
                 Need a set?
               </Button>
             )}
           </Box>
-          <Box>
-            <div className='w-75 h-50' style={{ zIndex: '100', margin: '0 auto' }}>
-              <Adsense client='ca-pub-2028740631579572' slot='7259870550' layout='in-article' format='fluid' />
-            </div>
-          </Box>
+          <div>
+            <Adsense
+              client='ca-pub-7640562161899788'
+              slot='7259870550'
+              style={{ zIndex: 1000, display: 'block' }}
+              layout='in-article'
+              format='fluid'
+            />
+          </div>
         </Grid>
       </Grid>
       <SideMenu />
@@ -77,5 +79,4 @@ const Index = () => {
     </Container>
   );
 };
-
 export default Index;

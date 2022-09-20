@@ -42,7 +42,7 @@ const Actions = () => {
   isRunning ? play() : stop();
   return (
     <div
-      style={{ margin: '64px 0', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}
+      style={{ margin: '20px 0', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}
     >
       <Button
         sx={{
