@@ -35,7 +35,8 @@ const Index = () => {
           height: '100%',
           alignContent: 'center',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          overflow: 'hidden'
         }}
       >
         <Grid item xs={12} lg={8}>
@@ -57,8 +58,7 @@ const Index = () => {
               </Button>
             )}
           </Box>
-
-          <div>
+          <div className='w-50' style={{ margin: '0 auto', zIndex: 900, height: '100px' }}>
             <Adsense client='ca-pub-5863549596591756' slot='8341210551' layout='in-article' format='fluid' />
           </div>
         </Grid>
