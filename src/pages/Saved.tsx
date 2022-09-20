@@ -39,14 +39,13 @@ const Save = ({ onClose }: { onClose: () => void }) => {
   } else {
     uid = null;
   }
-  //let docRef = doc(db, 'presets', label);
-  let presetData = presetObj;
-  const retrievePreset = async () => {
+
+  const retrievePreset = useCallback(async () => {
     await onSnapshot(doc(db, 'users', uid ?? ''), (doc) => {
       const data = doc.data();
       try {
         if (!!data?.presets.length) {
-          presetData = data;
+          const presetData = data;
           const len: number = presetData.presets.length;
           let preset;
           for (let i = 0; i < len; i++) {
@@ -118,7 +117,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
         setOpenAlert(true);
       }
     });
-  };
+  }, [label, setCountersConfig, setPresetObj, uid]);
 
   const loadPreset = useCallback(() => {
     if (uid) {
@@ -160,6 +159,8 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     label,
     presetObj.cdMinutes,
     presetObj.cdSeconds,
+    presetObj.countDownMinutes,
+    presetObj.countDownSeconds,
     presetObj.pMinutes,
     presetObj.pSeconds,
     presetObj.rMinutes,

@@ -53,6 +53,8 @@ const Share = ({ onClose }: { onClose: () => void }) => {
     label,
     presetObj.cdMinutes,
     presetObj.cdSeconds,
+    presetObj.countDownMinutes,
+    presetObj.countDownSeconds,
     presetObj.pMinutes,
     presetObj.pSeconds,
     presetObj.rMinutes,

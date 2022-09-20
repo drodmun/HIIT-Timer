@@ -1,49 +1,44 @@
+import { ChangeEvent, useCallback, useState, forwardRef } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'components/Button/Button';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { Navigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../config/firebase/firebaseConf';
-import { Navigate } from 'react-router-dom';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
-import { useGlobalContext } from 'globalStateContext';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { forwardRef } from 'react';
+import Button from 'components/Button/Button';
+import { auth, db } from '../../config/firebase/firebaseConf';
+import { useGlobalContext } from 'globalStateContext';
 import ExternalAuth from './ExternalAuth';
-import { Link } from 'react-router-dom';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
 const SignUpForm = () => {
+  const { darkMode } = useGlobalContext();
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [redirect, setRedirect] = useState<boolean>(false);
   const formElements = ['Name', 'Email', 'Password', 'Confirm_Password'];
-  const { darkMode } = useGlobalContext();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirm_password: ''
   });
-<<<<<<< HEAD
-  function handleErrorMessage(message: string) {
-    setErrorMessage(message);
-    setOpen(true);
-  }
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value, type, checked } = event.target;
-    setFormData((prevFormData) => {
-      return {
-=======
+
+  const handleErrorMessage = useCallback(
+    (message: string) => {
+      setErrorMessage(message);
+      setOpen(true);
+    },
+    [setErrorMessage, setOpen]
+  );
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value, type, checked } = event.target;
       setFormData((prevFormData) => ({
->>>>>>> e43095b8c2e29b95de59f900350ab8b8ea4b1693
         ...prevFormData,
         [name]: type === 'checkbox' ? checked : value
       }));
@@ -86,16 +81,9 @@ const SignUpForm = () => {
           }
         }
       })
-<<<<<<< HEAD
-      .catch((error) => {
-        console.log('Error getting document:', error);
-      });
-  }
-=======
       .catch((error) => console.log('Error getting document:', error));
   };
 
->>>>>>> e43095b8c2e29b95de59f900350ab8b8ea4b1693
   return (
     <div style={{ color: darkMode ? 'black' : 'white' }}>
       {redirect && <Navigate replace to='/login' />}
@@ -104,7 +92,7 @@ const SignUpForm = () => {
       <div>
         <Form className='py-4 d-flex flex-column'>
           {formElements.map((element, index) => (
-            <Form.Group key={index} className='mb-3' controlId={`Regform${element}`}>
+            <Form.Group key={`Regform${index}`} className='mb-3' controlId={`Regform${element}`}>
               {/* <Form.Label>{element}</Form.Label> */}
               <Form.Control
                 className='rounded-3'
@@ -124,16 +112,10 @@ const SignUpForm = () => {
           <Link to='/' style={{ textDecoration: 'none', margin: '0 auto' }}>
             <Button variant='contained'> Continue as a guest </Button>
           </Link>
-          <ExternalAuth
-            setRedirect={() => {
-              setRedirect(!redirect);
-            }}
-            redirect={redirect}
-            errorMessage={handleErrorMessage}
-          />
+          <ExternalAuth setRedirect={setRedirect} redirect={redirect} errorMessage={handleErrorMessage} />
         </Form>
       </div>
-      <Snackbar open={open} autoHideDuration={6000}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
         <Alert onClose={() => setOpen(false)} severity='error' sx={{ width: '100%' }}>
           {errorMessage}
         </Alert>
@@ -141,5 +123,4 @@ const SignUpForm = () => {
     </div>
   );
 };
-
 export default SignUpForm;
