@@ -21,6 +21,7 @@ const ShowCounter = () => {
   const setIsRunning = useSetRecoilState(isRunningAtom);
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentConfig = useMemo(() => countersConfigSet[currentIndex], [countersConfigSet, currentIndex]);
+  const { darkMode } = useGlobalContext();
   const currentDuration = useMemo(
     () => (currentConfig.minutes || 0) * 60 + (currentConfig.seconds || 0),
     [currentConfig.minutes, currentConfig.seconds]
@@ -39,7 +40,6 @@ const ShowCounter = () => {
       setIsRunning(false);
     }
   };
-  const { darkMode } = useGlobalContext();
   const colors: { 0: ColorHex } & { 1: ColorHex } & ColorHex[] = useMemo(() => {
     switch (currentConfig.type) {
       case 'preparation':

@@ -10,13 +10,17 @@ import { forwardRef } from 'react';
 import { db } from '../firebase/firebaseConf';
 import { collection, addDoc } from 'firebase/firestore';
 import { auth } from '../firebase/firebaseConf';
+import { useGlobalContext } from 'globalStateContext';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 const Feedback = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
+  const [loadSuccess, setLoadSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [feedback, setFeedback] = useState<string>('');
+  const { darkMode } = useGlobalContext();
   const current_user: any = auth.currentUser;
   let uid: any;
   if (current_user) {
@@ -25,14 +29,28 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
     uid = null;
   }
   const sendFeedback = async () => {
-    try {
-      await addDoc(collection(db, 'feedback'), {
-        feedback: feedback,
-        user: uid
-      });
+    if (uid) {
+      try {
+        await addDoc(collection(db, 'feedback'), {
+          feedback: feedback,
+          user: uid
+        });
+        setOpenAlert(true);
+        setLoadSuccess(true);
+        setErrorMessage('Feedback sent!');
+        //temporary
+        setTimeout(onClose, 1000);
+      } catch (error) {
+        setLoadSuccess(false);
+        setErrorMessage('User not logged in / Error sending feedback');
+        setOpenAlert(true);
+        setTimeout(onClose, 1000);
+      }
+    } else {
+      setLoadSuccess(false);
+      setErrorMessage('User not logged in / Error sending feedback');
       setOpenAlert(true);
-    } catch (error) {
-      alert('User not logged in.');
+      setTimeout(onClose, 1000);
     }
   };
 
@@ -44,6 +62,8 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
         <div className='text-center pb-5 px-5'>
           <Grid>
             <TextField
+              inputProps={{ style: { color: darkMode ? 'black' : 'white' } }}
+              color='success'
               type='text'
               variant='filled'
               label='Feedback'
@@ -71,10 +91,10 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
               onClose={() => {
                 setOpenAlert(false);
               }}
-              severity='success'
+              severity={loadSuccess ? 'success' : 'error'}
               sx={{ width: '100%' }}
             >
-              Feedback Submitted.
+              {errorMessage}
             </Alert>
           </Snackbar>
         </div>
