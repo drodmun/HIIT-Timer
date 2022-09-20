@@ -19,8 +19,9 @@ import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
 import Divider from '../Divider/Divider';
 import { useGlobalContext } from 'globalStateContext';
-import { auth } from '../../config/firebase/firebaseConf';
-import { signOut, onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../firebase/firebaseConf';
+import { signOut } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 
 let navItemsLogged: string[] = [];
 const navItemsMobile = ['Login', 'SignUp'];
@@ -94,7 +95,7 @@ const Header = (): JSX.Element => {
         </List>
       </Box>
     ),
-    [darkMode, handleDrawerToggle, theme]
+    [handleDrawerToggle, theme]
   );
 
   return (

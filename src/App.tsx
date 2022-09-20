@@ -29,7 +29,6 @@ const App = () => {
     countDownMinutes: 0,
     countDownSeconds: 0
   });
-
   return (
     <ThemeProvider theme={theme}>
       <RecoilRoot>

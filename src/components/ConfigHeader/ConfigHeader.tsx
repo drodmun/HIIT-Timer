@@ -1,7 +1,8 @@
-import { memo, useCallback } from 'react';
+import { memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { Fab } from '@mui/material';
-import { VolumeUpOutlined, VolumeOff } from '@mui/icons-material';
+import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import { isPlaySoundAtom } from 'stores/timers';
 import useSound from 'use-sound';
 import boopSfx from '../../assets/sounds/beep.mp3';
@@ -9,12 +10,10 @@ const ConfigHeader = () => {
   //const theme = useTheme();
   const [isPlaySound, setIsPlaySound] = useRecoilState(isPlaySoundAtom);
   const [play] = useSound(boopSfx);
-
-  const handleClick = useCallback(() => {
+  function handleClick() {
     setIsPlaySound(!isPlaySound);
     play();
-  }, [isPlaySound, play, setIsPlaySound]);
-
+  }
   return (
     // <Box
     //   sx={{
@@ -34,7 +33,7 @@ const ConfigHeader = () => {
         onClick={handleClick}
         sx={{ color: '#ffffff', background: 'linear-gradient(90deg, #FF5FF4 20%, #11C1F4 70%)' }}
       >
-        {isPlaySound ? <VolumeUpOutlined /> : <VolumeOff />}
+        {isPlaySound ? <VolumeUpOutlinedIcon /> : <VolumeOffIcon />}
       </Fab>
     </div>
     // </Box>
