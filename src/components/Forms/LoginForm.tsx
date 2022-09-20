@@ -91,6 +91,8 @@ const LoginForm = () => {
             <div className='py-3' style={{ margin: '0 auto' }}>
               <CircularProgress />
             </div>
+          ) : (
+            <></>
           )}
 
           <ExternalAuth setRedirect={setRedirect} redirect={redirect} errorMessage={handleErrorMessage} />

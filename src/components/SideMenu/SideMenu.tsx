@@ -1,6 +1,10 @@
 import { memo, useMemo } from 'react';
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
-import { BookmarkBorder, Share, Comment, Settings, Info } from '@mui/icons-material';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import ShareIcon from '@mui/icons-material/Share';
+import CommentIcon from '@mui/icons-material/Comment';
+import SettingsIcon from '@mui/icons-material/Settings';
+import InfoIcon from '@mui/icons-material/Info';
 import { useUIConfig } from 'hooks/useUIConfig';
 
 const SideMenu = () => {
@@ -9,11 +13,11 @@ const SideMenu = () => {
   const actions: { icon: JSX.Element; name: Omit<typeof openDialog, 'none'>; action?: () => void }[] = useMemo(
     () =>
       [
-        { icon: <BookmarkBorder />, name: 'Save', action: toggleSetOpenDialog('Save') },
-        { icon: <Share />, name: 'Share', action: toggleSetOpenDialog('Share') },
-        { icon: <Comment />, name: 'Feedback', action: toggleSetOpenDialog('Feedback') },
-        { icon: <Settings />, name: 'Settings', action: toggleSetOpenDialog('Settings') },
-        { icon: <Info />, name: 'About', action: toggleSetOpenDialog('About') }
+        { icon: <BookmarkBorderIcon />, name: 'Save', action: toggleSetOpenDialog('Save') },
+        { icon: <ShareIcon />, name: 'Share', action: toggleSetOpenDialog('Share') },
+        { icon: <CommentIcon />, name: 'Feedback', action: toggleSetOpenDialog('Feedback') },
+        { icon: <SettingsIcon />, name: 'Settings', action: toggleSetOpenDialog('Settings') },
+        { icon: <InfoIcon />, name: 'About', action: toggleSetOpenDialog('About') }
       ].reverse(),
     [toggleSetOpenDialog]
   );

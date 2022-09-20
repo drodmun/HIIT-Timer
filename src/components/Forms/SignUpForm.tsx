@@ -41,12 +41,10 @@ const SignUpForm = () => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: type === 'checkbox' ? checked : value
-      }));
-    },
-    [setFormData]
-  );
-
-  const register = useCallback(async () => {
+      };
+    });
+  }
+  const register = async () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const user = res.user;
@@ -63,9 +61,8 @@ const SignUpForm = () => {
       setErrorMessage('An error occured. Please try again.');
       setOpen(true);
     }
-  }, [formData.email, formData.name, formData.password]);
-
-  const handleRegister = () => {
+  };
+  function handleRegister() {
     const docRef = doc(db, 'users', formData.email);
     getDoc(docRef)
       .then((doc) => {

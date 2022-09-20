@@ -6,7 +6,7 @@ import Container from 'components/Container/Container';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Button from 'components/Button/Button';
-import SideMenu from 'components/SideMenu/SideMenu';
+import SideMenu from '../components/SideMenu/SideMenu';
 import { useGlobalContext } from 'globalStateContext';
 import { isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
@@ -35,8 +35,7 @@ const Index = () => {
           height: '100%',
           alignContent: 'center',
           justifyContent: 'center',
-          alignItems: 'center',
-          overflow: 'hidden'
+          alignItems: 'center'
         }}
       >
         <Grid item xs={12} lg={8}>
@@ -52,18 +51,15 @@ const Index = () => {
             }}
           >
             <TimersManager />
-
             {!isRunning && (
               <Button sx={{ textTransform: 'none' }} size='x-large' onClick={toggleSetOpenDialog('Configurator')}>
                 Need a set?
               </Button>
             )}
           </Box>
-          <Box>
-            <div className='w-75 h-50' style={{ zIndex: '100', margin: '0 auto' }}>
+          <div>
               <Adsense client='ca-pub-5863549596591756' slot='8341210551' layout='in-article' format='fluid' />
-            </div>
-          </Box>
+          </div>
         </Grid>
       </Grid>
       <SideMenu />
@@ -77,5 +73,4 @@ const Index = () => {
     </Container>
   );
 };
-
 export default Index;

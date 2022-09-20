@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { memo } from 'react';
 import { Grid } from '@mui/material';
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
@@ -10,7 +10,8 @@ import { countersConfigSetAtom } from '../stores/timers';
 import { Modal, Paper, TextField } from '@mui/material';
 import { useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db, auth } from '../config/firebase/firebaseConf';
+import { db } from '../firebase/firebaseConf';
+import { auth } from '../firebase/firebaseConf';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
@@ -18,22 +19,21 @@ import { forwardRef } from 'react';
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
-
 const Save = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [loadSuccess, setloadSuccess] = useState(false);
   const { presetObj, setPresetObj } = useGlobalContext();
   const [label, setLabel] = useState<string>('');
   const [modal, setModal] = useState<boolean>(false);
-  const toggleModal = useCallback(() => setModal((pModal) => !pModal), [setModal]);
   const [modal1, setModal1] = useState<boolean>(false);
-  const toggleModal1 = useCallback(() => setModal1((pModal1) => !pModal1), [setModal1]);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const toggleModal = () => setModal(!modal);
+  const toggleModal1 = () => setModal1(!modal1);
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
   //get user from firebase here
-  let uid: string | null;
-  const current_user = auth.currentUser;
+  let uid: any;
+  const current_user: any = auth.currentUser;
   if (current_user) {
     uid = current_user.email;
   } else {
@@ -119,7 +119,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     });
   }, [label, setCountersConfig, setPresetObj, uid]);
 
-  const loadPreset = useCallback(() => {
+  function LoadPreset() {
     if (uid) {
       retrievePreset();
     } else {
@@ -128,9 +128,9 @@ const Save = ({ onClose }: { onClose: () => void }) => {
       setOpenAlert(true);
     }
     //onFinish();
-  }, [retrievePreset, uid]);
+  }
 
-  const handleSave = useCallback(() => {
+  function handleSave() {
     if (uid) {
       save(
         label,
@@ -176,7 +176,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     toggleModal1();
     setLabel('');
     //alert here
-  }, [loadPreset, toggleModal1]);
+  }
 
   return (
     <Dialog
@@ -266,7 +266,9 @@ const Save = ({ onClose }: { onClose: () => void }) => {
             }}
           >
             <Alert
-              onClose={() => setOpenAlert(false)}
+              onClose={() => {
+                setOpenAlert(false);
+              }}
               severity={loadSuccess ? 'success' : 'error'}
               sx={{ width: '100%' }}
             >

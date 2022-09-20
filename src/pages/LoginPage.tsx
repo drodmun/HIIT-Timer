@@ -2,11 +2,10 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import ContainerS from 'components/Container/Container';
-import LoginForm from 'components/Forms/LoginForm';
+import LoginForm from '../components/Forms/LoginForm';
 import { Link } from 'react-router-dom';
 import { useGlobalContext } from 'globalStateContext';
-
-const LoginPage = () => {
+function LoginPage() {
   const { darkMode } = useGlobalContext();
   return (
     <ContainerS isSecondary={darkMode}>
@@ -37,5 +36,5 @@ const LoginPage = () => {
       </Container>
     </ContainerS>
   );
-};
+}
 export default LoginPage;

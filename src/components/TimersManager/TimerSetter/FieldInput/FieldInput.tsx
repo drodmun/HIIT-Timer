@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { IconButton, Modal, Paper, TextField, Typography, useTheme } from '@mui/material';
-import { Add, Remove } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { useGlobalContext } from 'globalStateContext';
 
 const FieldInput = (props: {
@@ -27,7 +28,7 @@ const FieldInput = (props: {
               onClick={props.onTenMore}
               sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
-              <Add fontSize='large' />
+              <AddIcon fontSize='large' />
             </IconButton>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
@@ -36,7 +37,7 @@ const FieldInput = (props: {
               onClick={props.onMore}
               sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
-              <Add fontSize='large' />
+              <AddIcon fontSize='large' />
             </IconButton>
           </div>
         </div>
@@ -62,7 +63,7 @@ const FieldInput = (props: {
               onClick={props.onTenLess}
               sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
-              <Remove fontSize='large' />
+              <RemoveIcon fontSize='large' />
             </IconButton>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
@@ -70,7 +71,7 @@ const FieldInput = (props: {
               onClick={props.onLess}
               sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
             >
-              <Remove fontSize='large' />
+              <RemoveIcon fontSize='large' />
             </IconButton>
           </div>
         </div>
