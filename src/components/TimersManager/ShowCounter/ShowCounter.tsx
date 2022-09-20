@@ -99,7 +99,11 @@ const ShowCounter = () => {
           }}
         >
           {!!currentConfig.round && (
-            <Typography variant='caption' component='span' style={{ fontSize: '0.6rem' }}>
+            <Typography
+              variant='caption'
+              component='span'
+              style={{ fontSize: '0.6rem', color: darkMode ? 'black' : 'white' }}
+            >
               {`Round ${currentConfig.round}, Set ${currentConfig.set}`}
             </Typography>
           )}
@@ -107,7 +111,7 @@ const ShowCounter = () => {
             {mmss(remainingTime)}
           </Typography>
 
-          <Typography variant='body1' component='span' style={{ marginTop: 8 }}>
+          <Typography variant='body1' component='span' style={{ marginTop: 8, color: darkMode ? 'black' : 'white' }}>
             {message.toUpperCase()}
           </Typography>
         </div>

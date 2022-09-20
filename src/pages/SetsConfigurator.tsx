@@ -124,7 +124,9 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
         cdMinutes: cdMinutes,
         cdSeconds: cdSeconds,
         pMinutes: pMinutes,
-        pSeconds: pSeconds
+        pSeconds: pSeconds,
+        countDownMinutes: minutes,
+        countDownSeconds: seconds
       });
       console.log(rounds);
       onFinish();

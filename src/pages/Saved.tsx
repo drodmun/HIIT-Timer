@@ -60,7 +60,9 @@ const Save = ({ onClose }: { onClose: () => void }) => {
                 cdMinutes: preset.cdMinutes,
                 cdSeconds: preset.cdSeconds,
                 pMinutes: preset.pMinutes,
-                pSeconds: preset.pSeconds
+                pSeconds: preset.pSeconds,
+                countDownMinutes: preset.countDownMinutes,
+                countDownSeconds: preset.countDownSeconds
               });
               break;
             }
@@ -85,8 +87,8 @@ const Save = ({ onClose }: { onClose: () => void }) => {
               countersConfig.push({
                 round,
                 set,
-                minutes: preset.rMinutes,
-                seconds: preset.rSeconds,
+                minutes: preset.countDownMinutes,
+                seconds: preset.countDownSeconds,
                 type: 'countdown'
               });
 
@@ -140,7 +142,9 @@ const Save = ({ onClose }: { onClose: () => void }) => {
         presetObj.cdMinutes,
         presetObj.cdSeconds,
         presetObj.pMinutes,
-        presetObj.pSeconds
+        presetObj.pSeconds,
+        presetObj.countDownMinutes,
+        presetObj.countDownSeconds
       );
       toggleModal();
       setLabel('');

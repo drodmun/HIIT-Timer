@@ -12,7 +12,9 @@ const sharePreset = async (
   cdMinutes: number,
   cdSeconds: number,
   pMinutes: number,
-  pSeconds: number
+  pSeconds: number,
+  countDownMinutes: number,
+  countDownSeconds: number
 ) => {
   //const presetName: string = name + uid;
   try {
@@ -26,7 +28,9 @@ const sharePreset = async (
         cdMinutes: cdMinutes,
         cdSeconds: cdSeconds,
         pMinutes: pMinutes,
-        pSeconds: pSeconds
+        pSeconds: pSeconds,
+        countDownMinutes: countDownMinutes,
+        countDownSeconds: countDownSeconds
       })
     });
   } catch (error) {

@@ -9,7 +9,7 @@ function LoginPage() {
   const { darkMode } = useGlobalContext();
   return (
     <ContainerS isSecondary={darkMode}>
-      <Navbar expand='lg' className='pb-5' style={{ color: darkMode ? 'black' : 'white' }}>
+      <Navbar expand='lg' className='py-4' style={{ color: darkMode ? 'black' : 'white' }}>
         <Container>
           <Link to='/' style={{ textDecoration: 'none' }}>
             <Navbar.Brand style={{ fontSize: '30px' }}>

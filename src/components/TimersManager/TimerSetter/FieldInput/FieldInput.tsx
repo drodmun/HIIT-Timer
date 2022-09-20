@@ -21,7 +21,7 @@ const FieldInput = (props: {
   const { darkMode } = useGlobalContext();
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', width: 'fit-content' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', width: 'fit-content', zIndex: 1200 }}>
         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
             <IconButton

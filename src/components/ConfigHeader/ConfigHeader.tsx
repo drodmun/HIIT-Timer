@@ -26,7 +26,7 @@ const ConfigHeader = () => {
     //     cursror: 'pointer'
     //   }}
     // >
-    <div className='py-5' style={{ zIndex: '1200' }}>
+    <div className='pt-5' style={{ zIndex: '1200' }}>
       <Fab
         size='small'
         aria-label='sound'

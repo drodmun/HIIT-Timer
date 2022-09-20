@@ -36,7 +36,9 @@ const Share = ({ onClose }: { onClose: () => void }) => {
         presetObj.cdMinutes,
         presetObj.cdSeconds,
         presetObj.pMinutes,
-        presetObj.pSeconds
+        presetObj.pSeconds,
+        presetObj.countDownMinutes,
+        presetObj.countDownSeconds
       );
       toggleModal();
       setOpenAlert(true);

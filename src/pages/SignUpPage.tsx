@@ -10,7 +10,7 @@ function SignUpPage() {
   const { darkMode } = useGlobalContext();
   return (
     <ContainerS isSecondary={darkMode}>
-      <Navbar expand='lg' style={{ color: darkMode ? 'black' : 'white' }}>
+      <Navbar expand='lg' className='py-4' style={{ color: darkMode ? 'black' : 'white' }}>
         <Container>
           <Link to='/' style={{ textDecoration: 'none' }}>
             <Navbar.Brand style={{ fontSize: '30px' }}>
@@ -32,12 +32,6 @@ function SignUpPage() {
         <div className='d-flex justify-content-center'>
           <div>
             <SignUpForm />
-            {/* <h4>
-              Already a member?{' '}
-              <Link to='/login' style={{ textDecoration: 'none' }}>
-                Login
-              </Link>
-            </h4> */}
           </div>
         </div>
       </Container>

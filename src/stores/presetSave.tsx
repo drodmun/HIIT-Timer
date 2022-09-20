@@ -20,7 +20,9 @@ const save = async (
   cdMinutes: number,
   cdSeconds: number,
   pMinutes: number,
-  pSeconds: number
+  pSeconds: number,
+  countDownMinutes: number,
+  countDownSeconds: number
 ) => {
   //const presetName: string = name + uid;
   try {
@@ -34,7 +36,9 @@ const save = async (
         cdMinutes: cdMinutes,
         cdSeconds: cdSeconds,
         pMinutes: pMinutes,
-        pSeconds: pSeconds
+        pSeconds: pSeconds,
+        countDownMinutes: countDownMinutes,
+        countDownSeconds: countDownSeconds
       })
     });
   } catch (error) {

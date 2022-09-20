@@ -9,6 +9,8 @@ import { useGlobalContext } from 'globalStateContext';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { forwardRef } from 'react';
+import ExternalAuth from './ExternalAuth';
+import { Link } from 'react-router-dom';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -26,7 +28,10 @@ function SignUpForm() {
     password: '',
     confirm_password: ''
   });
-
+  function handleErrorMessage(message: string) {
+    setErrorMessage(message);
+    setOpen(true);
+  }
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = event.target;
     setFormData((prevFormData) => {
@@ -74,14 +79,6 @@ function SignUpForm() {
         console.log('Error getting document:', error);
       });
   }
-  // function handleRegister() {
-  //   if (formData.password === formData.confirm_password) {
-  //     register();
-  //   } else {
-  //     setOpen(true);
-  //   }
-  // }
-
   return (
     <div style={{ color: darkMode ? 'black' : 'white' }}>
       {redirect && <Navigate replace to='/login' />}
@@ -107,6 +104,17 @@ function SignUpForm() {
           <Button onClick={handleRegister} sx={{ textTransform: 'none' }} size='large'>
             SignUp
           </Button>
+          <br />
+          <Link to='/' style={{ textDecoration: 'none', margin: '0 auto' }}>
+            <Button variant='contained'> Continue as a guest </Button>
+          </Link>
+          <ExternalAuth
+            setRedirect={() => {
+              setRedirect(!redirect);
+            }}
+            redirect={redirect}
+            errorMessage={handleErrorMessage}
+          />
         </Form>
       </div>
       <Snackbar

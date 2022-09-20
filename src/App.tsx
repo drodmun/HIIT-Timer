@@ -25,7 +25,9 @@ const App = () => {
     cdMinutes: 0,
     cdSeconds: 0,
     pMinutes: 0,
-    pSeconds: 0
+    pSeconds: 0,
+    countDownMinutes: 0,
+    countDownSeconds: 0
   });
   return (
     <ThemeProvider theme={theme}>

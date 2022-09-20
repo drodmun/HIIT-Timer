@@ -39,10 +39,10 @@ const Header = (): JSX.Element => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUid(user.email);
-        console.log(uid, 'hehe');
+        //console.log(uid, 'hehe');
       } else {
         setUid('nonexisting');
-        console.log(uid, 'pft');
+        //console.log(uid, 'pft');
       }
     });
     window.addEventListener('beforeinstallprompt', (e) => {
