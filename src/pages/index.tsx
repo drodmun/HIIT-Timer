@@ -57,12 +57,15 @@ const Index = () => {
               </Button>
             )}
           </Box>
+
           <div>
-              <Adsense client='ca-pub-5863549596591756' slot='8341210551' layout='in-article' format='fluid' />
+            <Adsense client='ca-pub-5863549596591756' slot='8341210551' layout='in-article' format='fluid' />
           </div>
         </Grid>
       </Grid>
+
       <SideMenu />
+
       {openDialog === 'Configurator' && <SetsConfigurator onFinish={toggleSetOpenDialog('none')} />}
       {openDialog === 'About' && <About onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Feedback' && <Feedback onClose={toggleSetOpenDialog('none')} />}
@@ -73,4 +76,5 @@ const Index = () => {
     </Container>
   );
 };
+
 export default Index;
