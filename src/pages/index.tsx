@@ -41,7 +41,6 @@ const Index = () => {
       >
         <Grid item xs={12} lg={8}>
           <Box
-            id='BOXXXXXXXXX'
             sx={{
               padding: { xs: theme.spacing(2), lg: theme.spacing(2) },
               display: 'flex',
@@ -52,12 +51,14 @@ const Index = () => {
             }}
           >
             <TimersManager />
+
             {!isRunning && (
               <Button sx={{ textTransform: 'none' }} size='x-large' onClick={toggleSetOpenDialog('Configurator')}>
                 Need a set?
               </Button>
             )}
           </Box>
+
           <div className='w-75' style={{ margin: '0 auto', zIndex: 900, height: '100px' }}>
             <Adsense client='ca-pub-5863549596591756' slot='8341210551' layout='in-article' format='fluid' />
           </div>

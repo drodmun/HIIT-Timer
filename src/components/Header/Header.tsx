@@ -77,7 +77,7 @@ const Header = (): JSX.Element => {
         <List>
           <Divider />
           {navItemsMobile.map((item, index) => (
-            <div key={item}>
+            <div key={`navItemsMobile_${item}`}>
               <ListItem>
                 <Link key={item} to={`/${item}`} style={{ textDecoration: 'none' }}>
                   <ListItemButton sx={{ textAlign: 'left' }}>
@@ -91,7 +91,7 @@ const Header = (): JSX.Element => {
         </List>
       </Box>
     ),
-    [handleDrawerToggle, theme]
+    [darkMode, handleDrawerToggle, navItemsMobile, theme]
   );
 
   return (
