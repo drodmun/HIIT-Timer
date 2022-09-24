@@ -1,25 +1,32 @@
 {
-  "background_color": "#ffffff",
+  "theme_color": "#11C1F4",
+  "background_color": "#0D174D",
   "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "HIIT Timer",
+  "short_name": "HIIT",
+  "description": "HIIT Timer from drodmun",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64",
-      "type": "image/x-icon"
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
     },
     {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  ],
-  "name": "HIIT Timer by drodmun",
-  "short_name": "HIIT Timer",
-  "start_url": ".",
-  "theme_color": "#000000"
+  ]
 }
