@@ -10,7 +10,7 @@ const Dialog = ({ onClose, title, content }: { onClose: () => void; title: strin
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const { darkMode } = useGlobalContext();
   return (
-    <MUIDialog key='settings_popup' fullScreen={fullScreen} maxWidth='md' fullWidth open>
+    <MUIDialog key='settings_popup' fullScreen={fullScreen} maxWidth='md' fullWidth open={true}>
       <Container isSecondary={darkMode} isPopup={true}>
         <DialogTitle>
           <Grid container direction='row' justifyContent='space-between' alignItems='center'>
