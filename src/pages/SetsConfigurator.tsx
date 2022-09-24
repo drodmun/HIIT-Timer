@@ -241,7 +241,20 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
           );
       }
     },
-    [cdMinutes, cdSeconds, minutes, pMinutes, pSeconds, rMinutes, rSeconds, renderFieldInput, rounds, seconds, sets]
+    [
+      cdMinutes,
+      cdSeconds,
+      darkMode,
+      minutes,
+      pMinutes,
+      pSeconds,
+      rMinutes,
+      rSeconds,
+      renderFieldInput,
+      rounds,
+      seconds,
+      sets
+    ]
   );
 
   return (

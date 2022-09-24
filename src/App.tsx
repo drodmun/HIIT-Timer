@@ -14,6 +14,7 @@ import { MyGlobalContext } from 'globalStateContext';
 import { useState } from 'react';
 const App = () => {
   useGaTracker();
+
   const [darkMode, setDarkMode] = useState(localStorage.getItem('dark-mode') === 'true');
   const [isPopup, setIsPopup] = useState<boolean>(true);
   const [presetObj, setPresetObj] = useState<object>({
@@ -29,6 +30,7 @@ const App = () => {
     countDownMinutes: 0,
     countDownSeconds: 0
   });
+
   return (
     <ThemeProvider theme={theme}>
       <RecoilRoot>

@@ -2,7 +2,6 @@
 node_modules
 # don't lint build output (make sure it's set to your correct build folder name)
 build
-dist
 public
 
 # Since it is a TS project, ignore JS compiled

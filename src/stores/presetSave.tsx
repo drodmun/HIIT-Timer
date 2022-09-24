@@ -2,7 +2,7 @@ import { db, auth } from '../firebase/firebaseConf';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
-let uid: any;
+let uid: string | null;
 onAuthStateChanged(auth, (user) => {
   if (user) {
     uid = user.email;
@@ -24,26 +24,27 @@ const save = async (
   countDownMinutes: number,
   countDownSeconds: number
 ) => {
-  //const presetName: string = name + uid;
-  try {
-    await updateDoc(doc(db, 'users', uid), {
-      presets: arrayUnion({
-        name: name,
-        rounds: rounds,
-        rMinutes: rMinutes,
-        rSeconds: rSeconds,
-        sets: sets,
-        cdMinutes: cdMinutes,
-        cdSeconds: cdSeconds,
-        pMinutes: pMinutes,
-        pSeconds: pSeconds,
-        countDownMinutes: countDownMinutes,
-        countDownSeconds: countDownSeconds
-      })
-    });
-  } catch (error) {
-    alert('An error occured while saving.');
-  }
+  if (!!uid)
+    //const presetName: string = name + uid;
+    try {
+      await updateDoc(doc(db, 'users', uid), {
+        presets: arrayUnion({
+          name: name,
+          rounds: rounds,
+          rMinutes: rMinutes,
+          rSeconds: rSeconds,
+          sets: sets,
+          cdMinutes: cdMinutes,
+          cdSeconds: cdSeconds,
+          pMinutes: pMinutes,
+          pSeconds: pSeconds,
+          countDownMinutes: countDownMinutes,
+          countDownSeconds: countDownSeconds
+        })
+      });
+    } catch (error) {
+      alert('An error occured while saving.');
+    }
 };
 
 export { save };
