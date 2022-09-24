@@ -3,22 +3,22 @@
   "name": "HIIT Timer by drodmun",
   "icons": [
     {
-      "src": "images/logo32",
+      "src": "static/images/logo32",
       "sizes": "64x64 48x48 32x32 24x24 16x16",
       "type": "image/png"
     },
     {
-      "src": "images/apple-touch-icon.png",
+      "src": "static/images/apple-touch-icon.png",
       "type": "image/png",
       "sizes": "180x180"
     },
     {
-      "src": "images/logo192.png",
+      "src": "static/images/logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "images/logo512.png",
+      "src": "static/images/logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

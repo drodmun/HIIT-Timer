@@ -23,15 +23,16 @@ const Save = ({ onClose }: { onClose: () => void }) => {
   const { presetObj, setPresetObj } = useGlobalContext();
   const [label, setLabel] = useState<string>('');
   const [modal, setModal] = useState<boolean>(false);
+  const toggleModal = useCallback(() => setModal((pModal) => !pModal), [setModal]);
   const [modal1, setModal1] = useState<boolean>(false);
+  const toggleModal1 = useCallback(() => setModal1((pModal1) => !pModal1), [setModal1]);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const toggleModal = () => setModal(!modal);
-  const toggleModal1 = () => setModal1(!modal1);
+
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
 
   //get user from firebase here
-  let uid: any;
-  const current_user: any = auth.currentUser;
+  let uid: string | null;
+  const current_user = auth.currentUser;
   if (current_user) {
     uid = current_user.email;
   } else {
@@ -39,85 +40,86 @@ const Save = ({ onClose }: { onClose: () => void }) => {
   }
 
   const retrievePreset = useCallback(async () => {
-    await onSnapshot(doc(db, 'users', uid ?? ''), (doc) => {
-      const data = doc.data();
-      try {
-        if (!!data?.presets.length) {
-          const presetData = data;
-          const len: number = presetData.presets.length;
-          let preset;
-          for (let i = 0; i < len; i++) {
-            if (presetData.presets[i].name == label) {
-              preset = presetData.presets[i];
-              setPresetObj({
-                rounds: preset.rounds,
-                rMinutes: preset.rMinutes,
-                rSeconds: preset.rSeconds,
-                sets: preset.sets,
-                cdMinutes: preset.cdMinutes,
-                cdSeconds: preset.cdSeconds,
-                pMinutes: preset.pMinutes,
-                pSeconds: preset.pSeconds,
-                countDownMinutes: preset.countDownMinutes,
-                countDownSeconds: preset.countDownSeconds
-              });
-              break;
+    if (!!uid)
+      await onSnapshot(doc(db, 'users', uid), (doc) => {
+        const data = doc.data();
+        try {
+          if (!!data?.presets.length) {
+            const presetData = data;
+            const len: number = presetData.presets.length;
+            let preset;
+            for (let i = 0; i < len; i++) {
+              if (presetData.presets[i].name == label) {
+                preset = presetData.presets[i];
+                setPresetObj({
+                  rounds: preset.rounds,
+                  rMinutes: preset.rMinutes,
+                  rSeconds: preset.rSeconds,
+                  sets: preset.sets,
+                  cdMinutes: preset.cdMinutes,
+                  cdSeconds: preset.cdSeconds,
+                  pMinutes: preset.pMinutes,
+                  pSeconds: preset.pSeconds,
+                  countDownMinutes: preset.countDownMinutes,
+                  countDownSeconds: preset.countDownSeconds
+                });
+                break;
+              }
             }
-          }
-          setErrorMessage('Preset loaded successfully!');
-          setOpenAlert(true);
-          setloadSuccess(true);
-          const countersConfig: CounterConfig[] = [];
-          const hasCooldown = !!preset.cdMinutes || !!preset.cdSeconds;
-          const hasPreparation = !!preset.pMinutes || !!preset.pSeconds;
-          for (let round = 1; round <= preset.rounds; round++) {
-            for (let set = 1; set <= preset.sets; set++) {
-              if (hasPreparation)
+            setErrorMessage('Preset loaded successfully!');
+            setOpenAlert(true);
+            setloadSuccess(true);
+            const countersConfig: CounterConfig[] = [];
+            const hasCooldown = !!preset.cdMinutes || !!preset.cdSeconds;
+            const hasPreparation = !!preset.pMinutes || !!preset.pSeconds;
+            for (let round = 1; round <= preset.rounds; round++) {
+              for (let set = 1; set <= preset.sets; set++) {
+                if (hasPreparation)
+                  countersConfig.push({
+                    round,
+                    set,
+                    minutes: preset.pMinutes,
+                    seconds: preset.pSeconds,
+                    type: 'preparation'
+                  });
+
                 countersConfig.push({
                   round,
                   set,
-                  minutes: preset.pMinutes,
-                  seconds: preset.pSeconds,
-                  type: 'preparation'
+                  minutes: preset.countDownMinutes,
+                  seconds: preset.countDownSeconds,
+                  type: 'countdown'
                 });
 
-              countersConfig.push({
-                round,
-                set,
-                minutes: preset.countDownMinutes,
-                seconds: preset.countDownSeconds,
-                type: 'countdown'
-              });
-
-              if (hasCooldown)
-                countersConfig.push({
-                  round,
-                  set,
-                  minutes: preset.cdMinutes,
-                  seconds: preset.cdSeconds,
-                  type: 'cooldown'
-                });
+                if (hasCooldown)
+                  countersConfig.push({
+                    round,
+                    set,
+                    minutes: preset.cdMinutes,
+                    seconds: preset.cdSeconds,
+                    type: 'cooldown'
+                  });
+              }
             }
+            setCountersConfig(countersConfig);
+            console.log(countersConfig);
+          } else {
+            // doc.data() will be undefined in this case
+            console.log('No such document!');
+            setErrorMessage('No such preset!');
+            setloadSuccess(false);
+            setOpenAlert(true);
           }
-          setCountersConfig(countersConfig);
-          console.log(countersConfig);
-        } else {
-          // doc.data() will be undefined in this case
+        } catch {
           console.log('No such document!');
           setErrorMessage('No such preset!');
           setloadSuccess(false);
           setOpenAlert(true);
         }
-      } catch {
-        console.log('No such document!');
-        setErrorMessage('No such preset!');
-        setloadSuccess(false);
-        setOpenAlert(true);
-      }
-    });
+      });
   }, [label, setCountersConfig, setPresetObj, uid]);
 
-  const loadPreset = () => {
+  const loadPreset = useCallback(() => {
     if (uid) {
       retrievePreset();
     } else {
@@ -126,10 +128,10 @@ const Save = ({ onClose }: { onClose: () => void }) => {
       setOpenAlert(true);
     }
     //onFinish();
-  };
+  }, [retrievePreset, uid]);
 
   const handleSave = useCallback(() => {
-    if (uid) {
+    if (!!uid) {
       save(
         label,
         presetObj.rounds,
@@ -142,12 +144,13 @@ const Save = ({ onClose }: { onClose: () => void }) => {
         presetObj.pSeconds,
         presetObj.countDownMinutes,
         presetObj.countDownSeconds
-      );
-      toggleModal();
-      setLabel('');
-      setErrorMessage('Preset saved successfully!');
-      setloadSuccess(true);
-      setOpenAlert(true);
+      ).then(() => {
+        toggleModal();
+        setLabel('');
+        setErrorMessage('Preset saved successfully!');
+        setloadSuccess(true);
+        setOpenAlert(true);
+      });
     } else {
       setErrorMessage('Please login to save presets!');
       setloadSuccess(false);
