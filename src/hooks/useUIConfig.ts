@@ -1,8 +1,14 @@
 import { useRecoilState } from 'recoil';
 
 import { openDialogAtom } from 'stores/ui-config';
+import { PossibleDialogType } from 'types/UIConfig';
 
-export const useUIConfig = () => {
+interface useUIConfigType {
+  openDialog: PossibleDialogType;
+  toggleSetOpenDialog: (dialog: PossibleDialogType) => () => void;
+}
+
+export const useUIConfig = (): useUIConfigType => {
   const [openDialog, setOpenDialog] = useRecoilState(openDialogAtom);
   const toggleSetOpenDialog = (dialog: typeof openDialog) => () => setOpenDialog(dialog);
 
