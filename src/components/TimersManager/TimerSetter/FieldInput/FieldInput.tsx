@@ -22,7 +22,7 @@ const FieldInput = (props: {
     <>
       <div style={{ display: 'flex', flexDirection: 'column', width: 'fit-content', zIndex: 1200 }}>
         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
+          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1), marginBottom: 0 }}>
             <IconButton
               onClick={props.onTenMore}
               sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
@@ -30,7 +30,7 @@ const FieldInput = (props: {
               <Add fontSize='large' />
             </IconButton>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
+          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1), marginBottom: 0 }}>
             <IconButton
               size='large'
               onClick={props.onMore}
@@ -50,14 +50,14 @@ const FieldInput = (props: {
             color: darkMode ? '#0d174d' : theme.palette.common.white,
             fontWeight: 'lighter',
             fontSize: 150,
-            margin: theme.spacing(1)
+            margin: `0 ${theme.spacing(1)}`
           }}
         >
           {(props.value > 9 ? '' : '0') + props.value}
         </Typography>
 
         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
+          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1), marginTop: 0 }}>
             <IconButton
               onClick={props.onTenLess}
               sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
@@ -65,7 +65,7 @@ const FieldInput = (props: {
               <Remove fontSize='large' />
             </IconButton>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1) }}>
+          <div style={{ display: 'flex', flexDirection: 'column-reverse', margin: theme.spacing(1), marginTop: 0 }}>
             <IconButton
               onClick={props.onLess}
               sx={{ color: darkMode ? '#0d174d' : theme.palette.common.white, padding: 0 }}
