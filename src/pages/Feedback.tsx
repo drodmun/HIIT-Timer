@@ -5,15 +5,10 @@ import Button from 'components/Button/Button';
 import { TextField } from '@mui/material';
 import { useState } from 'react';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { forwardRef } from 'react';
 import { db, auth } from '../firebase/firebaseConf';
 import { collection, addDoc } from 'firebase/firestore';
 import { useGlobalContext } from 'globalStateContext';
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
-});
+import Alert from '../components/Alert/Alert';
 
 const Feedback = ({ onClose }: { onClose: () => void }) => {
   const { darkMode } = useGlobalContext();
@@ -81,6 +76,7 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
               </Button>
             </div>
           </Grid>
+
           <Snackbar open={openAlert} autoHideDuration={6000} onClose={() => setOpenAlert(false)}>
             <Alert
               onClose={() => setOpenAlert(false)}

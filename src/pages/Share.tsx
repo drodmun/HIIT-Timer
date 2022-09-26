@@ -1,16 +1,12 @@
-import { memo, useState, useCallback, forwardRef } from 'react';
+import { memo, useState, useCallback } from 'react';
 import { Grid } from '@mui/material';
+import { Grid, TextField, Snackbar } from '@mui/material';
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
 import { useGlobalContext } from '../globalStateContext';
 import { sharePreset } from '../stores/presetShare';
-import { TextField } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
-});
+import { presetAtom } from '../stores/timers';
+import Alert from '../components/Alert/Alert';
 
 const Share = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
