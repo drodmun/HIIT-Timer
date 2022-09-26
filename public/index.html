@@ -1,78 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <!-- HTML Meta Tags -->
+    <title>HIIT timer</title>
+    <meta name="description" content="Configurable HIIT timer, add your rounds with cool-downs, prep time...">
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="HIIT timer" />
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/static/images/apple-touch-icon.png" />
-  <!--
-    manifest.json provides metadata used when your web app is installed on a
-    user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-  -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#11C1F4" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-  <meta property="og:title" content="HIIT timer">
-  <meta property="og:description" content="Configurable HIIT timer from drodmun">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="%PUBLIC_URL%">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:image" content="%PUBLIC_URL%/icon-512x512.png">
-  <meta property="og:site_name" content="HIIT timer">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
 
-  <link rel="shortcut icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico">
-  <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/icon-192x192.png">
-  <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/icon-512x512.png">
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="%PUBLIC_URL%">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="HIIT timer">
+    <meta property="og:description" content="Configurable HIIT timer, add your rounds with cool-downs, prep time...">
+    <meta property="og:image" content="%PUBLIC_URL%/ScreenshotForSocial.jpg">
+    <meta property="og:locale" content="en_GB">
 
-  <!--
-    Notice the use of %PUBLIC_URL% in the tags above.
-    It will be replaced with the URL of the `public` folder during the build.
-    Only files inside the `public` folder can be referenced from the HTML.
-
-    Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-    work correctly both with client-side routing and a non-root public URL.
-    Learn how to configure a non-root public URL by running `npm run build`.
-  -->
-  <title>HIIT Timer</title>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KX8HS6CBX4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() { dataLayer.push(arguments); }
-
-    gtag('js', new Date());
-    gtag('config', 'G-KX8HS6CBX4');
-  </script>
-
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5863549596591756"
-          crossorigin="anonymous"></script>
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="drodmun-hiit-timer.netlify.app">
+    <meta property="twitter:url" content="https://drodmun-hiit-timer.netlify.app/">
+    <meta name="twitter:title" content="HIIT timer">
+    <meta name="twitter:description" content="Configurable HIIT timer, add your rounds with cool-downs, prep time...">
+    <meta name="twitter:image" content="%PUBLIC_URL%/ScreenshotForSocial.jpg">
 
 
-</head>
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/icon-512x512.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png">
+    <link rel="mask-icon" href="%PUBLIC_URL%/safari-pinned-tab.svg" color="#11c1f4">
+    <meta name="apple-mobile-web-app-title" content="HIIT Timer">
+    <meta name="application-name" content="HIIT Timer">
+    <meta name="msapplication-TileColor" content="#0d164c">
+    <meta name="theme-color" content="#0d164c">
 
-<body>
-<noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root"></div>
-<!--
-This HTML file is a template.
-If you open it directly in the browser, you will see an empty page.
 
-You can add webfonts, meta tags, or analytics to this file.
-The build step will place the bundled scripts into the <body> tag.
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KX8HS6CBX4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
 
-To begin the development, run `npm start` or `yarn start`.
-To create a production bundle, use `npm run build` or `yarn build`.
--->
+      function gtag() { dataLayer.push(arguments); }
 
-</body>
+      gtag('js', new Date());
+      gtag('config', 'G-KX8HS6CBX4');
+    </script>
 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5863549596591756"
+            crossorigin="anonymous"></script>
+
+
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+    This HTML file is a template.
+    If you open it directly in the browser, you will see an empty page.
+
+    You can add webfonts, meta tags, or analytics to this file.
+    The build step will place the bundled scripts into the <body> tag.
+
+    To begin the development, run `npm start` or `yarn start`.
+    To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+
+  </body>
 </html>
