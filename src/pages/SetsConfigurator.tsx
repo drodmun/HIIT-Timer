@@ -17,8 +17,8 @@ import {
 } from '@mui/material';
 
 import FieldInput from 'components/TimersManager/TimerSetter/FieldInput/FieldInput';
-import { countersConfigSetAtom } from 'stores/timers';
-import { CounterConfig } from 'types/CounterConfig';
+import { hiitConfigurationAtom } from 'stores/timers';
+import { SetCounter } from 'types/CounterConfig';
 
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
@@ -73,7 +73,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
+  const setHIITConfiguration = useSetRecoilState(hiitConfigurationAtom);
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -108,27 +108,22 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
 
   const handleNext = () => {
     if (activeStep == steps.length - 1) {
-      const countersConfig: CounterConfig[] = [];
+      const counters = [] as SetCounter[];
+
       const hasRoundRest = !!rMinutes || !!rSeconds;
       const hasCooldown = !!cdMinutes || !!cdSeconds;
       const hasPreparation = !!pMinutes || !!pSeconds;
       for (let round = 1; round <= rounds; round++) {
         for (let set = 1; set <= sets; set++) {
-          if (hasPreparation)
-            countersConfig.push({ round, set, minutes: pMinutes, seconds: pSeconds, type: 'preparation' });
-
-          countersConfig.push({ round, set, minutes, seconds, type: 'countdown' });
-
-          if (hasCooldown)
-            countersConfig.push({ round, set, minutes: cdMinutes, seconds: cdSeconds, type: 'cooldown' });
+          if (hasPreparation) counters.push({ round, set, minutes: pMinutes, seconds: pSeconds, type: 'preparation' });
+          counters.push({ round, set, minutes, seconds, type: 'countdown' });
+          if (hasCooldown) counters.push({ round, set, minutes: cdMinutes, seconds: cdSeconds, type: 'cooldown' });
         }
 
-        if (hasRoundRest)
-          countersConfig.push({ round, set: sets, minutes: rMinutes, seconds: rSeconds, type: 'roundrest' });
+        if (hasRoundRest) counters.push({ round, set: sets, minutes: rMinutes, seconds: rSeconds, type: 'round-rest' });
       }
 
-      setCountersConfig(countersConfig);
-      console.log(rounds);
+      setHIITConfiguration({ rounds, sets, counters });
       onFinish();
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);

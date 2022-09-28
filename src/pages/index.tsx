@@ -8,7 +8,7 @@ import Footer from 'components/Footer/Footer';
 import Button from 'components/Button/Button';
 import SideMenu from '../components/SideMenu/SideMenu';
 import { useGlobalContext } from 'globalStateContext';
-import { countersConfigSetAtom, isRunningAtom } from 'stores/timers';
+import { hiitConfigurationAtom, isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
 import About from './About';
 import Settings from './Settings';
@@ -22,7 +22,8 @@ const Index = () => {
   const { container, containerBox, adsense } = useIndexStyles(useTheme());
 
   const isRunning = useRecoilValue(isRunningAtom);
-  const countersConfigSet = useRecoilValue(countersConfigSetAtom);
+  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
+  console.log(hiitConfiguration);
   const { openDialog, toggleSetOpenDialog } = useUIConfig();
   const { darkMode } = useGlobalContext();
 
@@ -41,7 +42,7 @@ const Index = () => {
             >
               <TimersManager />
 
-              {!isRunning && (!countersConfigSet.length || !countersConfigSet[0].round) && (
+              {!isRunning && (
                 <Box width='100%' padding='0 16px'>
                   <Button size='large' fullWidth onClick={toggleSetOpenDialog('Configurator')}>
                     Need a set?

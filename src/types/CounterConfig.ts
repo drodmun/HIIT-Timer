@@ -3,25 +3,14 @@ type Time = {
   seconds: number;
 };
 
-export type CounterConfig = Time & {
-  round?: number;
-  set?: number;
-  title?: string;
-  type: 'countdown' | 'cooldown' | 'preparation' | 'roundrest';
+export type SetCounter = Time & {
+  round: number;
+  set: number;
+  type: 'countdown' | 'cooldown' | 'preparation' | 'set-rest' | 'round-rest';
 };
 
-export ty
-
-export type PresetType = {
-  presetName?: string;
+export type HIITConfiguration = {
   rounds: number;
-  rMinutes: number;
-  rSeconds: number;
   sets: number;
-  cdMinutes: number;
-  cdSeconds: number;
-  pMinutes: number;
-  pSeconds: number;
-  countDownMinutes: number;
-  countDownSeconds: number;
+  counters: SetCounter[];
 };

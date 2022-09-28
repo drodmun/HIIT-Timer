@@ -1,12 +1,11 @@
 import { memo, useState, useCallback } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { Grid, Snackbar, Modal, Paper, TextField } from '@mui/material';
 
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
 import { save } from '../stores/presetSave';
-import { CounterConfig } from '../types/CounterConfig';
-import { countersConfigSetAtom, presetAtom } from '../stores/timers';
+import { hiitConfigurationAtom } from '../stores/timers';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db, auth } from '../firebase/firebaseConf';
 import Alert from '../components/Alert/Alert';
@@ -24,8 +23,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
 
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
-  const [preset, setPreset] = useRecoilState(presetAtom);
+  const [hiitConfiguration, setHIITConfiguration] = useRecoilState(hiitConfigurationAtom);
 
   //get user from firebase here
   let uid: string | null;
@@ -48,58 +46,13 @@ const Save = ({ onClose }: { onClose: () => void }) => {
             for (let i = 0; i < len; i++) {
               if (presetData.presets[i].name == label) {
                 preset = presetData.presets[i];
-                setPreset({
-                  rounds: preset.rounds,
-                  rMinutes: preset.rMinutes,
-                  rSeconds: preset.rSeconds,
-                  sets: preset.sets,
-                  cdMinutes: preset.cdMinutes,
-                  cdSeconds: preset.cdSeconds,
-                  pMinutes: preset.pMinutes,
-                  pSeconds: preset.pSeconds,
-                  countDownMinutes: preset.countDownMinutes,
-                  countDownSeconds: preset.countDownSeconds
-                });
+                setHIITConfiguration(preset);
                 break;
               }
             }
             setErrorMessage('Preset loaded successfully!');
             setOpenAlert(true);
             setLoadSuccess(true);
-            const countersConfig: CounterConfig[] = [];
-            const hasCooldown = !!preset.cdMinutes || !!preset.cdSeconds;
-            const hasPreparation = !!preset.pMinutes || !!preset.pSeconds;
-            for (let round = 1; round <= preset.rounds; round++) {
-              for (let set = 1; set <= preset.sets; set++) {
-                if (hasPreparation)
-                  countersConfig.push({
-                    round,
-                    set,
-                    minutes: preset.pMinutes,
-                    seconds: preset.pSeconds,
-                    type: 'preparation'
-                  });
-
-                countersConfig.push({
-                  round,
-                  set,
-                  minutes: preset.countDownMinutes,
-                  seconds: preset.countDownSeconds,
-                  type: 'countdown'
-                });
-
-                if (hasCooldown)
-                  countersConfig.push({
-                    round,
-                    set,
-                    minutes: preset.cdMinutes,
-                    seconds: preset.cdSeconds,
-                    type: 'cooldown'
-                  });
-              }
-            }
-            setCountersConfig(countersConfig);
-            console.log(countersConfig);
           } else {
             // doc.data() will be undefined in this case
             console.log('No such document!');
@@ -114,7 +67,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
           setOpenAlert(true);
         }
       });
-  }, [label, setCountersConfig, setPreset, uid]);
+  }, [label, setHIITConfiguration, uid]);
 
   const loadPreset = useCallback(() => {
     if (uid) {
@@ -129,19 +82,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
 
   const handleSave = useCallback(() => {
     if (!!uid) {
-      save(
-        label,
-        preset.rounds,
-        preset.rMinutes,
-        preset.rSeconds,
-        preset.sets,
-        preset.cdMinutes,
-        preset.cdSeconds,
-        preset.pMinutes,
-        preset.pSeconds,
-        preset.countDownMinutes,
-        preset.countDownSeconds
-      ).then(() => {
+      save(uid, label, hiitConfiguration).then(() => {
         toggleModal();
         setLabel('');
         setErrorMessage('Preset saved successfully!');
@@ -153,21 +94,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
       setLoadSuccess(false);
       setOpenAlert(true);
     }
-  }, [
-    label,
-    preset.cdMinutes,
-    preset.cdSeconds,
-    preset.countDownMinutes,
-    preset.countDownSeconds,
-    preset.pMinutes,
-    preset.pSeconds,
-    preset.rMinutes,
-    preset.rSeconds,
-    preset.rounds,
-    preset.sets,
-    toggleModal,
-    uid
-  ]);
+  }, [hiitConfiguration, label, toggleModal, uid]);
 
   const handleLoad = useCallback(() => {
     loadPreset();

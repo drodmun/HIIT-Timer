@@ -3,7 +3,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ColorHex, CountdownCircleTimer } from 'react-countdown-circle-timer';
 import useSound from 'use-sound';
 import { Typography } from '@mui/material';
-import { countersConfigSetAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
+import { hiitConfigurationAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
 import { useGlobalContext } from 'globalStateContext';
 
 const mmss = (seconds: number) => {
@@ -17,10 +17,10 @@ const ShowCounter = () => {
   const [play] = useSound('/static/assets/sounds/beep.mp3');
 
   const isPlaySound = useRecoilValue(isPlaySoundAtom);
-  const countersConfigSet = useRecoilValue(countersConfigSetAtom);
+  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
   const setIsRunning = useSetRecoilState(isRunningAtom);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentConfig = useMemo(() => countersConfigSet[currentIndex], [countersConfigSet, currentIndex]);
+  const currentConfig = useMemo(() => hiitConfiguration.counters[currentIndex], [hiitConfiguration, currentIndex]);
   const { darkMode } = useGlobalContext();
   const currentDuration = useMemo(
     () => (currentConfig.minutes || 0) * 60 + (currentConfig.seconds || 0),
@@ -32,7 +32,7 @@ const ShowCounter = () => {
 
     if (isPlaySound) play();
 
-    if (nextIndex < countersConfigSet.length) {
+    if (nextIndex < hiitConfiguration.counters.length) {
       setCurrentIndex(nextIndex);
     } else {
       // resetCountersConfigSet();
@@ -47,7 +47,8 @@ const ShowCounter = () => {
       case 'countdown':
         return ['#040267', '#00FAFC', '#9B5BF9', '#F301B0'];
       case 'cooldown':
-      case 'roundrest':
+      case 'round-rest':
+      case 'set-rest':
         return ['#00FAFC', '#00FAFC', '#00FAFC', '#00FAFC'];
     }
   }, [currentConfig.type]);
@@ -60,7 +61,8 @@ const ShowCounter = () => {
         return '';
       case 'cooldown':
         return 'Cool now...';
-      case 'roundrest':
+      case 'round-rest':
+      case 'set-rest':
         return 'Breathe and get ready...';
     }
   }, [currentConfig.type]);
@@ -75,8 +77,7 @@ const ShowCounter = () => {
     currentIndex,
     currentConfig.type,
     currentDuration,
-    mmss(currentDuration),
-    countersConfigSet.length
+    mmss(currentDuration)
   );
 
   return (

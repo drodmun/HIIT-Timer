@@ -1,28 +1,46 @@
 import { ChangeEvent } from 'react';
-import { SetterOrUpdater, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { Typography } from '@mui/material';
 
 import FieldInput from 'components/TimersManager/TimerSetter/FieldInput/FieldInput';
-import { minutesAtom, secondsAtom } from 'stores/timers';
+import { hiitConfigurationAtom } from 'stores/timers';
 import { useGlobalContext } from 'globalStateContext';
 
 const TimerSetter = () => {
-  const [mins, setMins] = useRecoilState(minutesAtom);
-  const [secs, setSecs] = useRecoilState(secondsAtom);
   const { darkMode } = useGlobalContext();
+
+  const [hiitConfiguration, setHIITConfiguration] = useRecoilState(hiitConfigurationAtom);
+
   const handleOnInput = (e: ChangeEvent<HTMLInputElement>) =>
     (e.target.value = Math.max(0, Math.min(Number(e.target.value), 59)).toString());
-  const handleOnChange = (setter: SetterOrUpdater<number>) => (e: ChangeEvent<HTMLInputElement>) =>
-    setter(Number(e.target.value));
+  const handleOnChange = (type: 'min' | 'sec') => (e: ChangeEvent<HTMLInputElement>) =>
+    handleChange(Number(e.target.value), type);
 
-  const handleOnLess = (setter: SetterOrUpdater<number>) => () =>
-    setter((prev) => Number(Math.max(0, Math.min(prev - 1, 59))));
-  const handleOnTenLess = (setter: SetterOrUpdater<number>) => () =>
-    setter((prev) => Number(Math.max(0, Math.min(prev - 10, 59))));
-  const handleOnMore = (setter: SetterOrUpdater<number>) => () =>
-    setter((prev) => Number(Math.max(0, Math.min(prev + 1, 59))));
-  const handleOnTenMore = (setter: SetterOrUpdater<number>) => () =>
-    setter((prev) => Number(Math.max(0, Math.min(prev + 10, 59))));
+  const valueFromType = (type: 'min' | 'sec'): number =>
+    hiitConfiguration.counters[0][type === 'min' ? 'minutes' : 'seconds'];
+
+  const handleOnLess = (type: 'min' | 'sec') => () =>
+    handleChange(Number(Math.max(0, Math.min(valueFromType(type) - 1, 59))), type);
+  const handleOnTenLess = (type: 'min' | 'sec') => () =>
+    handleChange(Number(Math.max(0, Math.min(valueFromType(type) - 10, 59))), type);
+  const handleOnMore = (type: 'min' | 'sec') => () =>
+    handleChange(Number(Math.max(0, Math.min(valueFromType(type) + 1, 59))), type);
+  const handleOnTenMore = (type: 'min' | 'sec') => () =>
+    handleChange(Number(Math.max(0, Math.min(valueFromType(type) + 10, 59))), type);
+
+  const handleChange = (n: number, type: 'min' | 'sec') =>
+    setHIITConfiguration((pHIITConf) => ({
+      ...pHIITConf,
+      counters: [
+        {
+          round: 1,
+          set: 1,
+          type: 'countdown',
+          minutes: type === 'min' ? n : pHIITConf.counters[0].minutes,
+          seconds: type === 'sec' ? n : pHIITConf.counters[0].seconds
+        }
+      ]
+    }));
 
   return (
     <div
@@ -36,13 +54,13 @@ const TimerSetter = () => {
     >
       <FieldInput
         label='Minutes'
-        value={mins}
-        onLess={handleOnLess(setMins)}
-        onTenLess={handleOnTenLess(setMins)}
-        onMore={handleOnMore(setMins)}
-        onTenMore={handleOnTenMore(setMins)}
+        value={valueFromType('min')}
+        onLess={handleOnLess('min')}
+        onTenLess={handleOnTenLess('min')}
+        onMore={handleOnMore('min')}
+        onTenMore={handleOnTenMore('min')}
         onInput={handleOnInput}
-        onChange={handleOnChange(setMins)}
+        onChange={handleOnChange('min')}
       />
 
       <Typography variant='h1' component='div' style={{ margin: 16, color: darkMode ? 'black' : '#ffffff' }}>
@@ -51,13 +69,13 @@ const TimerSetter = () => {
 
       <FieldInput
         label='Seconds'
-        value={secs}
-        onLess={handleOnLess(setSecs)}
-        onTenLess={handleOnTenLess(setSecs)}
-        onMore={handleOnMore(setSecs)}
-        onTenMore={handleOnTenMore(setSecs)}
+        value={valueFromType('sec')}
+        onLess={handleOnLess('sec')}
+        onTenLess={handleOnTenLess('sec')}
+        onMore={handleOnMore('sec')}
+        onTenMore={handleOnTenMore('sec')}
         onInput={handleOnInput}
-        onChange={handleOnChange(setSecs)}
+        onChange={handleOnChange('sec')}
       />
     </div>
   );

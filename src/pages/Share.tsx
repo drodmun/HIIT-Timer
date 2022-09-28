@@ -5,56 +5,32 @@ import { Grid, TextField, Snackbar } from '@mui/material';
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
 import { sharePreset } from '../stores/presetShare';
-import { presetAtom } from '../stores/timers';
+import { hiitConfigurationAtom } from '../stores/timers';
 import Alert from '../components/Alert/Alert';
 
 const Share = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
-  const [loadSuccess, setloadSuccess] = useState(false);
+  const [loadSuccess, setLoadSuccess] = useState(false);
   const [label, setLabel] = useState<string>('');
   const [shareToUser, setShareToUser] = useState<string>('');
 
-  const preset = useRecoilValue(presetAtom);
+  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
 
   //let docRef = doc(db, 'presets', label);
   //const presetData = presetObj;
   const handleShare = useCallback(() => {
     if (!!shareToUser.trim() && !!label.trim()) {
-      sharePreset(
-        shareToUser,
-        label,
-        1,
-        preset.rMinutes,
-        preset.rSeconds,
-        1,
-        preset.cdMinutes,
-        preset.cdSeconds,
-        preset.pMinutes,
-        preset.pSeconds,
-        preset.countDownMinutes,
-        preset.countDownSeconds
-      ).then(() => {
+      sharePreset(shareToUser, label, hiitConfiguration).then(() => {
         setOpenAlert(true);
-        setloadSuccess(true);
+        setLoadSuccess(true);
         setLabel('');
       });
     } else {
-      setloadSuccess(false);
+      setLoadSuccess(false);
       setOpenAlert(true);
     }
     //alert here
-  }, [
-    label,
-    preset.cdMinutes,
-    preset.cdSeconds,
-    preset.countDownMinutes,
-    preset.countDownSeconds,
-    preset.pMinutes,
-    preset.pSeconds,
-    preset.rMinutes,
-    preset.rSeconds,
-    shareToUser
-  ]);
+  }, [hiitConfiguration, label, shareToUser]);
 
   return (
     <Dialog
