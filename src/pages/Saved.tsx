@@ -4,28 +4,28 @@ import { Grid, Snackbar, Modal, Paper, TextField } from '@mui/material';
 
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
-import { useGlobalContext } from '../globalStateContext';
 import { save } from '../stores/presetSave';
 import { CounterConfig } from '../types/CounterConfig';
-import { useSetRecoilState } from 'recoil';
-import { countersConfigSetAtom } from '../stores/timers';
-import { Modal, Paper, TextField } from '@mui/material';
+import { countersConfigSetAtom, presetAtom } from '../stores/timers';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db, auth } from '../firebase/firebaseConf';
 import Alert from '../components/Alert/Alert';
 
 const Save = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
-  const [loadSuccess, setloadSuccess] = useState(false);
-  const { presetObj, setPresetObj } = useGlobalContext();
+  const [loadSuccess, setLoadSuccess] = useState(false);
   const [label, setLabel] = useState<string>('');
+
   const [modal, setModal] = useState<boolean>(false);
   const toggleModal = useCallback(() => setModal((pModal) => !pModal), [setModal]);
+
   const [modal1, setModal1] = useState<boolean>(false);
   const toggleModal1 = useCallback(() => setModal1((pModal1) => !pModal1), [setModal1]);
+
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const setCountersConfig = useSetRecoilState(countersConfigSetAtom);
+  const [preset, setPreset] = useRecoilState(presetAtom);
 
   //get user from firebase here
   let uid: string | null;
@@ -48,7 +48,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
             for (let i = 0; i < len; i++) {
               if (presetData.presets[i].name == label) {
                 preset = presetData.presets[i];
-                setPresetObj({
+                setPreset({
                   rounds: preset.rounds,
                   rMinutes: preset.rMinutes,
                   rSeconds: preset.rSeconds,
@@ -65,7 +65,7 @@ const Save = ({ onClose }: { onClose: () => void }) => {
             }
             setErrorMessage('Preset loaded successfully!');
             setOpenAlert(true);
-            setloadSuccess(true);
+            setLoadSuccess(true);
             const countersConfig: CounterConfig[] = [];
             const hasCooldown = !!preset.cdMinutes || !!preset.cdSeconds;
             const hasPreparation = !!preset.pMinutes || !!preset.pSeconds;
@@ -104,24 +104,24 @@ const Save = ({ onClose }: { onClose: () => void }) => {
             // doc.data() will be undefined in this case
             console.log('No such document!');
             setErrorMessage('No such preset!');
-            setloadSuccess(false);
+            setLoadSuccess(false);
             setOpenAlert(true);
           }
         } catch {
           console.log('No such document!');
           setErrorMessage('No such preset!');
-          setloadSuccess(false);
+          setLoadSuccess(false);
           setOpenAlert(true);
         }
       });
-  }, [label, setCountersConfig, setPresetObj, uid]);
+  }, [label, setCountersConfig, setPreset, uid]);
 
   const loadPreset = useCallback(() => {
     if (uid) {
       retrievePreset();
     } else {
       setErrorMessage('Please login to load presets!');
-      setloadSuccess(false);
+      setLoadSuccess(false);
       setOpenAlert(true);
     }
     //onFinish();
@@ -131,40 +131,40 @@ const Save = ({ onClose }: { onClose: () => void }) => {
     if (!!uid) {
       save(
         label,
-        presetObj.rounds,
-        presetObj.rMinutes,
-        presetObj.rSeconds,
-        presetObj.sets,
-        presetObj.cdMinutes,
-        presetObj.cdSeconds,
-        presetObj.pMinutes,
-        presetObj.pSeconds,
-        presetObj.countDownMinutes,
-        presetObj.countDownSeconds
+        preset.rounds,
+        preset.rMinutes,
+        preset.rSeconds,
+        preset.sets,
+        preset.cdMinutes,
+        preset.cdSeconds,
+        preset.pMinutes,
+        preset.pSeconds,
+        preset.countDownMinutes,
+        preset.countDownSeconds
       ).then(() => {
         toggleModal();
         setLabel('');
         setErrorMessage('Preset saved successfully!');
-        setloadSuccess(true);
+        setLoadSuccess(true);
         setOpenAlert(true);
       });
     } else {
       setErrorMessage('Please login to save presets!');
-      setloadSuccess(false);
+      setLoadSuccess(false);
       setOpenAlert(true);
     }
   }, [
     label,
-    presetObj.cdMinutes,
-    presetObj.cdSeconds,
-    presetObj.countDownMinutes,
-    presetObj.countDownSeconds,
-    presetObj.pMinutes,
-    presetObj.pSeconds,
-    presetObj.rMinutes,
-    presetObj.rSeconds,
-    presetObj.rounds,
-    presetObj.sets,
+    preset.cdMinutes,
+    preset.cdSeconds,
+    preset.countDownMinutes,
+    preset.countDownSeconds,
+    preset.pMinutes,
+    preset.pSeconds,
+    preset.rMinutes,
+    preset.rSeconds,
+    preset.rounds,
+    preset.sets,
     toggleModal,
     uid
   ]);

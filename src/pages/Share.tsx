@@ -1,9 +1,9 @@
 import { memo, useState, useCallback } from 'react';
-import { Grid } from '@mui/material';
+import { useRecoilValue } from 'recoil';
 import { Grid, TextField, Snackbar } from '@mui/material';
+
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
-import { useGlobalContext } from '../globalStateContext';
 import { sharePreset } from '../stores/presetShare';
 import { presetAtom } from '../stores/timers';
 import Alert from '../components/Alert/Alert';
@@ -11,9 +11,10 @@ import Alert from '../components/Alert/Alert';
 const Share = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [loadSuccess, setloadSuccess] = useState(false);
-  const { presetObj } = useGlobalContext();
   const [label, setLabel] = useState<string>('');
   const [shareToUser, setShareToUser] = useState<string>('');
+
+  const preset = useRecoilValue(presetAtom);
 
   //let docRef = doc(db, 'presets', label);
   //const presetData = presetObj;
@@ -23,15 +24,15 @@ const Share = ({ onClose }: { onClose: () => void }) => {
         shareToUser,
         label,
         1,
-        presetObj.rMinutes,
-        presetObj.rSeconds,
+        preset.rMinutes,
+        preset.rSeconds,
         1,
-        presetObj.cdMinutes,
-        presetObj.cdSeconds,
-        presetObj.pMinutes,
-        presetObj.pSeconds,
-        presetObj.countDownMinutes,
-        presetObj.countDownSeconds
+        preset.cdMinutes,
+        preset.cdSeconds,
+        preset.pMinutes,
+        preset.pSeconds,
+        preset.countDownMinutes,
+        preset.countDownSeconds
       ).then(() => {
         setOpenAlert(true);
         setloadSuccess(true);
@@ -44,14 +45,14 @@ const Share = ({ onClose }: { onClose: () => void }) => {
     //alert here
   }, [
     label,
-    presetObj.cdMinutes,
-    presetObj.cdSeconds,
-    presetObj.countDownMinutes,
-    presetObj.countDownSeconds,
-    presetObj.pMinutes,
-    presetObj.pSeconds,
-    presetObj.rMinutes,
-    presetObj.rSeconds,
+    preset.cdMinutes,
+    preset.cdSeconds,
+    preset.countDownMinutes,
+    preset.countDownSeconds,
+    preset.pMinutes,
+    preset.pSeconds,
+    preset.rMinutes,
+    preset.rSeconds,
     shareToUser
   ]);
 

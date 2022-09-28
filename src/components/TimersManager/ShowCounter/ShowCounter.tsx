@@ -47,6 +47,7 @@ const ShowCounter = () => {
       case 'countdown':
         return ['#040267', '#00FAFC', '#9B5BF9', '#F301B0'];
       case 'cooldown':
+      case 'roundrest':
         return ['#00FAFC', '#00FAFC', '#00FAFC', '#00FAFC'];
     }
   }, [currentConfig.type]);
@@ -59,6 +60,8 @@ const ShowCounter = () => {
         return '';
       case 'cooldown':
         return 'Cool now...';
+      case 'roundrest':
+        return 'Breathe and get ready...';
     }
   }, [currentConfig.type]);
 

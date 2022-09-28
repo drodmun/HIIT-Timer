@@ -30,7 +30,8 @@ const TimerSetter = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 300
+        // height: 300,
+        margin: '16px 16px 0'
       }}
     >
       <FieldInput

@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { CounterConfig } from 'types/CounterConfig';
+import { CounterConfig, PresetType } from 'types/CounterConfig';
 
 export const minutesAtom = atom({
   key: 'minutesAtom', // unique ID (with respect to other atoms/selectors)
@@ -39,4 +39,21 @@ export const addCounterSelector = selector<CounterConfig>({
 export const isPlaySoundAtom = atom({
   key: 'isPlaySoundAtom', // unique ID (with respect to other atoms/selectors)
   default: true // default value (aka initial value)
+});
+
+export const DefaultPreset = {
+  rounds: 2,
+  rMinutes: 1,
+  rSeconds: 0,
+  sets: 9,
+  cdMinutes: 0,
+  cdSeconds: 30,
+  pMinutes: 0,
+  pSeconds: 20,
+  countDownMinutes: 0,
+  countDownSeconds: 40
+} as const;
+export const presetAtom = atom<PresetType>({
+  key: 'presetAtom',
+  default: DefaultPreset
 });

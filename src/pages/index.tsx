@@ -8,7 +8,7 @@ import Footer from 'components/Footer/Footer';
 import Button from 'components/Button/Button';
 import SideMenu from '../components/SideMenu/SideMenu';
 import { useGlobalContext } from 'globalStateContext';
-import { isRunningAtom } from 'stores/timers';
+import { countersConfigSetAtom, isRunningAtom } from 'stores/timers';
 import { useUIConfig } from 'hooks/useUIConfig';
 import About from './About';
 import Settings from './Settings';
@@ -22,6 +22,7 @@ const Index = () => {
   const { container, containerBox, adsense } = useIndexStyles(useTheme());
 
   const isRunning = useRecoilValue(isRunningAtom);
+  const countersConfigSet = useRecoilValue(countersConfigSetAtom);
   const { openDialog, toggleSetOpenDialog } = useUIConfig();
   const { darkMode } = useGlobalContext();
 
@@ -31,13 +32,23 @@ const Index = () => {
       <Grid container spacing={0} alignItems='center' justifyContent='center' className={container}>
         <Grid item xs={12} lg={8}>
           <Box className={containerBox}>
-            <TimersManager />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}
+            >
+              <TimersManager />
 
-            {!isRunning && (
-              <Button size='x-large' onClick={toggleSetOpenDialog('Configurator')}>
-                Need a set?
-              </Button>
-            )}
+              {!isRunning && (!countersConfigSet.length || !countersConfigSet[0].round) && (
+                <Box width='100%' padding='0 16px'>
+                  <Button size='large' fullWidth onClick={toggleSetOpenDialog('Configurator')}>
+                    Need a set?
+                  </Button>
+                </Box>
+              )}
+            </div>
           </Box>
         </Grid>
       </Grid>

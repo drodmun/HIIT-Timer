@@ -7,8 +7,10 @@ export type CounterConfig = Time & {
   round?: number;
   set?: number;
   title?: string;
-  type: 'countdown' | 'cooldown' | 'preparation';
+  type: 'countdown' | 'cooldown' | 'preparation' | 'roundrest';
 };
+
+export ty
 
 export type PresetType = {
   presetName?: string;

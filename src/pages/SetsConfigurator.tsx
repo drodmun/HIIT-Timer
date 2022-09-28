@@ -5,9 +5,12 @@ import {
   Grid,
   Step,
   StepButton,
+  StepConnector,
+  stepConnectorClasses,
   StepContent,
   StepLabel,
   Stepper,
+  styled,
   Typography,
   useMediaQuery,
   useTheme
@@ -60,6 +63,12 @@ const steps: {
   }
 ];
 
+const QontoConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.line}`]: {
+    minHeight: theme.spacing(2)
+  }
+}));
+
 const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -85,7 +94,6 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const { setPresetObj } = useGlobalContext();
   const { darkMode } = useGlobalContext();
 
   const handleOnInput =
@@ -101,6 +109,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const handleNext = () => {
     if (activeStep == steps.length - 1) {
       const countersConfig: CounterConfig[] = [];
+      const hasRoundRest = !!rMinutes || !!rSeconds;
       const hasCooldown = !!cdMinutes || !!cdSeconds;
       const hasPreparation = !!pMinutes || !!pSeconds;
       for (let round = 1; round <= rounds; round++) {
@@ -113,21 +122,12 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
           if (hasCooldown)
             countersConfig.push({ round, set, minutes: cdMinutes, seconds: cdSeconds, type: 'cooldown' });
         }
+
+        if (hasRoundRest)
+          countersConfig.push({ round, set: sets, minutes: rMinutes, seconds: rSeconds, type: 'roundrest' });
       }
 
       setCountersConfig(countersConfig);
-      setPresetObj({
-        rounds: rounds,
-        rMinutes: rMinutes,
-        rSeconds: rSeconds,
-        sets: sets,
-        cdMinutes: cdMinutes,
-        cdSeconds: cdSeconds,
-        pMinutes: pMinutes,
-        pSeconds: pSeconds,
-        countDownMinutes: minutes,
-        countDownSeconds: seconds
-      });
       console.log(rounds);
       onFinish();
     } else {
@@ -138,21 +138,19 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const handleStep = (step: number) => () => setActiveStep(step);
 
   const renderFieldInput = useCallback(
-    (setter: Dispatch<SetStateAction<number>>, value: number, label: string, isTime = false) => {
-      return (
-        <FieldInput
-          label={label}
-          value={value}
-          onLess={handleOnValueChange(setter, -1)}
-          onTenLess={handleOnValueChange(setter, -10)}
-          onMore={handleOnValueChange(setter, 1)}
-          onTenMore={handleOnValueChange(setter, 10)}
-          onInput={isTime ? handleOnInput() : handleOnInput(1, 99)}
-          onChange={handleOnChange(setter)}
-          onSecondView
-        />
-      );
-    },
+    (setter: Dispatch<SetStateAction<number>>, value: number, label: string, isTime = false) => (
+      <FieldInput
+        label={label}
+        value={value}
+        onLess={handleOnValueChange(setter, -1)}
+        onTenLess={handleOnValueChange(setter, -10)}
+        onMore={handleOnValueChange(setter, 1)}
+        onTenMore={handleOnValueChange(setter, 10)}
+        onInput={isTime ? handleOnInput() : handleOnInput(1, 99)}
+        onChange={handleOnChange(setter)}
+        onSecondView
+      />
+    ),
     []
   );
 
@@ -264,7 +262,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
       content={
         <Grid container spacing={0}>
           <Grid item xs={12} style={{ padding: fullScreen ? 10 : 64, paddingTop: 0, margin: 0 }}>
-            <Stepper nonLinear activeStep={activeStep} orientation='vertical'>
+            <Stepper nonLinear activeStep={activeStep} orientation='vertical' connector={<QontoConnector />}>
               {steps.map((step, index) => (
                 <Step key={step.label}>
                   <StepButton onClick={handleStep(index)}>
