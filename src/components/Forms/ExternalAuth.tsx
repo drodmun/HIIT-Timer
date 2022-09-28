@@ -5,6 +5,7 @@ import { auth, googleProvider, db, facebookProvider } from '../../config/firebas
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { red } from '@mui/material/colors';
+import Button from '../Button/Button';
 
 const ExternalAuth = ({
   errorMessage,
@@ -60,14 +61,26 @@ const ExternalAuth = ({
   const googleLogin = () => externalProvider(googleProvider, 'google');
 
   return (
-    <div className='pt-5 text-center'>
-      <h5>
-        OR <br />
-        <br /> continue with
-      </h5>
-      <div className='d-flex justify-content-center' style={{ gap: '30px' }}>
-        <GoogleIcon sx={{ color: red[500], fontSize: 50, cursor: 'pointer' }} onClick={googleLogin} />
-        <FacebookIcon color='primary' sx={{ fontSize: 50, cursor: 'pointer' }} onClick={facebookLogin} />
+    <div className='pt-1 text-center'>
+      <div style={{ margin: 8 }}>OR</div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+        <Button
+          variant='outlined'
+          onClick={googleLogin}
+          startIcon={<GoogleIcon sx={{ color: red[500] }} />}
+          style={{ color: red[500], borderColor: red[500] }}
+        >
+          GOOGLE
+        </Button>
+        <Button
+          onClick={facebookLogin}
+          variant='outlined'
+          startIcon={<FacebookIcon sx={{ color: '#4267B2' }} />}
+          style={{ color: '#4267B2', borderColor: '#4267B2' }}
+        >
+          FACEBOOK
+        </Button>
       </div>
     </div>
   );

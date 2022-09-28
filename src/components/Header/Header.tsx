@@ -1,18 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  AppBar,
-  Box,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Toolbar,
-  Typography,
-  useTheme
-} from '@mui/material';
+import { AppBar, Box, Drawer, IconButton, Link, List, ListItem, Toolbar, Typography, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Logo from '../Logo/Logo';
@@ -24,7 +11,7 @@ import { signOut } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const container = window !== undefined ? () => window.document.body : undefined;
-const Header = (): JSX.Element => {
+const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
   const [uid, setUid] = useState<string | null>('no');
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -68,15 +55,6 @@ const Header = (): JSX.Element => {
     []
   );
 
-  console.log(
-    document.referrer.startsWith('android-app://')
-      ? 'twa'
-      : 'standalone' in window.navigator || window.matchMedia('(display-mode: standalone)').matches
-      ? 'standalone'
-      : 'browser',
-    isPWAInstalled
-  );
-
   const navItemsLogged = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
   const navItemsMobile = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
 
@@ -95,23 +73,29 @@ const Header = (): JSX.Element => {
 
           <List>
             <Divider />
-            {navItemsMobile.map((item, index) => (
-              <>
-                <ListItem key={`navItemsMobile_${item}`}>
-                  <Link
-                    key={item}
-                    to={`/${item}`}
-                    style={{ textDecoration: 'none', width: '100%', color: !darkMode ? 'white' : '#0d174d' }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary={item} />
-                    </ListItemButton>
-                  </Link>
-                </ListItem>
+            {!hideMenu &&
+              navItemsMobile.map((item, index) => (
+                <>
+                  <ListItem key={`navItemsMobile_${item}`}>
+                    <Link
+                      key={item}
+                      href={`/${item}`}
+                      style={{
+                        textDecoration: 'none',
+                        width: '100%',
+                        color: !darkMode ? 'white' : '#0d174d',
+                        padding: theme.spacing(2)
+                      }}
+                    >
+                      <Typography variant='h4' component='span'>
+                        {item}
+                      </Typography>
+                    </Link>
+                  </ListItem>
 
-                {index !== navItemsMobile.length && <Divider />}
-              </>
-            ))}
+                  {!hideMenu && index !== navItemsMobile.length && <Divider />}
+                </>
+              ))}
           </List>
         </Box>
 
@@ -126,7 +110,7 @@ const Header = (): JSX.Element => {
         )}
       </>
     ),
-    [darkMode, handleDrawerToggle, installApp, isPWAInstalled, navItemsMobile, theme]
+    [darkMode, handleDrawerToggle, installApp, isPWAInstalled, navItemsMobile, hideMenu, theme]
   );
 
   return (
@@ -149,14 +133,14 @@ const Header = (): JSX.Element => {
               m: `${theme.spacing(4)} ${theme.spacing(6)}`,
               width: '100%',
               display: { xs: 'none', md: 'flex' },
-              alignItems: 'flex-end',
+              alignItems: !isPWAInstalled ? 'flex-start' : 'center',
               justifyContent: 'space-between'
             }}
           >
             <Box
               sx={{
                 display: 'flex',
-                alignItems: 'flex-end'
+                alignItems: !isPWAInstalled ? 'flex-end' : 'center'
               }}
             >
               <Box
@@ -166,7 +150,7 @@ const Header = (): JSX.Element => {
                   alignItems: 'center'
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+                <Box sx={{ display: 'flex', alignItems: !isPWAInstalled ? 'baseline' : 'center' }}>
                   <Logo />
                   {!isPWAInstalled && (
                     <Typography
@@ -178,7 +162,12 @@ const Header = (): JSX.Element => {
                   )}
                 </Box>
                 {!isPWAInstalled && (
-                  <Button onClick={installApp} sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
+                  <Button
+                    onClick={installApp}
+                    sx={{ textTransform: 'none', fontWeight: 'bold' }}
+                    fullWidth
+                    size='large'
+                  >
                     Get APP
                   </Button>
                 )}
@@ -186,33 +175,34 @@ const Header = (): JSX.Element => {
             </Box>
 
             <Box sx={{ display: { xs: 'none', md: 'block' }, margin: theme.spacing() }}>
-              {navItemsLogged.map((item) => (
-                <Link key={item} to={`/${item}`} style={{ textDecoration: 'none' }}>
-                  <Button
-                    sx={{ color: darkMode ? 'black' : '#fff', padding: theme.spacing(4), width: 150 }}
-                    variant='text'
-                    onClick={() => {
-                      if (item === 'Logout') {
-                        signOut(auth)
-                          .then(() => {
-                            // Sign-out successful.
-                            setUid('nonexisting');
-                            console.log('Sign-out successful.');
-                          })
-                          .catch((error) => {
-                            // An error happened.
-                            console.log(error, 'fail');
-                          });
-                        //set to live auth instead of state
-                      }
-                    }}
-                  >
-                    <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
-                      {item}
-                    </Typography>
-                  </Button>
-                </Link>
-              ))}
+              {!hideMenu &&
+                navItemsLogged.map((item) => (
+                  <Link key={item} href={`/${item}`} style={{ textDecoration: 'none' }}>
+                    <Button
+                      sx={{ color: darkMode ? 'black' : '#fff', width: 150 }}
+                      variant='text'
+                      onClick={() => {
+                        if (item === 'Logout') {
+                          signOut(auth)
+                            .then(() => {
+                              // Sign-out successful.
+                              setUid('nonexisting');
+                              console.log('Sign-out successful.');
+                            })
+                            .catch((error) => {
+                              // An error happened.
+                              console.log(error, 'fail');
+                            });
+                          //set to live auth instead of state
+                        }
+                      }}
+                    >
+                      <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
+                        {item}
+                      </Typography>
+                    </Button>
+                  </Link>
+                ))}
             </Box>
           </Box>
         </Toolbar>
