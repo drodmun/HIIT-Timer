@@ -58,15 +58,24 @@ const Header = (): JSX.Element => {
     }
   }, [deferredPrompt]);
 
-  const getPWADisplayMode = () => {
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    return document.referrer.startsWith('android-app://')
+  const isPWAInstalled = useMemo(
+    () =>
+      (document.referrer.startsWith('android-app://')
+        ? 'twa'
+        : 'standalone' in window.navigator || window.matchMedia('(display-mode: standalone)').matches
+        ? 'standalone'
+        : 'browser') !== 'browser',
+    []
+  );
+
+  console.log(
+    document.referrer.startsWith('android-app://')
       ? 'twa'
-      : 'standalone' in window.navigator || isStandalone
+      : 'standalone' in window.navigator || window.matchMedia('(display-mode: standalone)').matches
       ? 'standalone'
-      : 'browser';
-  };
-  console.log(getPWADisplayMode());
+      : 'browser',
+    isPWAInstalled
+  );
 
   const navItemsLogged = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
   const navItemsMobile = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
@@ -106,16 +115,18 @@ const Header = (): JSX.Element => {
           </List>
         </Box>
 
-        <Button
-          onClick={installApp}
-          sx={{ textTransform: 'none', fontWeight: 'bold', margin: theme.spacing(2) }}
-          size='x-large'
-        >
-          Get APP
-        </Button>
+        {!isPWAInstalled && (
+          <Button
+            onClick={installApp}
+            sx={{ textTransform: 'none', fontWeight: 'bold', margin: theme.spacing(2) }}
+            size='x-large'
+          >
+            Get APP
+          </Button>
+        )}
       </>
     ),
-    [darkMode, handleDrawerToggle, installApp, navItemsMobile, theme]
+    [darkMode, handleDrawerToggle, installApp, isPWAInstalled, navItemsMobile, theme]
   );
 
   return (
@@ -157,16 +168,20 @@ const Header = (): JSX.Element => {
               >
                 <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
                   <Logo />
-                  <Typography
-                    variant='body1'
-                    sx={{ marginLeft: theme.spacing(2), color: darkMode ? 'black' : 'white' }}
-                  >
-                    works better as App
-                  </Typography>
+                  {!isPWAInstalled && (
+                    <Typography
+                      variant='body1'
+                      sx={{ marginLeft: theme.spacing(2), color: darkMode ? 'black' : 'white' }}
+                    >
+                      works better as App
+                    </Typography>
+                  )}
                 </Box>
-                <Button onClick={installApp} sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
-                  Get APP
-                </Button>
+                {!isPWAInstalled && (
+                  <Button onClick={installApp} sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
+                    Get APP
+                  </Button>
+                )}
               </Box>
             </Box>
 
