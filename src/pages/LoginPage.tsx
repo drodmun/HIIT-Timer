@@ -4,7 +4,7 @@ import { Link } from '@mui/material';
 import Container from 'components/Container/Container';
 import LoginForm from 'components/Forms/LoginForm';
 import { useGlobalContext } from 'globalStateContext';
-import Header from '../components/Header/Header';
+import Header from 'components/Header/Header';
 
 function LoginPage() {
   const { darkMode } = useGlobalContext();
@@ -14,7 +14,7 @@ function LoginPage() {
       <Header hideMenu />
 
       <div className='d-flex justify-content-center' style={{ flexGrow: 1, alignItems: 'center' }}>
-        <div style={{}}>
+        <div>
           <LoginForm />
 
           <Navbar expand='lg' className='py-4' style={{ color: darkMode ? 'black' : 'white' }}>

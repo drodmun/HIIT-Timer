@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { Link, Snackbar, CircularProgress } from '@mui/material';
+import { Link, Snackbar } from '@mui/material';
 import { auth } from '../../config/firebase/firebaseConf';
 import { useGlobalContext } from 'globalStateContext';
 import Button from 'components/Button/Button';
@@ -10,10 +10,10 @@ import ExternalAuth from './ExternalAuth';
 import Alert from '../Alert/Alert';
 
 const LoginForm = () => {
+  const { darkMode } = useGlobalContext();
   const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const { darkMode } = useGlobalContext();
   const formElements = ['Email', 'Password'];
   const [formData, setFormData] = useState({
     email: '',
@@ -21,7 +21,7 @@ const LoginForm = () => {
   });
 
   const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value, type, checked } = event.target;
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -31,10 +31,13 @@ const LoginForm = () => {
     [setFormData]
   );
 
-  const handleErrorMessage = (message: string) => {
-    setErrorMessage(message);
-    setOpen(true);
-  };
+  const handleErrorMessage = useCallback(
+    (message: string) => {
+      setErrorMessage(message);
+      setOpen(true);
+    },
+    [setErrorMessage, setOpen]
+  );
 
   const login = () =>
     signInWithEmailAndPassword(auth, formData.email, formData.password)
@@ -69,7 +72,7 @@ const LoginForm = () => {
             ))}
 
             <Button className='mt-2' onClick={login} sx={{ textDecoration: 'none' }} size='large'>
-              Login
+              Log In
             </Button>
 
             <div style={{ textAlign: 'center', margin: 8 }}>OR</div>
@@ -91,12 +94,6 @@ const LoginForm = () => {
                 Continue as a guest
               </Button>
             </Link>
-
-            {redirect && (
-              <div className='py-3' style={{ margin: '0 auto' }}>
-                <CircularProgress />
-              </div>
-            )}
 
             <ExternalAuth setRedirect={setRedirect} redirect={redirect} errorMessage={handleErrorMessage} />
           </Form>
