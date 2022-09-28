@@ -4,18 +4,23 @@ import { BookmarkBorder, Share, Comment, Settings, Info } from '@mui/icons-mater
 import { useUIConfig } from 'hooks/useUIConfig';
 
 const SideMenu = () => {
-  const { openDialog, toggleSetOpenDialog } = useUIConfig();
+  const { openDialog, toggleSetOpenDialog, isHasChanges } = useUIConfig();
 
-  const actions: { icon: JSX.Element; name: Omit<typeof openDialog, 'none'>; action?: () => void }[] = useMemo(
+  const actions: {
+    icon: JSX.Element;
+    name: Omit<typeof openDialog, 'none'>;
+    action?: ReturnType<typeof toggleSetOpenDialog>;
+    disabled?: boolean;
+  }[] = useMemo(
     () =>
       [
-        { icon: <BookmarkBorder />, name: 'Save', action: toggleSetOpenDialog('Save') },
+        { icon: <BookmarkBorder />, name: 'Save', action: toggleSetOpenDialog('Save'), disabled: !isHasChanges },
         { icon: <Share />, name: 'Share', action: toggleSetOpenDialog('Share') },
         { icon: <Comment />, name: 'Feedback', action: toggleSetOpenDialog('Feedback') },
         { icon: <Settings />, name: 'Settings', action: toggleSetOpenDialog('Settings') },
         { icon: <Info />, name: 'About', action: toggleSetOpenDialog('About') }
       ].reverse(),
-    [toggleSetOpenDialog]
+    [isHasChanges, toggleSetOpenDialog]
   );
 
   return (
@@ -36,18 +41,16 @@ const SideMenu = () => {
           tooltipTitle={
             <Box
               sx={{
-                // color: !('action' in action) ? 'grey.A200' : 'primary.main'
-                color: 'primary.main'
+                color: !('action' in action) || action.disabled ? 'grey.A200' : 'primary.main'
               }}
             >
-              {/* {!('action' in action) ? 'Soon...' : action.name} */}
               {action.name}
             </Box>
           }
           tooltipOpen
           onClick={action.action}
           FabProps={{
-            // disabled: !('action' in action),
+            disabled: !('action' in action) || action.disabled,
             sx: {
               color: 'primary.main',
               '&:hover': {

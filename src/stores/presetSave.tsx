@@ -1,50 +1,16 @@
-import { db, auth } from '../firebase/firebaseConf';
+import { db } from '../firebase/firebaseConf';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
+import { HIITConfiguration } from '../types/CounterConfig';
 
-let uid: string | null;
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    uid = user.email;
-  } else {
-    uid = null;
-  }
-});
-
-const save = async (
-  name: string,
-  rounds: number,
-  rMinutes: number,
-  rSeconds: number,
-  sets: number,
-  cdMinutes: number,
-  cdSeconds: number,
-  pMinutes: number,
-  pSeconds: number,
-  countDownMinutes: number,
-  countDownSeconds: number
-) => {
-  if (!!uid)
-    //const presetName: string = name + uid;
-    try {
-      await updateDoc(doc(db, 'users', uid), {
-        presets: arrayUnion({
-          name: name,
-          rounds: rounds,
-          rMinutes: rMinutes,
-          rSeconds: rSeconds,
-          sets: sets,
-          cdMinutes: cdMinutes,
-          cdSeconds: cdSeconds,
-          pMinutes: pMinutes,
-          pSeconds: pSeconds,
-          countDownMinutes: countDownMinutes,
-          countDownSeconds: countDownSeconds
-        })
-      });
-    } catch (error) {
-      alert('An error occured while saving.');
-    }
-};
+const save = async (uid: string, name: string, hiitConfiguration: HIITConfiguration) =>
+  await updateDoc(doc(db, 'users', uid), {
+    presets: arrayUnion({
+      name,
+      hiitConfiguration
+    })
+  }).catch((e) => {
+    console.error(e);
+    alert('An error occurred while saving.');
+  });
 
 export { save };

@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ColorHex, CountdownCircleTimer } from 'react-countdown-circle-timer';
 import useSound from 'use-sound';
+import beep from '../../../assets/sounds/beep.mp3';
 import { Typography } from '@mui/material';
-import { countersConfigSetAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
+import { hiitConfigurationAtom, isPausedAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
 import { useGlobalContext } from 'globalStateContext';
 
 const mmss = (seconds: number) => {
@@ -14,32 +15,34 @@ const mmss = (seconds: number) => {
 };
 
 const ShowCounter = () => {
-  const [play] = useSound('/static/assets/sounds/beep.mp3');
+  const [play] = useSound(beep);
 
   const isPlaySound = useRecoilValue(isPlaySoundAtom);
-  const countersConfigSet = useRecoilValue(countersConfigSetAtom);
+  const isPaused = useRecoilValue(isPausedAtom);
+  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
   const setIsRunning = useSetRecoilState(isRunningAtom);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentConfig = useMemo(() => countersConfigSet[currentIndex], [countersConfigSet, currentIndex]);
+  const currentConfig = useMemo(() => hiitConfiguration.counters[currentIndex], [hiitConfiguration, currentIndex]);
   const { darkMode } = useGlobalContext();
   const currentDuration = useMemo(
     () => (currentConfig.minutes || 0) * 60 + (currentConfig.seconds || 0),
     [currentConfig.minutes, currentConfig.seconds]
   );
 
-  const handleOnFinish = () => {
+  const handleOnFinish = useCallback(() => {
     const nextIndex = currentIndex + 1;
 
     if (isPlaySound) play();
 
-    if (nextIndex < countersConfigSet.length) {
+    if (nextIndex < hiitConfiguration.counters.length) {
       setCurrentIndex(nextIndex);
     } else {
       // resetCountersConfigSet();
       setCurrentIndex(0);
       setIsRunning(false);
     }
-  };
+  }, [currentIndex, hiitConfiguration.counters.length, isPlaySound, play, setIsRunning]);
+
   const colors: { 0: ColorHex } & { 1: ColorHex } & ColorHex[] = useMemo(() => {
     switch (currentConfig.type) {
       case 'preparation':
@@ -47,6 +50,8 @@ const ShowCounter = () => {
       case 'countdown':
         return ['#040267', '#00FAFC', '#9B5BF9', '#F301B0'];
       case 'cooldown':
+      case 'round-rest':
+      case 'set-rest':
         return ['#00FAFC', '#00FAFC', '#00FAFC', '#00FAFC'];
     }
   }, [currentConfig.type]);
@@ -59,6 +64,9 @@ const ShowCounter = () => {
         return '';
       case 'cooldown':
         return 'Cool now...';
+      case 'round-rest':
+      case 'set-rest':
+        return 'Breathe and get ready...';
     }
   }, [currentConfig.type]);
 
@@ -72,14 +80,13 @@ const ShowCounter = () => {
     currentIndex,
     currentConfig.type,
     currentDuration,
-    mmss(currentDuration),
-    countersConfigSet.length
+    mmss(currentDuration)
   );
 
   return (
     <CountdownCircleTimer
       key={currentIndex}
-      isPlaying
+      isPlaying={!isPaused}
       size={350}
       duration={currentDuration}
       colors={colors}

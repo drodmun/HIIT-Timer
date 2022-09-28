@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+button {
+    text-transform: none;
+}
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;

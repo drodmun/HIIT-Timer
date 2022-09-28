@@ -1,18 +1,14 @@
-import { ChangeEvent, useCallback, useState, forwardRef } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { Navigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Button from 'components/Button/Button';
 import { auth, db } from '../../config/firebase/firebaseConf';
 import { useGlobalContext } from 'globalStateContext';
 import ExternalAuth from './ExternalAuth';
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
-});
+import Alert from '../Alert/Alert';
 
 const SignUpForm = () => {
   const { darkMode } = useGlobalContext();

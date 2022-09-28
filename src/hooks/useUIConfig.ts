@@ -1,10 +1,23 @@
-import { useRecoilState } from 'recoil';
+import isEqual from 'lodash.isequal';
+import { useMemo } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { openDialogAtom } from 'stores/ui-config';
+import { PossibleDialogType } from 'types/UIConfig';
+import { DefaultHIITConfiguration, hiitConfigurationAtom } from '../stores/timers';
 
-export const useUIConfig = () => {
+interface useUIConfigType {
+  openDialog: PossibleDialogType;
+  toggleSetOpenDialog: (dialog: PossibleDialogType) => () => void;
+  isHasChanges: boolean;
+}
+
+export const useUIConfig = (): useUIConfigType => {
+  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
   const [openDialog, setOpenDialog] = useRecoilState(openDialogAtom);
   const toggleSetOpenDialog = (dialog: typeof openDialog) => () => setOpenDialog(dialog);
 
-  return { openDialog, toggleSetOpenDialog };
+  const isHasChanges = useMemo(() => !isEqual(hiitConfiguration, DefaultHIITConfiguration), [hiitConfiguration]);
+
+  return { openDialog, toggleSetOpenDialog, isHasChanges };
 };

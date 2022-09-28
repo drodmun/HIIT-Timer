@@ -131,7 +131,7 @@ const Header = (): JSX.Element => {
                   alignItems: 'center'
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
                   <Logo />
                   <Typography
                     variant='body1'

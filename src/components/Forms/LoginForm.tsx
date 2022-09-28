@@ -1,17 +1,13 @@
-import { useCallback, useState, forwardRef } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Snackbar, CircularProgress } from '@mui/material';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { auth } from '../../config/firebase/firebaseConf';
 import { useGlobalContext } from 'globalStateContext';
 import Button from 'components/Button/Button';
 import ExternalAuth from './ExternalAuth';
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
-});
+import Alert from '../Alert/Alert';
 
 const LoginForm = () => {
   const [open, setOpen] = useState(false);

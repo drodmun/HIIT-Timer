@@ -1,42 +1,26 @@
-import { atom, selector } from 'recoil';
-import { CounterConfig } from 'types/CounterConfig';
-
-export const minutesAtom = atom({
-  key: 'minutesAtom', // unique ID (with respect to other atoms/selectors)
-  default: 0 // default value (aka initial value)
-});
-
-export const secondsAtom = atom({
-  key: 'secondsAtom', // unique ID (with respect to other atoms/selectors)
-  default: 30 // default value (aka initial value)
-});
-
-export const isTimerSetSelector = selector({
-  key: 'isTimerSetSelector',
-  get: ({ get }) => !!get(minutesAtom) || !!get(secondsAtom)
-});
+import { atom } from 'recoil';
+import { HIITConfiguration } from 'types/CounterConfig';
 
 export const isRunningAtom = atom({
-  key: 'isRunningAtom', // unique ID (with respect to other atoms/selectors)
-  default: false // default value (aka initial value)
+  key: 'isRunningAtom',
+  default: false
 });
-
-export const countersConfigSetAtom = atom<CounterConfig[]>({
-  key: 'countersConfigSetAtom', // unique ID (with respect to other atoms/selectors)
-  default: [] // default value (aka initial value)
-});
-
-export const addCounterSelector = selector<CounterConfig>({
-  key: 'addCounterSelector',
-  get: () => ({} as CounterConfig),
-  set: ({ get, set }, config) =>
-    set(countersConfigSetAtom, [
-      ...(!('minutes' in config) ? ([] as CounterConfig[]) : get(countersConfigSetAtom)),
-      { minutes: get(minutesAtom), seconds: get(secondsAtom), type: 'countdown' } as CounterConfig
-    ])
+export const isPausedAtom = atom({
+  key: 'isPausedAtom',
+  default: false
 });
 
 export const isPlaySoundAtom = atom({
-  key: 'isPlaySoundAtom', // unique ID (with respect to other atoms/selectors)
-  default: true // default value (aka initial value)
+  key: 'isPlaySoundAtom',
+  default: true
+});
+
+export const DefaultHIITConfiguration: HIITConfiguration = {
+  rounds: 0,
+  sets: 0,
+  counters: [{ round: 1, set: 1, minutes: 0, seconds: 30, type: 'countdown' }]
+};
+export const hiitConfigurationAtom = atom<HIITConfiguration>({
+  key: 'hiitConfigurationAtom',
+  default: DefaultHIITConfiguration
 });

@@ -1,63 +1,36 @@
-import { memo, useState, useCallback, forwardRef } from 'react';
-import { Grid } from '@mui/material';
+import { memo, useState, useCallback } from 'react';
+import { useRecoilValue } from 'recoil';
+import { Grid, TextField, Snackbar } from '@mui/material';
+
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
-import { useGlobalContext } from '../globalStateContext';
 import { sharePreset } from '../stores/presetShare';
-import { TextField } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
-});
+import { hiitConfigurationAtom } from '../stores/timers';
+import Alert from '../components/Alert/Alert';
 
 const Share = ({ onClose }: { onClose: () => void }) => {
   const [openAlert, setOpenAlert] = useState(false);
-  const [loadSuccess, setloadSuccess] = useState(false);
-  const { presetObj } = useGlobalContext();
+  const [loadSuccess, setLoadSuccess] = useState(false);
   const [label, setLabel] = useState<string>('');
   const [shareToUser, setShareToUser] = useState<string>('');
+
+  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
 
   //let docRef = doc(db, 'presets', label);
   //const presetData = presetObj;
   const handleShare = useCallback(() => {
     if (!!shareToUser.trim() && !!label.trim()) {
-      sharePreset(
-        shareToUser,
-        label,
-        1,
-        presetObj.rMinutes,
-        presetObj.rSeconds,
-        1,
-        presetObj.cdMinutes,
-        presetObj.cdSeconds,
-        presetObj.pMinutes,
-        presetObj.pSeconds,
-        presetObj.countDownMinutes,
-        presetObj.countDownSeconds
-      ).then(() => {
+      sharePreset(shareToUser, label, hiitConfiguration).then(() => {
         setOpenAlert(true);
-        setloadSuccess(true);
+        setLoadSuccess(true);
         setLabel('');
       });
     } else {
-      setloadSuccess(false);
+      setLoadSuccess(false);
       setOpenAlert(true);
     }
     //alert here
-  }, [
-    label,
-    presetObj.cdMinutes,
-    presetObj.cdSeconds,
-    presetObj.countDownMinutes,
-    presetObj.countDownSeconds,
-    presetObj.pMinutes,
-    presetObj.pSeconds,
-    presetObj.rMinutes,
-    presetObj.rSeconds,
-    shareToUser
-  ]);
+  }, [hiitConfiguration, label, shareToUser]);
 
   return (
     <Dialog

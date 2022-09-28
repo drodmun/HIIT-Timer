@@ -1,41 +1,16 @@
 import { db } from '../firebase/firebaseConf';
-import { doc } from 'firebase/firestore';
-import { updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { HIITConfiguration } from '../types/CounterConfig';
 
-const sharePreset = async (
-  user: string,
-  name: string,
-  rounds: number,
-  rMinutes: number,
-  rSeconds: number,
-  sets: number,
-  cdMinutes: number,
-  cdSeconds: number,
-  pMinutes: number,
-  pSeconds: number,
-  countDownMinutes: number,
-  countDownSeconds: number
-) => {
-  //const presetName: string = name + uid;
-  try {
-    await updateDoc(doc(db, 'users', user), {
-      presets: arrayUnion({
-        name: name,
-        rounds: rounds,
-        rMinutes: rMinutes,
-        rSeconds: rSeconds,
-        sets: sets,
-        cdMinutes: cdMinutes,
-        cdSeconds: cdSeconds,
-        pMinutes: pMinutes,
-        pSeconds: pSeconds,
-        countDownMinutes: countDownMinutes,
-        countDownSeconds: countDownSeconds
-      })
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+const sharePreset = async (user: string, name: string, hiitConfiguration: HIITConfiguration) =>
+  await updateDoc(doc(db, 'users', user), {
+    presets: arrayUnion({
+      name,
+      hiitConfiguration
+    })
+  }).catch((e) => {
+    console.error(e);
+    alert('An error occurred while saving.');
+  });
 
 export { sharePreset };
