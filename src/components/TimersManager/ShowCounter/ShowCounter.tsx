@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ColorHex, CountdownCircleTimer } from 'react-countdown-circle-timer';
 import useSound from 'use-sound';
 import { Typography } from '@mui/material';
-import { hiitConfigurationAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
+import { hiitConfigurationAtom, isPausedAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
 import { useGlobalContext } from 'globalStateContext';
 
 const mmss = (seconds: number) => {
@@ -17,6 +17,7 @@ const ShowCounter = () => {
   const [play] = useSound('/static/assets/sounds/beep.mp3');
 
   const isPlaySound = useRecoilValue(isPlaySoundAtom);
+  const isPaused = useRecoilValue(isPausedAtom);
   const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
   const setIsRunning = useSetRecoilState(isRunningAtom);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -27,7 +28,7 @@ const ShowCounter = () => {
     [currentConfig.minutes, currentConfig.seconds]
   );
 
-  const handleOnFinish = () => {
+  const handleOnFinish = useCallback(() => {
     const nextIndex = currentIndex + 1;
 
     if (isPlaySound) play();
@@ -39,7 +40,8 @@ const ShowCounter = () => {
       setCurrentIndex(0);
       setIsRunning(false);
     }
-  };
+  }, [currentIndex, hiitConfiguration.counters.length, isPlaySound, play, setIsRunning]);
+
   const colors: { 0: ColorHex } & { 1: ColorHex } & ColorHex[] = useMemo(() => {
     switch (currentConfig.type) {
       case 'preparation':
@@ -83,7 +85,7 @@ const ShowCounter = () => {
   return (
     <CountdownCircleTimer
       key={currentIndex}
-      isPlaying
+      isPlaying={!isPaused}
       size={350}
       duration={currentDuration}
       colors={colors}

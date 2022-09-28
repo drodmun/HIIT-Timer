@@ -2,13 +2,17 @@ import { atom } from 'recoil';
 import { HIITConfiguration } from 'types/CounterConfig';
 
 export const isRunningAtom = atom({
-  key: 'isRunningAtom', // unique ID (with respect to other atoms/selectors)
-  default: false // default value (aka initial value)
+  key: 'isRunningAtom',
+  default: false
+});
+export const isPausedAtom = atom({
+  key: 'isPausedAtom',
+  default: false
 });
 
 export const isPlaySoundAtom = atom({
-  key: 'isPlaySoundAtom', // unique ID (with respect to other atoms/selectors)
-  default: true // default value (aka initial value)
+  key: 'isPlaySoundAtom',
+  default: true
 });
 
 export const DefaultHIITConfiguration: HIITConfiguration = {
