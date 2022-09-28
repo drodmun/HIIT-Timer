@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ColorHex, CountdownCircleTimer } from 'react-countdown-circle-timer';
 import useSound from 'use-sound';
+import beep from '../../../assets/sounds/beep.mp3';
 import { Typography } from '@mui/material';
 import { hiitConfigurationAtom, isPausedAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
 import { useGlobalContext } from 'globalStateContext';
@@ -14,7 +15,7 @@ const mmss = (seconds: number) => {
 };
 
 const ShowCounter = () => {
-  const [play] = useSound('/static/assets/sounds/beep.mp3');
+  const [play] = useSound(beep);
 
   const isPlaySound = useRecoilValue(isPlaySoundAtom);
   const isPaused = useRecoilValue(isPausedAtom);
