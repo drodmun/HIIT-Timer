@@ -48,7 +48,7 @@ const Header = (): JSX.Element => {
     });
   }, [deferredPrompt]);
 
-  const installApp = async () => {
+  const installApp = useCallback(async () => {
     if (!!deferredPrompt) {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
@@ -56,42 +56,66 @@ const Header = (): JSX.Element => {
         setDeferredPrompt(null);
       }
     }
+  }, [deferredPrompt]);
+
+  const getPWADisplayMode = () => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    return document.referrer.startsWith('android-app://')
+      ? 'twa'
+      : 'standalone' in window.navigator || isStandalone
+      ? 'standalone'
+      : 'browser';
   };
+  console.log(getPWADisplayMode());
 
   const navItemsLogged = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
   const navItemsMobile = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
 
-  const drawer = useMemo(
+  const renderDrawer = useMemo(
     () => (
-      <Box onClick={handleDrawerToggle}>
-        <Box sx={{ display: 'flex', alignItems: 'center', marginTop: theme.spacing(1) }}>
-          <Box>
+      <>
+        <Box onClick={handleDrawerToggle}>
+          <Box sx={{ display: 'flex', alignItems: 'center', marginTop: theme.spacing(1) }}>
             <IconButton aria-label='delete' size='large'>
-              <ArrowBackIosNewIcon sx={{ color: darkMode ? 'black' : 'black' }} />
+              <ArrowBackIosNewIcon sx={{ color: !darkMode ? 'white' : '#0d174d' }} />
             </IconButton>
+            <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+              <Logo />
+            </Box>
           </Box>
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-            <Logo />
-          </Box>
+
+          <List>
+            <Divider />
+            {navItemsMobile.map((item, index) => (
+              <>
+                <ListItem key={`navItemsMobile_${item}`}>
+                  <Link
+                    key={item}
+                    to={`/${item}`}
+                    style={{ textDecoration: 'none', width: '100%', color: !darkMode ? 'white' : '#0d174d' }}
+                  >
+                    <ListItemButton>
+                      <ListItemText primary={item} />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+
+                {index !== navItemsMobile.length && <Divider />}
+              </>
+            ))}
+          </List>
         </Box>
-        <List>
-          <Divider />
-          {navItemsMobile.map((item, index) => (
-            <div key={`navItemsMobile_${item}`}>
-              <ListItem>
-                <Link key={item} to={`/${item}`} style={{ textDecoration: 'none' }}>
-                  <ListItemButton sx={{ textAlign: 'left' }}>
-                    <ListItemText primary={item} />
-                  </ListItemButton>
-                </Link>
-              </ListItem>
-              {index !== navItemsMobile.length && <Divider />}
-            </div>
-          ))}
-        </List>
-      </Box>
+
+        <Button
+          onClick={installApp}
+          sx={{ textTransform: 'none', fontWeight: 'bold', margin: theme.spacing(2) }}
+          size='x-large'
+        >
+          Get APP
+        </Button>
+      </>
     ),
-    [darkMode, handleDrawerToggle, navItemsMobile, theme]
+    [darkMode, handleDrawerToggle, installApp, navItemsMobile, theme]
   );
 
   return (
@@ -145,6 +169,7 @@ const Header = (): JSX.Element => {
                 </Button>
               </Box>
             </Box>
+
             <Box sx={{ display: { xs: 'none', md: 'block' }, margin: theme.spacing() }}>
               {navItemsLogged.map((item) => (
                 <Link key={item} to={`/${item}`} style={{ textDecoration: 'none' }}>
@@ -177,6 +202,7 @@ const Header = (): JSX.Element => {
           </Box>
         </Toolbar>
       </AppBar>
+
       <Box component='nav'>
         <Drawer
           container={container}
@@ -184,21 +210,23 @@ const Header = (): JSX.Element => {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           PaperProps={{
+            id: 'paperDrawer',
             sx: {
               boxSizing: 'border-box',
-              width: '100%',
+              width: 320,
               backgroundColor: darkMode ? 'white' : '#0d174d',
-              color: darkMode ? 'black' : 'white'
+              color: darkMode ? 'black' : 'white',
+              justifyContent: 'space-between'
             }
           }}
           ModalProps={{
             keepMounted: true // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', md: 'none' }
+            display: { xs: 'flex', md: 'none' }
           }}
         >
-          {drawer}
+          {renderDrawer}
         </Drawer>
       </Box>
     </>
