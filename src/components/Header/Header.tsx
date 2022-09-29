@@ -1,18 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  AppBar,
-  Box,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Toolbar,
-  Typography,
-  useTheme
-} from '@mui/material';
+import { AppBar, Box, Drawer, IconButton, Link, List, ListItem, Toolbar, Typography, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Logo from '../Logo/Logo';
@@ -24,7 +11,7 @@ import { signOut } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const container = window !== undefined ? () => window.document.body : undefined;
-const Header = (): JSX.Element => {
+const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
   const [uid, setUid] = useState<string | null>('no');
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -48,7 +35,7 @@ const Header = (): JSX.Element => {
     });
   }, [deferredPrompt]);
 
-  const installApp = async () => {
+  const installApp = useCallback(async () => {
     if (!!deferredPrompt) {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
@@ -56,42 +43,74 @@ const Header = (): JSX.Element => {
         setDeferredPrompt(null);
       }
     }
-  };
+  }, [deferredPrompt]);
+
+  const isPWAInstalled = useMemo(
+    () =>
+      (document.referrer.startsWith('android-app://')
+        ? 'twa'
+        : 'standalone' in window.navigator || window.matchMedia('(display-mode: standalone)').matches
+        ? 'standalone'
+        : 'browser') !== 'browser',
+    []
+  );
 
   const navItemsLogged = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
   const navItemsMobile = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
 
-  const drawer = useMemo(
+  const renderDrawer = useMemo(
     () => (
-      <Box onClick={handleDrawerToggle}>
-        <Box sx={{ display: 'flex', alignItems: 'center', marginTop: theme.spacing(1) }}>
-          <Box>
+      <>
+        <Box onClick={handleDrawerToggle}>
+          <Box sx={{ display: 'flex', alignItems: 'center', marginTop: theme.spacing(1) }}>
             <IconButton aria-label='delete' size='large'>
-              <ArrowBackIosNewIcon sx={{ color: darkMode ? 'black' : 'black' }} />
+              <ArrowBackIosNewIcon sx={{ color: !darkMode ? 'white' : '#0d174d' }} />
             </IconButton>
+            <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+              <Logo />
+            </Box>
           </Box>
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-            <Logo />
-          </Box>
+
+          <List>
+            <Divider />
+            {!hideMenu &&
+              navItemsMobile.map((item, index) => (
+                <>
+                  <ListItem key={`navItemsMobile_${item}`}>
+                    <Link
+                      key={item}
+                      href={`/${item}`}
+                      style={{
+                        textDecoration: 'none',
+                        width: '100%',
+                        color: !darkMode ? 'white' : '#0d174d',
+                        padding: theme.spacing(2)
+                      }}
+                    >
+                      <Typography variant='h4' component='span'>
+                        {item}
+                      </Typography>
+                    </Link>
+                  </ListItem>
+
+                  {!hideMenu && index !== navItemsMobile.length && <Divider />}
+                </>
+              ))}
+          </List>
         </Box>
-        <List>
-          <Divider />
-          {navItemsMobile.map((item, index) => (
-            <div key={`navItemsMobile_${item}`}>
-              <ListItem>
-                <Link key={item} to={`/${item}`} style={{ textDecoration: 'none' }}>
-                  <ListItemButton sx={{ textAlign: 'left' }}>
-                    <ListItemText primary={item} />
-                  </ListItemButton>
-                </Link>
-              </ListItem>
-              {index !== navItemsMobile.length && <Divider />}
-            </div>
-          ))}
-        </List>
-      </Box>
+
+        {!isPWAInstalled && (
+          <Button
+            onClick={installApp}
+            sx={{ textTransform: 'none', fontWeight: 'bold', margin: theme.spacing(2) }}
+            size='x-large'
+          >
+            Get APP
+          </Button>
+        )}
+      </>
     ),
-    [darkMode, handleDrawerToggle, navItemsMobile, theme]
+    [darkMode, handleDrawerToggle, installApp, isPWAInstalled, navItemsMobile, hideMenu, theme]
   );
 
   return (
@@ -114,14 +133,14 @@ const Header = (): JSX.Element => {
               m: `${theme.spacing(4)} ${theme.spacing(6)}`,
               width: '100%',
               display: { xs: 'none', md: 'flex' },
-              alignItems: 'flex-end',
+              alignItems: !isPWAInstalled ? 'flex-start' : 'center',
               justifyContent: 'space-between'
             }}
           >
             <Box
               sx={{
                 display: 'flex',
-                alignItems: 'flex-end'
+                alignItems: !isPWAInstalled ? 'flex-end' : 'center'
               }}
             >
               <Box
@@ -131,52 +150,64 @@ const Header = (): JSX.Element => {
                   alignItems: 'center'
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+                <Box sx={{ display: 'flex', alignItems: !isPWAInstalled ? 'baseline' : 'center' }}>
                   <Logo />
-                  <Typography
-                    variant='body1'
-                    sx={{ marginLeft: theme.spacing(2), color: darkMode ? 'black' : 'white' }}
-                  >
-                    works better as App
-                  </Typography>
+                  {!isPWAInstalled && (
+                    <Typography
+                      variant='body1'
+                      sx={{ marginLeft: theme.spacing(2), color: darkMode ? 'black' : 'white' }}
+                    >
+                      works better as App
+                    </Typography>
+                  )}
                 </Box>
-                <Button onClick={installApp} sx={{ textTransform: 'none', fontWeight: 'bold' }} size='x-large'>
-                  Get APP
-                </Button>
+                {!isPWAInstalled && (
+                  <Button
+                    onClick={installApp}
+                    sx={{ textTransform: 'none', fontWeight: 'bold' }}
+                    fullWidth
+                    size='large'
+                  >
+                    Get APP
+                  </Button>
+                )}
               </Box>
             </Box>
+
             <Box sx={{ display: { xs: 'none', md: 'block' }, margin: theme.spacing() }}>
-              {navItemsLogged.map((item) => (
-                <Link key={item} to={`/${item}`} style={{ textDecoration: 'none' }}>
-                  <Button
-                    sx={{ color: darkMode ? 'black' : '#fff', padding: theme.spacing(4), width: 150 }}
-                    variant='text'
-                    onClick={() => {
-                      if (item === 'Logout') {
-                        signOut(auth)
-                          .then(() => {
-                            // Sign-out successful.
-                            setUid('nonexisting');
-                            console.log('Sign-out successful.');
-                          })
-                          .catch((error) => {
-                            // An error happened.
-                            console.log(error, 'fail');
-                          });
-                        //set to live auth instead of state
-                      }
-                    }}
-                  >
-                    <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
-                      {item}
-                    </Typography>
-                  </Button>
-                </Link>
-              ))}
+              {!hideMenu &&
+                navItemsLogged.map((item) => (
+                  <Link key={item} href={`/${item}`} style={{ textDecoration: 'none' }}>
+                    <Button
+                      sx={{ color: darkMode ? 'black' : '#fff', width: 150 }}
+                      variant='text'
+                      onClick={() => {
+                        if (item === 'Logout') {
+                          signOut(auth)
+                            .then(() => {
+                              // Sign-out successful.
+                              setUid('nonexisting');
+                              console.log('Sign-out successful.');
+                            })
+                            .catch((error) => {
+                              // An error happened.
+                              console.log(error, 'fail');
+                            });
+                          //set to live auth instead of state
+                        }
+                      }}
+                    >
+                      <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
+                        {item}
+                      </Typography>
+                    </Button>
+                  </Link>
+                ))}
             </Box>
           </Box>
         </Toolbar>
       </AppBar>
+
       <Box component='nav'>
         <Drawer
           container={container}
@@ -184,21 +215,23 @@ const Header = (): JSX.Element => {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           PaperProps={{
+            id: 'paperDrawer',
             sx: {
               boxSizing: 'border-box',
-              width: '100%',
+              width: 320,
               backgroundColor: darkMode ? 'white' : '#0d174d',
-              color: darkMode ? 'black' : 'white'
+              color: darkMode ? 'black' : 'white',
+              justifyContent: 'space-between'
             }
           }}
           ModalProps={{
             keepMounted: true // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', md: 'none' }
+            display: { xs: 'flex', md: 'none' }
           }}
         >
-          {drawer}
+          {renderDrawer}
         </Drawer>
       </Box>
     </>

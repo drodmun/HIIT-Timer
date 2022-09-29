@@ -1,40 +1,37 @@
-import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import ContainerS from 'components/Container/Container';
-import LoginForm from '../components/Forms/LoginForm';
-import { Link } from 'react-router-dom';
+import { Link } from '@mui/material';
+import Container from 'components/Container/Container';
+import LoginForm from 'components/Forms/LoginForm';
 import { useGlobalContext } from 'globalStateContext';
+import Header from 'components/Header/Header';
+
 function LoginPage() {
   const { darkMode } = useGlobalContext();
+
   return (
-    <ContainerS isSecondary={darkMode}>
-      <Navbar expand='lg' className='py-4' style={{ color: darkMode ? 'black' : 'white' }}>
-        <Container>
-          <Link to='/' style={{ textDecoration: 'none' }}>
-            <Navbar.Brand style={{ fontSize: '30px' }}>
-              <b style={{ color: '#11c1f4' }}>HIIT</b>
-              <b style={{ color: darkMode ? '#000000' : 'white' }}> timer</b>
-            </Navbar.Brand>
-          </Link>
-          <Nav>
-            <Nav.Item style={{ fontSize: '20px' }}>
-              {`New User  ?  `}
-              <Link to='/signup' style={{ color: '#11c1f4', fontWeight: 'bold', textDecoration: 'none' }}>
-                Sign Up
-              </Link>
-            </Nav.Item>
-          </Nav>
-        </Container>
-      </Navbar>
-      <Container>
-        <div className='d-flex justify-content-center'>
-          <div>
-            <LoginForm />
-          </div>
+    <Container isSecondary={darkMode} style={{ display: 'flex', flexDirection: 'column' }}>
+      <Header hideMenu />
+
+      <div className='d-flex justify-content-center' style={{ flexGrow: 1, alignItems: 'center' }}>
+        <div>
+          <LoginForm />
+
+          <Navbar expand='lg' className='py-4' style={{ color: darkMode ? 'black' : 'white' }}>
+            <div>
+              <Nav>
+                <Nav.Item>
+                  {`Don't have an account? `}
+                  <Link href='/signup' style={{ color: '#11c1f4', fontWeight: 'bold', textDecoration: 'none' }}>
+                    Sign Up
+                  </Link>
+                </Nav.Item>
+              </Nav>
+            </div>
+          </Navbar>
         </div>
-      </Container>
-    </ContainerS>
+      </div>
+    </Container>
   );
 }
 export default LoginPage;
