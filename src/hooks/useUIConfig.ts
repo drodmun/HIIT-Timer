@@ -2,13 +2,15 @@ import isEqual from 'lodash.isequal';
 import { useMemo } from 'react';
 import { SetterOrUpdater, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
-import { menuAnchorAtom, openDialogAtom } from 'stores/ui-config';
+import { menuAnchorAtom, openDialogAtom, openMobileDrawerAtom } from 'stores/ui-config';
 import { PossibleDialogType } from 'types/UIConfig';
 import { DefaultHIITConfiguration, hiitConfigurationAtom } from '../stores/timers';
 import { useMediaQuery, useTheme } from '@mui/material';
 
 interface useUIConfigType {
   isMobileOrSmall: boolean;
+  openMobileDrawer: boolean;
+  toggleSetOpenMobileDrawer: () => void;
   openDialog: PossibleDialogType;
   toggleSetOpenDialog: (dialog: PossibleDialogType) => () => void;
   isHasChanges: boolean;
@@ -20,6 +22,9 @@ interface useUIConfigType {
 export const useUIConfig = (): useUIConfigType => {
   const theme = useTheme();
   const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
+
+  const [openMobileDrawer, setOpenMobileDrawer] = useRecoilState(openMobileDrawerAtom);
+  const toggleSetOpenMobileDrawer = () => setOpenMobileDrawer((pOpenMobileDrawer) => !pOpenMobileDrawer);
 
   const [openDialog, setOpenDialog] = useRecoilState(openDialogAtom);
   const toggleSetOpenDialog = (dialog: typeof openDialog) => () => setOpenDialog(dialog);
@@ -33,6 +38,8 @@ export const useUIConfig = (): useUIConfigType => {
 
   return {
     isMobileOrSmall,
+    openMobileDrawer,
+    toggleSetOpenMobileDrawer,
     openDialog,
     toggleSetOpenDialog,
     isHasChanges,

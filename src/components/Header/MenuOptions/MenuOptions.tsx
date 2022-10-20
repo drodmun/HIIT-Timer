@@ -8,20 +8,30 @@ import { PossibleDialogType } from 'types/UIConfig';
 
 const MenuOptions = () => {
   const { isLightMode, toggleDarkMode } = useDarkMode();
-  const { toggleSetOpenDialog } = useUIConfig();
+  const { openDialog, toggleSetOpenDialog, openMobileDrawer, toggleSetOpenMobileDrawer, removeAnchor } = useUIConfig();
   const { logout } = useFirebaseAuth();
 
   const [openSubMenu, setOpenSubMenu] = useState<PossibleDialogType>('none');
   const toggleSetOpenSubMenu = (subMenu: typeof openSubMenu) => () =>
     setOpenSubMenu((pSubmenu) => (pSubmenu === subMenu ? 'none' : subMenu));
 
+  const finalizeSelection = useCallback(
+    (action: () => void) => () => {
+      removeAnchor();
+      openDialog !== 'none' && toggleSetOpenDialog('none');
+      openMobileDrawer && toggleSetOpenMobileDrawer();
+      action();
+    },
+    [openDialog, openMobileDrawer, removeAnchor, toggleSetOpenDialog, toggleSetOpenMobileDrawer]
+  );
+
   const renderMenuItem = useCallback(
     (name: string, icon: JSX.Element, action: () => void, isSubmenu = false) => (
       <>
         {isSubmenu && <MUIDivider sx={{ borderColor: '#666', margin: '0 !important' }} />}
-        <MenuItem sx={{ color: isLightMode ? 'black' : '#fff' }} onClick={action}>
+        <MenuItem sx={{ width: '100%' }} onClick={action}>
           <ListItemIcon sx={{ ml: isSubmenu ? 2 : 0 }}>{icon}</ListItemIcon>
-          <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
+          <Typography variant='h6' component='span' sx={{ fontWeight: 300, color: isLightMode ? 'black' : '#fff' }}>
             {name}
           </Typography>
         </MenuItem>
@@ -47,12 +57,20 @@ const MenuOptions = () => {
           )}
         </>
       )}
-      {renderMenuItem('Feedback', <Comment sx={{ color: 'primary.main' }} />, toggleSetOpenDialog('Feedback'))}
-      {renderMenuItem('About', <Info sx={{ color: 'primary.main' }} />, toggleSetOpenDialog('About'))}
+      {renderMenuItem(
+        'Feedback',
+        <Comment sx={{ color: 'primary.main' }} />,
+        finalizeSelection(toggleSetOpenDialog('Feedback'))
+      )}
+      {renderMenuItem(
+        'About',
+        <Info sx={{ color: 'primary.main' }} />,
+        finalizeSelection(toggleSetOpenDialog('About'))
+      )}
 
       <Divider />
 
-      {renderMenuItem('Logout', <Logout sx={{ color: 'secondary.main' }} />, logout)}
+      {renderMenuItem('Logout', <Logout sx={{ color: 'secondary.main' }} />, finalizeSelection(logout))}
     </>
   );
 };

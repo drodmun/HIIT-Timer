@@ -3,7 +3,7 @@ import { AppBar, Box, Drawer, IconButton, Link, List, Toolbar, Typography, useTh
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { User } from 'firebase/auth';
-import { useDarkMode, useFirebaseAuth } from 'hooks';
+import { useDarkMode, useFirebaseAuth, useUIConfig } from 'hooks';
 
 import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
@@ -17,6 +17,9 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
 
   const { isLightMode } = useDarkMode();
   const { user: fbUser } = useFirebaseAuth();
+  const { openMobileDrawer, toggleSetOpenMobileDrawer } = useUIConfig();
+
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   const user = useMemo(
     () =>
@@ -28,10 +31,6 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
       } as User),
     [fbUser]
   );
-
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const handleDrawerToggle = useCallback(() => setMobileOpen((pMobileOpen) => !pMobileOpen), [setMobileOpen]);
 
   // This variable will save the event for later use.
   useEffect(() => {
@@ -104,7 +103,7 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
             color='inherit'
             aria-label='open drawer'
             edge='start'
-            onClick={handleDrawerToggle}
+            onClick={toggleSetOpenMobileDrawer}
             sx={{ mr: 2, mt: 1, display: { md: 'none' }, color: isLightMode ? 'black' : 'white' }}
           >
             <MenuIcon />
@@ -181,8 +180,8 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
         <Drawer
           container={container}
           variant='temporary'
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
+          open={openMobileDrawer}
+          onClose={toggleSetOpenMobileDrawer}
           PaperProps={{
             id: 'paperDrawer',
             sx: {
