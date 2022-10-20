@@ -7,7 +7,7 @@ import Button from 'components/Button/Button';
 import { save } from '../stores/presetSave';
 import { hiitConfigurationAtom } from '../stores/timers';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db, auth } from '../firebase/firebaseConf';
+import { db, auth } from 'config/firebase/firebaseConf';
 import Alert from '../components/Alert/Alert';
 
 const Save = ({ onClose }: { onClose: () => void }) => {

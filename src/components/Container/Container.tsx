@@ -6,17 +6,20 @@ import GenericSecondaryBackgroundMobile from 'assets/images/background/login-bac
 const Container = ({
   isSecondary,
   isPopup,
+  isScrollable,
   style,
   children
 }: {
   isSecondary?: boolean;
   isPopup?: boolean;
+  isScrollable?: boolean;
   style?: React.CSSProperties;
   children: ReactNode;
 }) => (
   <div
     style={{
-      height: `${isPopup ? 'max-content' : '100vh'}`,
+      height: `${isPopup ? 'inherit' : '100vh'}`,
+      overflow: `${isPopup && !isScrollable ? 'hidden' : 'inherit'}`,
       background: `url('${isSecondary ? GenericSecondaryBackgroundMobile : GenericBackgroundMobile}')`,
       backgroundSize: isSecondary ? '100% 100%' : 'cover',
       backgroundColor: `${isSecondary ? '#ffffff' : '#0d174d'}`,

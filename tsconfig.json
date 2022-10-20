@@ -21,11 +21,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "experimentalDecorators": true,
+    "downlevelIteration": true,
     "noFallthroughCasesInSwitch": true,
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [ "**/*.ts", "**/*.tsx", "public/service-worker.js", "public/serviceWorkerRegistration.ts"],
   "exclude": [

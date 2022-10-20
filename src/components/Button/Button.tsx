@@ -32,7 +32,7 @@ const Button = ({ sx, size, variant, fullWidth, disabled, disabledMessage, ...re
           '&.Mui-disabled': {
             color: theme.palette.grey.A200,
             borderColor: theme.palette.grey.A200,
-            background: theme.palette.grey[50],
+            background: theme.palette.grey.A400,
             opacity: theme.palette.action.disabledOpacity,
             ...((variant ?? 'contained') === 'text' && {
               background: 'inherit',

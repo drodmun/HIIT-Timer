@@ -4,13 +4,13 @@ import Form from 'react-bootstrap/Form';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Link, Snackbar } from '@mui/material';
 import { auth } from '../../config/firebase/firebaseConf';
-import { useGlobalContext } from 'globalStateContext';
+import { useDarkMode } from 'hooks';
 import Button from 'components/Button/Button';
 import ExternalAuth from './ExternalAuth';
 import Alert from '../Alert/Alert';
 
 const LoginForm = () => {
-  const { darkMode } = useGlobalContext();
+  const { isLightMode } = useDarkMode();
   const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -54,7 +54,7 @@ const LoginForm = () => {
     <>
       {redirect && <Navigate replace to='/' />}
 
-      <div style={{ color: darkMode ? 'black' : 'white' }}>
+      <div style={{ color: isLightMode ? 'black' : 'white' }}>
         <h2 style={{ margin: '16px 0' }}>Welcome!</h2>
 
         <>
@@ -82,9 +82,9 @@ const LoginForm = () => {
                 sx={{
                   borderLeftColor: '#FF5FF4',
                   borderBottomColor: '#FF5FF4',
-                  color: darkMode ? '11c1f4' : '#ffffff',
+                  color: isLightMode ? '11c1f4' : '#ffffff',
                   '&:hover': {
-                    color: darkMode ? 'black' : '#ffffff'
+                    color: isLightMode ? 'black' : '#ffffff'
                   }
                 }}
                 fullWidth

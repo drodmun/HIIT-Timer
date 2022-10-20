@@ -1,37 +1,43 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { AppBar, Box, Drawer, IconButton, Link, List, ListItem, Toolbar, Typography, useTheme } from '@mui/material';
+import { AppBar, Box, Drawer, IconButton, Link, List, Toolbar, Typography, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
+import { User } from 'firebase/auth';
+import { useDarkMode, useFirebaseAuth } from 'hooks';
+
 import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
 import Divider from '../Divider/Divider';
-import { useGlobalContext } from 'globalStateContext';
-import { auth } from '../../firebase/firebaseConf';
-import { signOut } from 'firebase/auth';
-import { onAuthStateChanged } from 'firebase/auth';
+import UserProfile from './UserProfile/UserProfile';
+import MenuOptions from './MenuOptions/MenuOptions';
 
 const container = window !== undefined ? () => window.document.body : undefined;
 const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
-  const [uid, setUid] = useState<string | null>('no');
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { isLightMode } = useDarkMode();
+  const { user: fbUser } = useFirebaseAuth();
+
+  const user = useMemo(
+    () =>
+      fbUser ||
+      ({
+        displayName: 'Guest Member',
+        photoURL: '',
+        email: 'No email added!'
+      } as User),
+    [fbUser]
+  );
+
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const { darkMode } = useGlobalContext();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = useCallback(() => setMobileOpen((pMobileOpen) => !pMobileOpen), [setMobileOpen]);
 
   // This variable will save the event for later use.
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUid(user.email);
-      } else {
-        setUid('nonexisting');
-      }
-    });
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      console.log(deferredPrompt, 'PWA3');
+      setDeferredPrompt(e as typeof deferredPrompt);
     });
   }, [deferredPrompt]);
 
@@ -55,62 +61,39 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
     []
   );
 
-  const navItemsLogged = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
-  const navItemsMobile = useMemo(() => (uid == 'nonexisting' ? ['Login', 'Signup'] : ['Logout']), [uid]);
-
   const renderDrawer = useMemo(
     () => (
       <>
-        <Box onClick={handleDrawerToggle}>
-          <Box sx={{ display: 'flex', alignItems: 'center', marginTop: theme.spacing(1) }}>
-            <IconButton aria-label='delete' size='large'>
-              <ArrowBackIosNewIcon sx={{ color: !darkMode ? 'white' : '#0d174d' }} />
-            </IconButton>
-            <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-              <Logo />
+        <Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, mb: 1 }}>
+              <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+                <Logo />
+              </Box>
             </Box>
+
+            {!!fbUser && (
+              <>
+                <Divider />
+                <UserProfile user={user} />
+              </>
+            )}
           </Box>
 
           <List>
             <Divider />
-            {!hideMenu &&
-              navItemsMobile.map((item, index) => (
-                <>
-                  <ListItem key={`navItemsMobile_${item}`}>
-                    <Link
-                      key={item}
-                      href={`/${item}`}
-                      style={{
-                        textDecoration: 'none',
-                        width: '100%',
-                        color: !darkMode ? 'white' : '#0d174d',
-                        padding: theme.spacing(2)
-                      }}
-                    >
-                      <Typography variant='h4' component='span'>
-                        {item}
-                      </Typography>
-                    </Link>
-                  </ListItem>
-
-                  {!hideMenu && index !== navItemsMobile.length && <Divider />}
-                </>
-              ))}
+            {!hideMenu && <MenuOptions />}
           </List>
         </Box>
 
         {!isPWAInstalled && (
-          <Button
-            onClick={installApp}
-            sx={{ textTransform: 'none', fontWeight: 'bold', margin: theme.spacing(2) }}
-            size='x-large'
-          >
+          <Button onClick={installApp} sx={{ textTransform: 'none', fontWeight: 'bold', m: 2, mb: 2 }} size='x-large'>
             Get APP
           </Button>
         )}
       </>
     ),
-    [darkMode, handleDrawerToggle, installApp, isPWAInstalled, navItemsMobile, hideMenu, theme]
+    [fbUser, user, hideMenu, isPWAInstalled, installApp]
   );
 
   return (
@@ -122,7 +105,7 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
             aria-label='open drawer'
             edge='start'
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, mt: 1, display: { md: 'none' }, color: darkMode ? 'black' : 'white' }}
+            sx={{ mr: 2, mt: 1, display: { md: 'none' }, color: isLightMode ? 'black' : 'white' }}
           >
             <MenuIcon />
           </IconButton>
@@ -155,7 +138,7 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
                   {!isPWAInstalled && (
                     <Typography
                       variant='body1'
-                      sx={{ marginLeft: theme.spacing(2), color: darkMode ? 'black' : 'white' }}
+                      sx={{ marginLeft: theme.spacing(2), color: isLightMode ? 'black' : 'white' }}
                     >
                       works better as App
                     </Typography>
@@ -174,34 +157,20 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
               </Box>
             </Box>
 
-            <Box sx={{ display: { xs: 'none', md: 'block' }, margin: theme.spacing() }}>
+            <Box sx={{ display: { xs: 'none', md: 'block' }, m: 1 }}>
               {!hideMenu &&
-                navItemsLogged.map((item) => (
-                  <Link key={item} href={`/${item}`} style={{ textDecoration: 'none' }}>
-                    <Button
-                      sx={{ color: darkMode ? 'black' : '#fff', width: 150 }}
-                      variant='text'
-                      onClick={() => {
-                        if (item === 'Logout') {
-                          signOut(auth)
-                            .then(() => {
-                              // Sign-out successful.
-                              setUid('nonexisting');
-                              console.log('Sign-out successful.');
-                            })
-                            .catch((error) => {
-                              // An error happened.
-                              console.log(error, 'fail');
-                            });
-                          //set to live auth instead of state
-                        }
-                      }}
-                    >
-                      <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
-                        {item}
-                      </Typography>
-                    </Button>
-                  </Link>
+                (!!fbUser ? (
+                  <UserProfile user={user} />
+                ) : (
+                  ['Login', 'Signup'].map((item) => (
+                    <Link key={`navItems_${item}`} href={`/${item}`} style={{ textDecoration: 'none' }}>
+                      <Button sx={{ color: isLightMode ? 'black' : '#fff', width: 150 }} variant='text'>
+                        <Typography variant='h6' sx={{ flexGrow: 1, display: 'block', textTransform: 'none' }}>
+                          {item}
+                        </Typography>
+                      </Button>
+                    </Link>
+                  ))
                 ))}
             </Box>
           </Box>
@@ -219,8 +188,8 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
             sx: {
               boxSizing: 'border-box',
               width: 320,
-              backgroundColor: darkMode ? 'white' : '#0d174d',
-              color: darkMode ? 'black' : 'white',
+              backgroundColor: isLightMode ? 'white' : '#0d174d',
+              color: isLightMode ? 'black' : 'white',
               justifyContent: 'space-between'
             }
           }}

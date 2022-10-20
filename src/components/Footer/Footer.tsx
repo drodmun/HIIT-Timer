@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { Link, Typography } from '@mui/material';
-import { useGlobalContext } from 'globalStateContext';
+import { useDarkMode } from 'hooks';
 const Footer = () => {
-  const { darkMode } = useGlobalContext();
+  const { isLightMode } = useDarkMode();
   return (
     <div
       style={{
@@ -14,7 +14,7 @@ const Footer = () => {
         transformOrigin: '0 100%'
       }}
     >
-      <Typography sx={{ wordWrap: 'nowrap', color: darkMode ? '#000000' : '#ffffff' }}>
+      <Typography sx={{ wordWrap: 'nowrap', color: isLightMode ? '#000000' : '#ffffff' }}>
         By
         <Link href='https://github.com/drodmun' underline='none'>
           &nbsp; Damian Rodriguez (drodmun)&nbsp;
