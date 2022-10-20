@@ -22,7 +22,7 @@ import { SetCounter } from 'types/CounterConfig';
 
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
-import { useGlobalContext } from '../globalStateContext';
+import { useDarkMode } from 'hooks';
 
 const steps: {
   label: string;
@@ -94,7 +94,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const { darkMode } = useGlobalContext();
+  const { isLightMode } = useDarkMode();
 
   const handleOnInput =
     (min = 0, max = 59) =>
@@ -166,7 +166,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setRMinutes, rMinutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16, color: darkMode ? 'black' : 'white' }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: isLightMode ? 'black' : 'white' }}>
                 :
               </Typography>
 
@@ -187,7 +187,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setCdMinutes, cdMinutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16, color: darkMode ? 'black' : 'white' }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: isLightMode ? 'black' : 'white' }}>
                 :
               </Typography>
 
@@ -206,7 +206,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setPMinutes, pMinutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16, color: darkMode ? 'black' : 'white' }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: isLightMode ? 'black' : 'white' }}>
                 :
               </Typography>
 
@@ -225,7 +225,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
             >
               {renderFieldInput(setMinutes, minutes, 'Minutes', true)}
 
-              <Typography variant='h3' component='div' style={{ margin: 16, color: darkMode ? 'black' : 'white' }}>
+              <Typography variant='h3' component='div' style={{ margin: 16, color: isLightMode ? 'black' : 'white' }}>
                 :
               </Typography>
 
@@ -237,7 +237,7 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
     [
       cdMinutes,
       cdSeconds,
-      darkMode,
+      isLightMode,
       minutes,
       pMinutes,
       pSeconds,
@@ -252,17 +252,18 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
 
   return (
     <Dialog
+      isScrollable
       onClose={onFinish}
       title='Configure ROUNDS/SETS'
       content={
-        <Grid container spacing={0}>
-          <Grid item xs={12} style={{ padding: fullScreen ? 10 : 64, paddingTop: 0, margin: 0 }}>
+        <Grid container spacing={0} sx={{ overflow: 'auto' }}>
+          <Grid item xs={12} sx={{ p: fullScreen ? 2 : 8, pt: 0, m: 0 }}>
             <Stepper nonLinear activeStep={activeStep} orientation='vertical' connector={<QontoConnector />}>
               {steps.map((step, index) => (
                 <Step key={step.label}>
                   <StepButton onClick={handleStep(index)}>
                     <StepLabel>
-                      <Typography variant='h6' component='span' style={{ color: darkMode ? 'black' : 'white' }}>
+                      <Typography variant='h6' component='span' style={{ color: isLightMode ? 'black' : 'white' }}>
                         {step.label}
                       </Typography>
                     </StepLabel>
@@ -270,11 +271,11 @@ const SetsConfigurator = ({ onFinish }: { onFinish: () => void }) => {
                   <StepContent>
                     <>
                       {!!step?.description && (
-                        <Typography style={{ color: darkMode ? 'black' : 'white' }}>{step.description}</Typography>
+                        <Typography style={{ color: isLightMode ? 'black' : 'white' }}>{step.description}</Typography>
                       )}
 
                       {!!step?.example && (
-                        <Typography style={{ color: darkMode ? 'black' : 'white' }}>ie: {step.example}</Typography>
+                        <Typography style={{ color: isLightMode ? 'black' : 'white' }}>ie: {step.example}</Typography>
                       )}
 
                       {renderContent(step.field)}

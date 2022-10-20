@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
-const useGaTracker = () => {
+export const useGaTracker = () => {
   const location = useLocation();
   const [initialized, setInitialized] = useState(false);
 
@@ -19,5 +19,3 @@ const useGaTracker = () => {
     }
   }, [initialized, location]);
 };
-
-export default useGaTracker;

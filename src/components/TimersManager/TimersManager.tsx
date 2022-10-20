@@ -7,7 +7,8 @@ import TimerSetter from 'components/TimersManager/TimerSetter/TimerSetter';
 import Actions from 'components/Actions/Actions';
 import { hiitConfigurationAtom, isRunningAtom } from 'stores/timers';
 import ConfigHeader from '../ConfigHeader/ConfigHeader';
-import { Divider, Tooltip } from '@mui/material';
+import Divider from '../Divider/Divider';
+import { Tooltip } from '@mui/material';
 
 const TimerManager = () => {
   const isRunning = useRecoilValue(isRunningAtom);

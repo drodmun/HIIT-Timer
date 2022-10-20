@@ -5,7 +5,7 @@ import useSound from 'use-sound';
 import beep from '../../../assets/sounds/beep.mp3';
 import { Typography } from '@mui/material';
 import { hiitConfigurationAtom, isPausedAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
-import { useGlobalContext } from 'globalStateContext';
+import { useDarkMode } from 'hooks';
 
 const mmss = (seconds: number) => {
   const mm = Math.floor(seconds / 60);
@@ -23,7 +23,7 @@ const ShowCounter = () => {
   const setIsRunning = useSetRecoilState(isRunningAtom);
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentConfig = useMemo(() => hiitConfiguration.counters[currentIndex], [hiitConfiguration, currentIndex]);
-  const { darkMode } = useGlobalContext();
+  const { isLightMode } = useDarkMode();
   const currentDuration = useMemo(
     () => (currentConfig.minutes || 0) * 60 + (currentConfig.seconds || 0),
     [currentConfig.minutes, currentConfig.seconds]
@@ -73,7 +73,7 @@ const ShowCounter = () => {
   const myStyles = {
     fontWeight: 400,
     fontSize: '7.5rem',
-    color: darkMode ? 'black' : 'white'
+    color: isLightMode ? 'black' : 'white'
   };
   console.log(
     new Date().getMinutes() + ':' + new Date().getSeconds(),
@@ -109,7 +109,7 @@ const ShowCounter = () => {
             <Typography
               variant='caption'
               component='span'
-              style={{ fontSize: '0.6rem', color: darkMode ? 'black' : 'white' }}
+              style={{ fontSize: '0.6rem', color: isLightMode ? 'black' : 'white' }}
             >
               {`Round ${currentConfig.round}, Set ${currentConfig.set}`}
             </Typography>
@@ -118,7 +118,7 @@ const ShowCounter = () => {
             {mmss(remainingTime)}
           </Typography>
 
-          <Typography variant='body1' component='span' style={{ marginTop: 8, color: darkMode ? 'black' : 'white' }}>
+          <Typography variant='body1' component='span' style={{ marginTop: 8, color: isLightMode ? 'black' : 'white' }}>
             {message.toUpperCase()}
           </Typography>
         </div>

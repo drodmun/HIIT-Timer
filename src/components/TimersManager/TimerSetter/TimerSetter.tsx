@@ -4,10 +4,10 @@ import { Typography } from '@mui/material';
 
 import FieldInput from 'components/TimersManager/TimerSetter/FieldInput/FieldInput';
 import { hiitConfigurationAtom } from 'stores/timers';
-import { useGlobalContext } from 'globalStateContext';
+import { useDarkMode } from 'hooks';
 
 const TimerSetter = () => {
-  const { darkMode } = useGlobalContext();
+  const { isLightMode } = useDarkMode();
 
   const [hiitConfiguration, setHIITConfiguration] = useRecoilState(hiitConfigurationAtom);
 
@@ -63,7 +63,7 @@ const TimerSetter = () => {
         onChange={handleOnChange('min')}
       />
 
-      <Typography variant='h1' component='div' style={{ margin: 16, color: darkMode ? 'black' : '#ffffff' }}>
+      <Typography variant='h1' component='div' style={{ margin: 16, color: isLightMode ? 'black' : '#ffffff' }}>
         :
       </Typography>
 

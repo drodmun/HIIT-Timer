@@ -1,4 +1,4 @@
-import { db } from '../firebase/firebaseConf';
+import { db } from 'config/firebase/firebaseConf';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { HIITConfiguration } from '../types/CounterConfig';
 

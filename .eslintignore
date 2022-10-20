@@ -8,4 +8,4 @@ public
 **/*.js
 **/*.js.map
 # Valid
-globalStateContext.tsx
+src/config/contexts/DarkModeContext.tsx

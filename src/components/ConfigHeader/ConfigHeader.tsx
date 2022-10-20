@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import useSound from 'use-sound';
 
-import { Fab } from '@mui/material';
+import { Fab, useTheme } from '@mui/material';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 
@@ -10,7 +10,7 @@ import { isPlaySoundAtom } from 'stores/timers';
 import beep from '../../assets/sounds/beep.mp3';
 
 const ConfigHeader = () => {
-  //const theme = useTheme();
+  const theme = useTheme();
   const [isPlaySound, setIsPlaySound] = useRecoilState(isPlaySoundAtom);
   const [play] = useSound(beep);
 
@@ -20,7 +20,7 @@ const ConfigHeader = () => {
   }, [isPlaySound, play, setIsPlaySound]);
 
   return (
-    <div style={{ zIndex: '1200' }}>
+    <div style={{ zIndex: '1200', marginRight: theme.spacing(2) }}>
       <Fab
         size='small'
         aria-label='sound'

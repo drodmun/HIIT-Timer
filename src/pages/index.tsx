@@ -7,15 +7,15 @@ import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Button from 'components/Button/Button';
 import SideMenu from '../components/SideMenu/SideMenu';
-import { useGlobalContext } from 'globalStateContext';
 import { hiitConfigurationAtom, isRunningAtom } from 'stores/timers';
-import { useUIConfig } from 'hooks/useUIConfig';
 import About from './About';
 import Settings from './Settings';
 import Saved from './Saved';
 import Share from './Share';
 import { Adsense } from '@ctrl/react-adsense';
 import Feedback from './Feedback';
+
+import { useDarkMode, useUIConfig } from 'hooks';
 
 import { useIndexStyles } from './index.styles';
 const Index = () => {
@@ -25,11 +25,12 @@ const Index = () => {
   const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
   console.log(hiitConfiguration);
   const { openDialog, toggleSetOpenDialog } = useUIConfig();
-  const { darkMode } = useGlobalContext();
+  const { isLightMode } = useDarkMode();
 
   return (
-    <Container isSecondary={darkMode}>
+    <Container isSecondary={isLightMode}>
       <Header />
+
       <Grid container spacing={0} alignItems='center' justifyContent='center' className={container}>
         <Grid item xs={12} lg={8}>
           <Box className={containerBox}>

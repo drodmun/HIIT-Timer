@@ -6,12 +6,12 @@ import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { Link, Snackbar } from '@mui/material';
 import Button from 'components/Button/Button';
 import { auth, db } from '../../config/firebase/firebaseConf';
-import { useGlobalContext } from 'globalStateContext';
+import { useDarkMode } from 'hooks';
 import ExternalAuth from './ExternalAuth';
 import Alert from '../Alert/Alert';
 
 const SignUpForm = () => {
-  const { darkMode } = useGlobalContext();
+  const { isLightMode } = useDarkMode();
   const [open, setOpen] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -85,7 +85,7 @@ const SignUpForm = () => {
     <>
       {redirect && <Navigate replace to='/' />}
 
-      <div style={{ color: darkMode ? 'black' : 'white' }}>
+      <div style={{ color: isLightMode ? 'black' : 'white' }}>
         <h2 style={{ margin: '16px 0' }}>Welcome!</h2>
         <>
           <Form className=' d-flex flex-column'>
@@ -113,9 +113,9 @@ const SignUpForm = () => {
                 sx={{
                   borderLeftColor: '#FF5FF4',
                   borderBottomColor: '#FF5FF4',
-                  color: darkMode ? '11c1f4' : '#ffffff',
+                  color: isLightMode ? '11c1f4' : '#ffffff',
                   '&:hover': {
-                    color: darkMode ? 'black' : '#ffffff'
+                    color: isLightMode ? 'black' : '#ffffff'
                   }
                 }}
                 fullWidth

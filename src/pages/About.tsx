@@ -4,18 +4,19 @@ import { Grid, Link, Typography } from '@mui/material';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 import PaidIcon from '@mui/icons-material/Paid';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { useGlobalContext } from 'globalStateContext';
 import Dialog from 'components/Dialog/Dialog';
 
+import { useDarkMode } from 'hooks';
+
 const About = ({ onClose }: { onClose: () => void }) => {
-  const { darkMode } = useGlobalContext();
+  const { isLightMode } = useDarkMode();
   return (
     <Dialog
       onClose={onClose}
       title='About the App & Me'
       content={
         <Grid container spacing={0}>
-          <Grid item xs={12} style={{ padding: 32, paddingTop: 0, color: darkMode ? 'black' : 'white' }}>
+          <Grid item xs={12} style={{ padding: 32, paddingTop: 0, color: isLightMode ? 'black' : 'white' }}>
             <Typography variant='h4' align='center' component='p' color='secondary'>
               HIIT timer
             </Typography>

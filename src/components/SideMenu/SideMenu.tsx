@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react';
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
-import { BookmarkBorder, Share, Comment, Settings, Info } from '@mui/icons-material';
+import { BookmarkBorder, Share } from '@mui/icons-material';
 import { useUIConfig } from 'hooks/useUIConfig';
 
 const SideMenu = () => {
@@ -15,10 +15,7 @@ const SideMenu = () => {
     () =>
       [
         { icon: <BookmarkBorder />, name: 'Save', action: toggleSetOpenDialog('Save'), disabled: !isHasChanges },
-        { icon: <Share />, name: 'Share', action: toggleSetOpenDialog('Share') },
-        { icon: <Comment />, name: 'Feedback', action: toggleSetOpenDialog('Feedback') },
-        { icon: <Settings />, name: 'Settings', action: toggleSetOpenDialog('Settings') },
-        { icon: <Info />, name: 'About', action: toggleSetOpenDialog('About') }
+        { icon: <Share />, name: 'Share', action: toggleSetOpenDialog('Share') }
       ].reverse(),
     [isHasChanges, toggleSetOpenDialog]
   );

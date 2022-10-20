@@ -10,6 +10,7 @@ const theme = createTheme({
     toolbar: {
       maxHeight: 160,
       background: 'transparent',
+      // background: '#0d174d',
       color: '#ffffff'
     }
   },
