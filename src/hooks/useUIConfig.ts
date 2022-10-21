@@ -17,6 +17,7 @@ interface useUIConfigType {
   setMenuAnchor: SetterOrUpdater<HTMLElement | null>;
   removeAnchor: () => void;
   executeFinalAction: (action: () => void) => () => void;
+  isHIITSaved: boolean;
   isHasChanges: boolean;
 }
 
@@ -48,6 +49,8 @@ export const useUIConfig = (): useUIConfigType => {
 
   const isHasChanges = useMemo(() => !isEqual(hiitConfiguration, DefaultHIITConfiguration), [hiitConfiguration]);
 
+  const isHIITSaved = useMemo(() => !isEqual(hiitConfiguration, DefaultHIITConfiguration), [hiitConfiguration]);
+
   const isMobileOrSmall = useMediaQuery(theme.breakpoints.down('sm'), { noSsr: true });
 
   return {
@@ -60,6 +63,7 @@ export const useUIConfig = (): useUIConfigType => {
     setMenuAnchor,
     removeAnchor,
     executeFinalAction,
-    isHasChanges
+    isHasChanges,
+    isHIITSaved
   };
 };

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { memo, MouseEvent, useCallback, useRef } from 'react';
+import { memo, MouseEvent, useCallback, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Avatar, Box, Typography, useTheme } from '@mui/material';
-import { User } from 'firebase/auth';
+import { User } from 'types';
 import { useDarkMode, useUIConfig } from 'hooks';
 import AccountMenu from '../AccountMenu/AccountMenu';
 
@@ -18,13 +18,18 @@ const UserProfile = ({ user }: { user: User }) => {
   const handleOpen = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {
       e.preventDefault();
-      if (!!user && user.displayName !== 'Guest') {
+      if (!!user && user.name !== 'Guest') {
         if (!isMobileOrSmall && !!anchor?.current) setMenuAnchor(anchor?.current);
       } else {
         navigate('/login');
       }
     },
     [navigate, isMobileOrSmall, setMenuAnchor, user]
+  );
+
+  const initialsForAvatar = useMemo(
+    () => `${user.name?.split(' ')[0][0]}${user.name?.split(' ')[1]?.[0] ?? ''}`,
+    [user.name]
   );
 
   return (
@@ -57,7 +62,7 @@ const UserProfile = ({ user }: { user: User }) => {
             component='span'
             sx={{ color: isLightMode ? '#0d174d' : 'white', fontWeight: '500' }}
           >
-            {`${user.displayName!.split(' ')[0][0]}${user.displayName!.split(' ')[1]?.[0]}`}
+            {initialsForAvatar}
           </Typography>
         </Avatar>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -66,7 +71,7 @@ const UserProfile = ({ user }: { user: User }) => {
             component='span'
             sx={{ color: isLightMode ? 'black' : 'white' }}
           >
-            {user.displayName}
+            {user.name}
             <Typography variant={!isMobileOrSmall ? 'subtitle1' : 'h4'} component='p' color='primary'>
               {user.email}
             </Typography>

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ColorHex, CountdownCircleTimer } from 'react-countdown-circle-timer';
 import useSound from 'use-sound';
-import beep from '../../../assets/sounds/beep.mp3';
+import beep from 'assets/sounds/beep.mp3';
 import { Typography } from '@mui/material';
 import { hiitConfigurationAtom, isPausedAtom, isPlaySoundAtom, isRunningAtom } from 'stores/timers';
 import { useDarkMode } from 'hooks';

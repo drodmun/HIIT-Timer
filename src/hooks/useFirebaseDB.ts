@@ -1,21 +1,46 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import ReactGA from 'react-ga';
+import { useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import { User, HIITSet } from 'types';
+import { doc, FirestoreError } from 'firebase/firestore';
+import { db } from '../config/firebase/firebaseConf';
+import { useFirebaseAuth } from '../config/contexts';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 
-export const useFirebaseDB = () => {
-  const location = useLocation();
-  const [initialized, setInitialized] = useState(false);
+export const useUser = (): {
+  data: User | null;
+  isLoading: boolean;
+  error: FirestoreError | undefined;
+} => {
+  const { user } = useFirebaseAuth();
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const [value, loading, error] = useDocumentData(doc(db, 'users', user?.email || 'undefined'), {
+    snapshotListenOptions: { includeMetadataChanges: true }
+  });
 
   useEffect(() => {
-    if (!window.location.href.includes('localhost')) {
-      ReactGA.initialize('G-KX8HS6CBX4');
+    if (!!error) {
+      const snackbarKey = enqueueSnackbar(error.message, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center'
+        },
+        onClick: () => closeSnackbar(snackbarKey)
+      });
     }
-    setInitialized(true);
-  }, [setInitialized]);
+  }, [closeSnackbar, enqueueSnackbar, error]);
 
-  useEffect(() => {
-    if (initialized) {
-      ReactGA.pageview(location.pathname + location.search);
-    }
-  }, [initialized, location]);
+  return { data: value as User, isLoading: loading, error };
+};
+
+export const useSavedSets = (): {
+  data: HIITSet[];
+  isLoading: boolean;
+  error: FirestoreError | undefined;
+} => {
+  const { data: user, isLoading, error } = useUser();
+
+  return { data: user?.presets ?? [], isLoading, error };
 };

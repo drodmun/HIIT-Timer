@@ -7,7 +7,7 @@ import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 
 import { isPlaySoundAtom } from 'stores/timers';
-import beep from '../../assets/sounds/beep.mp3';
+import beep from 'assets/sounds/beep.mp3';
 
 const ConfigHeader = () => {
   const theme = useTheme();

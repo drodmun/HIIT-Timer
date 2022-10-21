@@ -2,35 +2,24 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { AppBar, Box, Drawer, IconButton, Link, List, Toolbar, Typography, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { User } from 'firebase/auth';
-import { useDarkMode, useFirebaseAuth, useUIConfig } from 'hooks';
+import { useDarkMode, useUIConfig, useUser } from 'hooks';
 
 import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
 import Divider from '../Divider/Divider';
 import UserProfile from './UserProfile/UserProfile';
 import MenuOptions from './MenuOptions/MenuOptions';
+import { User } from 'types';
 
 const container = window !== undefined ? () => window.document.body : undefined;
 const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
   const theme = useTheme();
 
   const { isLightMode } = useDarkMode();
-  const { user: fbUser } = useFirebaseAuth();
+  const { data: user } = useUser();
   const { openMobileDrawer, toggleSetOpenMobileDrawer } = useUIConfig();
 
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-
-  const user = useMemo(
-    () =>
-      fbUser ||
-      ({
-        displayName: 'Guest Member',
-        photoURL: '',
-        email: 'No email added!'
-      } as User),
-    [fbUser]
-  );
 
   // This variable will save the event for later use.
   useEffect(() => {
@@ -71,10 +60,10 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
               </Box>
             </Box>
 
-            {!!fbUser && (
+            {!!user && (
               <>
                 <Divider />
-                <UserProfile user={user} />
+                <UserProfile user={user as User} />
               </>
             )}
           </Box>
@@ -92,7 +81,7 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
         )}
       </>
     ),
-    [fbUser, user, hideMenu, isPWAInstalled, installApp]
+    [user, hideMenu, isPWAInstalled, installApp]
   );
 
   return (
@@ -158,8 +147,8 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
 
             <Box sx={{ display: { xs: 'none', md: 'block' }, m: 1 }}>
               {!hideMenu &&
-                (!!fbUser ? (
-                  <UserProfile user={user} />
+                (!!user ? (
+                  <UserProfile user={user as User} />
                 ) : (
                   ['Login', 'Signup'].map((item) => (
                     <Link key={`navItems_${item}`} href={`/${item}`} style={{ textDecoration: 'none' }}>

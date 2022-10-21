@@ -31,10 +31,8 @@ const ExternalAuth = ({
               } else {
                 // doc.data() will be undefined in this case
                 setDoc(docRef, {
-                  name: user.displayName,
+                  ...user,
                   authProvider: providerName,
-                  email: user.email,
-                  userID: user.uid,
                   presets: []
                 });
               }

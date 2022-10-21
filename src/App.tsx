@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
+import { SnackbarProvider } from 'notistack';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -29,13 +30,15 @@ const App = () => {
         <FirebaseAuthProvider>
           <DarkModeProvider>
             <RecoilRoot>
-              <Routes>
-                <Route path='/' element={<Index />} />
-                <Route path='Login' element={<LoginPage />} />
-                <Route path='Logout' element={<Navigate replace to='/' />} />
-                <Route path='Signup' element={<SignUpPage />} />
-                <Route path='*' element={<NotFoundPage />} />
-              </Routes>
+              <SnackbarProvider preventDuplicate maxSnack={3} autoHideDuration={3500}>
+                <Routes>
+                  <Route path='/' element={<Index />} />
+                  <Route path='Login' element={<LoginPage />} />
+                  <Route path='Logout' element={<Navigate replace to='/' />} />
+                  <Route path='Signup' element={<SignUpPage />} />
+                  <Route path='*' element={<NotFoundPage />} />
+                </Routes>
+              </SnackbarProvider>
             </RecoilRoot>
           </DarkModeProvider>
         </FirebaseAuthProvider>
