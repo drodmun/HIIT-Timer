@@ -5,6 +5,7 @@ import { HIITConfiguration } from '../types/CounterConfig';
 const save = async (uid: string, name: string, hiitConfiguration: HIITConfiguration) =>
   await updateDoc(doc(db, 'users', uid), {
     presets: arrayUnion({
+      creator: uid,
       name,
       hiitConfiguration
     })

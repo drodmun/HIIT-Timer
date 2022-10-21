@@ -1,13 +1,13 @@
 import { useRecoilValue } from 'recoil';
 import { Grid, useTheme, Box } from '@mui/material';
-import TimersManager from 'components/TimersManager/TimersManager';
+import TimersManager from 'components/TimersManager/TimerManager';
 import SetsConfigurator from 'pages/SetsConfigurator';
 import Container from 'components/Container/Container';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Button from 'components/Button/Button';
 import SideMenu from '../components/SideMenu/SideMenu';
-import { hiitConfigurationAtom, isRunningAtom } from 'stores/timers';
+import { isRunningAtom } from 'stores/timers';
 import About from './About';
 import Settings from './Settings';
 import Saved from './Saved';
@@ -18,12 +18,12 @@ import Feedback from './Feedback';
 import { useDarkMode, useUIConfig } from 'hooks';
 
 import { useIndexStyles } from './index.styles';
+import MySets from './MySets';
 const Index = () => {
   const { container, containerBox, adsense } = useIndexStyles(useTheme());
 
   const isRunning = useRecoilValue(isRunningAtom);
-  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
-  console.log(hiitConfiguration);
+
   const { openDialog, toggleSetOpenDialog } = useUIConfig();
   const { isLightMode } = useDarkMode();
 
@@ -63,6 +63,7 @@ const Index = () => {
       {openDialog === 'Settings' && <Settings onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Save' && <Saved onClose={toggleSetOpenDialog('none')} />}
       {openDialog === 'Share' && <Share onClose={toggleSetOpenDialog('none')} />}
+      {openDialog === 'My Sets' && <MySets onClose={toggleSetOpenDialog('none')} />}
 
       <Footer />
 

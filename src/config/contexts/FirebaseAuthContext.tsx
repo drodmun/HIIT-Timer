@@ -17,15 +17,6 @@ const FirebaseAuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const logout = () => signOut(auth);
-  // .then(() => {
-  //   // Sign-out successful.
-  //   setUser(null);
-  //   console.log('Sign-out successful.');
-  // })
-  // .catch((error) => {
-  //   // An error happened.
-  //   console.log(error, 'fail');
-  // });
 
   return <FirebaseAuthContext.Provider value={{ user, logout }}>{children}</FirebaseAuthContext.Provider>;
 };

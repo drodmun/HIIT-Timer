@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react';
 import { Divider as MUIDivider, ListItemIcon, MenuItem, Typography } from '@mui/material';
-import { Comment, DarkMode, Info, LightMode, Logout, Settings } from '@mui/icons-material';
+import { Comment, DarkMode, Info, LightMode, Logout, Settings, Tune } from '@mui/icons-material';
 
 import { useDarkMode, useFirebaseAuth, useUIConfig } from 'hooks';
 import Divider from 'components/Divider/Divider';
@@ -8,22 +8,12 @@ import { PossibleDialogType } from 'types/UIConfig';
 
 const MenuOptions = () => {
   const { isLightMode, toggleDarkMode } = useDarkMode();
-  const { openDialog, toggleSetOpenDialog, openMobileDrawer, toggleSetOpenMobileDrawer, removeAnchor } = useUIConfig();
+  const { toggleSetOpenDialog, executeFinalAction } = useUIConfig();
   const { logout } = useFirebaseAuth();
 
   const [openSubMenu, setOpenSubMenu] = useState<PossibleDialogType>('none');
   const toggleSetOpenSubMenu = (subMenu: typeof openSubMenu) => () =>
     setOpenSubMenu((pSubmenu) => (pSubmenu === subMenu ? 'none' : subMenu));
-
-  const finalizeSelection = useCallback(
-    (action: () => void) => () => {
-      removeAnchor();
-      openDialog !== 'none' && toggleSetOpenDialog('none');
-      openMobileDrawer && toggleSetOpenMobileDrawer();
-      action();
-    },
-    [openDialog, openMobileDrawer, removeAnchor, toggleSetOpenDialog, toggleSetOpenMobileDrawer]
-  );
 
   const renderMenuItem = useCallback(
     (name: string, icon: JSX.Element, action: () => void, isSubmenu = false) => (
@@ -47,6 +37,14 @@ const MenuOptions = () => {
 
   return (
     <>
+      {renderMenuItem(
+        'My Sets',
+        <Tune sx={{ color: 'secondary.main' }} />,
+        executeFinalAction(toggleSetOpenDialog('My Sets'))
+      )}
+
+      <Divider />
+
       {renderMenuItem('Settings', <Settings sx={{ color: 'primary.main' }} />, toggleSetOpenSubMenu('Settings'))}
       {openSubMenu === 'Settings' && (
         <>
@@ -60,17 +58,17 @@ const MenuOptions = () => {
       {renderMenuItem(
         'Feedback',
         <Comment sx={{ color: 'primary.main' }} />,
-        finalizeSelection(toggleSetOpenDialog('Feedback'))
+        executeFinalAction(toggleSetOpenDialog('Feedback'))
       )}
       {renderMenuItem(
         'About',
         <Info sx={{ color: 'primary.main' }} />,
-        finalizeSelection(toggleSetOpenDialog('About'))
+        executeFinalAction(toggleSetOpenDialog('About'))
       )}
 
       <Divider />
 
-      {renderMenuItem('Logout', <Logout sx={{ color: 'secondary.main' }} />, finalizeSelection(logout))}
+      {renderMenuItem('Logout', <Logout sx={{ color: 'secondary.main' }} />, executeFinalAction(logout))}
     </>
   );
 };

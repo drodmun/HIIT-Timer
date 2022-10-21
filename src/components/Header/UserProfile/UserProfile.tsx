@@ -57,7 +57,7 @@ const UserProfile = ({ user }: { user: User }) => {
             component='span'
             sx={{ color: isLightMode ? '#0d174d' : 'white', fontWeight: '500' }}
           >
-            {`${user.displayName!.split(' ')[0][0]}${user.displayName!.split(' ')[1][0]}`}
+            {`${user.displayName!.split(' ')[0][0]}${user.displayName!.split(' ')[1]?.[0]}`}
           </Typography>
         </Avatar>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>

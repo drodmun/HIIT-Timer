@@ -175,6 +175,30 @@ const MapMultiProps = <T extends object>(array: T[], properties: (keyof T)[]) =>
 
 const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
+const toHHMMSS = (secondsToParse: number) => {
+  const hours = Math.floor(secondsToParse / 3600);
+  const minutes = Math.floor((secondsToParse - hours * 3600) / 60);
+  const seconds = secondsToParse - hours * 3600 - minutes * 60;
+
+  let hoursText: string = hours.toString();
+  let minutesText: string = minutes.toString();
+  let secondsText: string = seconds.toString();
+
+  if (!!hours || !!minutes) {
+    if (hours < 10) hoursText = `0${hours}`;
+    if (minutes < 10) {
+      minutesText = `0${minutes}`;
+    }
+    if (seconds < 10) {
+      secondsText = `0${seconds}`;
+    }
+
+    return `${!!hours ? `${hoursText}:` : ''}${minutesText}:${secondsText}`;
+  } else {
+    return `${seconds}s`;
+  }
+};
+
 const CommonUtils = {
   areObjectsDeeplyEqual,
   isJson,
@@ -185,6 +209,7 @@ const CommonUtils = {
   getKeys,
   subtractMonths,
   MapMultiProps,
-  scrollToTop
+  scrollToTop,
+  toHHMMSS
 };
 export default CommonUtils;

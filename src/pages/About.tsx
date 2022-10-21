@@ -48,7 +48,7 @@ const About = ({ onClose }: { onClose: () => void }) => {
             <br />
             <Typography variant='body1' component='p'>
               <Link
-                href='hhttps://paypal.me/drodmun'
+                href='https://paypal.me/drodmun'
                 underline='none'
                 style={{
                   display: 'flex',

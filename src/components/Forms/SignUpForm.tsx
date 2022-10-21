@@ -60,7 +60,7 @@ const SignUpForm = () => {
 
   const handleError = (e: Error) => {
     console.error(e);
-    setErrorMessage('An error occured. Please try again.');
+    setErrorMessage('An error occurred. Please try again.');
     setOpen(true);
   };
 

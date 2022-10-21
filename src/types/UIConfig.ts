@@ -1,1 +1,9 @@
-export type PossibleDialogType = 'none' | 'Configurator' | 'About' | 'Save' | 'Share' | 'Feedback' | 'Settings';
+export type PossibleDialogType =
+  | 'none'
+  | 'My Sets'
+  | 'Configurator'
+  | 'About'
+  | 'Save'
+  | 'Share'
+  | 'Feedback'
+  | 'Settings';

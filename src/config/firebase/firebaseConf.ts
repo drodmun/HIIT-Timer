@@ -1,12 +1,18 @@
 import { initializeApp } from 'firebase/app';
+
 import { getAuth, FacebookAuthProvider, GoogleAuthProvider, Auth } from 'firebase/auth';
 import config from './config';
-import { Firestore, getFirestore } from 'firebase/firestore';
+import { Firestore, getFirestore, collection } from 'firebase/firestore';
 
 const app = initializeApp(config.firebase);
 
-export const auth: Auth = getAuth(app);
-export const db: Firestore = getFirestore(app);
+const auth: Auth = getAuth(app);
+const db: Firestore = getFirestore(app);
 
-export const googleProvider = new GoogleAuthProvider();
-export const facebookProvider = new FacebookAuthProvider();
+const feedbackRef = collection(db, 'feedback');
+const usersRef = collection(db, 'users');
+
+const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
+
+export { auth, db, feedbackRef, usersRef, googleProvider, facebookProvider };

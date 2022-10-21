@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { SetterOrUpdater, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { menuAnchorAtom, openDialogAtom, openMobileDrawerAtom } from 'stores/ui-config';
@@ -13,10 +13,11 @@ interface useUIConfigType {
   toggleSetOpenMobileDrawer: () => void;
   openDialog: PossibleDialogType;
   toggleSetOpenDialog: (dialog: PossibleDialogType) => () => void;
-  isHasChanges: boolean;
   menuAnchor: HTMLElement | null;
   setMenuAnchor: SetterOrUpdater<HTMLElement | null>;
   removeAnchor: () => void;
+  executeFinalAction: (action: () => void) => () => void;
+  isHasChanges: boolean;
 }
 
 export const useUIConfig = (): useUIConfigType => {
@@ -24,13 +25,26 @@ export const useUIConfig = (): useUIConfigType => {
   const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
 
   const [openMobileDrawer, setOpenMobileDrawer] = useRecoilState(openMobileDrawerAtom);
-  const toggleSetOpenMobileDrawer = () => setOpenMobileDrawer((pOpenMobileDrawer) => !pOpenMobileDrawer);
+  const toggleSetOpenMobileDrawer = useCallback(
+    () => setOpenMobileDrawer((pOpenMobileDrawer) => !pOpenMobileDrawer),
+    [setOpenMobileDrawer]
+  );
 
   const [openDialog, setOpenDialog] = useRecoilState(openDialogAtom);
-  const toggleSetOpenDialog = (dialog: typeof openDialog) => () => setOpenDialog(dialog);
+  const toggleSetOpenDialog = useCallback((dialog: typeof openDialog) => () => setOpenDialog(dialog), [setOpenDialog]);
 
   const [menuAnchor, setMenuAnchor] = useRecoilState(menuAnchorAtom);
   const removeAnchor = useResetRecoilState(menuAnchorAtom);
+
+  const executeFinalAction = useCallback(
+    (action: () => void) => () => {
+      removeAnchor();
+      openDialog !== 'none' && setOpenDialog('none');
+      openMobileDrawer && setOpenMobileDrawer(false);
+      action();
+    },
+    [openDialog, openMobileDrawer, removeAnchor, setOpenDialog, setOpenMobileDrawer]
+  );
 
   const isHasChanges = useMemo(() => !isEqual(hiitConfiguration, DefaultHIITConfiguration), [hiitConfiguration]);
 
@@ -42,9 +56,10 @@ export const useUIConfig = (): useUIConfigType => {
     toggleSetOpenMobileDrawer,
     openDialog,
     toggleSetOpenDialog,
-    isHasChanges,
     menuAnchor,
     setMenuAnchor,
-    removeAnchor
+    removeAnchor,
+    executeFinalAction,
+    isHasChanges
   };
 };
