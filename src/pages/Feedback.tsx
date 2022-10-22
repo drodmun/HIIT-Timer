@@ -38,12 +38,11 @@ const Feedback = ({ onClose }: { onClose: () => void }) => {
             type='text'
             variant='outlined'
             label='Feedback'
-            color='primary'
             required
             multiline
             rows={6}
             fullWidth
-            value={feedback ?? 'Feedback'}
+            value={feedback}
             autoFocus={true}
             onChange={(e) => setFeedback(e.target.value)}
             focused

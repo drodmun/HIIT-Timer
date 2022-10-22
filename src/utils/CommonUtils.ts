@@ -75,7 +75,7 @@ const areObjectsDeeplyEqual = (objA: any, objB: any): boolean => {
   }
 
   // Check they have the same keys
-  if (objectsDeeplyEqual && !aKeys.some((k) => !(k in objB))) {
+  if (objectsDeeplyEqual && aKeys.some((k) => !(k in objB))) {
     objectsDeeplyEqual = false;
   }
 

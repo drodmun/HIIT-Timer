@@ -1,11 +1,14 @@
 import { memo, useMemo } from 'react';
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { BookmarkBorder, Share } from '@mui/icons-material';
-import { useUIConfig } from 'hooks/useUIConfig';
+
+import { useHIITSets, useUIConfig } from 'hooks';
 
 const SideMenu = () => {
   const { openDialog, toggleSetOpenDialog, isHasChanges } = useUIConfig();
+  const { isSetAlreadySaved } = useHIITSets();
 
+  const isDisabled = !isHasChanges || isSetAlreadySaved;
   const actions: {
     icon: JSX.Element;
     name: Omit<typeof openDialog, 'none'>;
@@ -14,57 +17,64 @@ const SideMenu = () => {
   }[] = useMemo(
     () =>
       [
-        { icon: <BookmarkBorder />, name: 'Save', action: toggleSetOpenDialog('Save'), disabled: !isHasChanges },
+        {
+          icon: <BookmarkBorder />,
+          name: 'Save',
+          action: () => !isDisabled && toggleSetOpenDialog('Save'),
+          disabled: isDisabled
+        },
         { icon: <Share />, name: 'Share', action: toggleSetOpenDialog('Share') }
       ].reverse(),
-    [isHasChanges, toggleSetOpenDialog]
+    [isDisabled, toggleSetOpenDialog]
   );
 
   return (
-    <SpeedDial
-      ariaLabel='SpeedDial'
-      sx={{
-        position: 'absolute',
-        bottom: 16,
-        right: 16
-      }}
-      icon={<SpeedDialIcon />}
-      direction='up'
-    >
-      {actions.map((action) => (
-        <SpeedDialAction
-          key={action.name as string}
-          icon={action.icon}
-          tooltipTitle={
-            <Box
-              sx={{
-                color: !('action' in action) || action.disabled ? 'grey.A200' : 'primary.main'
-              }}
-            >
-              {action.name}
-            </Box>
-          }
-          tooltipOpen
-          onClick={action.action}
-          FabProps={{
-            disabled: !('action' in action) || action.disabled,
-            sx: {
-              color: 'primary.main',
-              '&:hover': {
-                color: '#ffffff',
-                backgroundColor: 'primary.main'
-              },
-              '&.Mui-disabled': {
-                color: 'grey.A200',
-                borderColor: 'grey.A200',
-                backgroundColor: 'grey.50',
-                opacity: 0.4
-              }
+    <>
+      <SpeedDial
+        ariaLabel='SpeedDial'
+        sx={{
+          position: 'absolute',
+          bottom: 16,
+          right: 16
+        }}
+        icon={<SpeedDialIcon />}
+        direction='up'
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name as string}
+            icon={action.icon}
+            tooltipTitle={
+              <Box
+                sx={{
+                  color: !('action' in action) || action.disabled ? 'grey.A200' : 'primary.main'
+                }}
+              >
+                {action.name}
+              </Box>
             }
-          }}
-        />
-      ))}
-    </SpeedDial>
+            tooltipOpen
+            onClick={action.action}
+            FabProps={{
+              disabled: !('action' in action) || action.disabled,
+              sx: {
+                color: 'primary.main',
+                '&:hover': {
+                  color: '#ffffff',
+                  backgroundColor: 'primary.main'
+                },
+                '&.Mui-disabled': {
+                  color: 'grey.A200',
+                  borderColor: 'grey.A200',
+                  backgroundColor: 'grey.50',
+                  opacity: 0.4
+                }
+              }
+            }}
+          />
+        ))}
+      </SpeedDial>
+    </>
   );
 };
 

@@ -1,10 +1,13 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useSnackbar, VariantType } from 'notistack';
-import { User, HIITSet } from 'types';
-import { addDoc, collection, doc, FirestoreError } from 'firebase/firestore';
+import { User } from 'types';
+import { addDoc, arrayUnion, collection, doc, FirestoreError, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase/firebaseConf';
 import { useFirebaseAuth } from '../config/contexts';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useRecoilValue } from 'recoil';
+import { hiitConfigurationAtom } from '../stores/timers';
+import CommonUtils from '../utils/CommonUtils';
 
 export const useUser = (): {
   data: User | null;
@@ -34,14 +37,54 @@ export const useUser = (): {
   return { data: value as User, isLoading: loading, error };
 };
 
-export const useSavedSets = (): {
-  data: HIITSet[];
-  isLoading: boolean;
-  error: FirestoreError | undefined;
-} => {
+export const useHIITSets = () => {
   const { data: user, isLoading, error } = useUser();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
 
-  return { data: user?.presets ?? [], isLoading, error };
+  const getSavedSets = useCallback(
+    () => ({ data: user?.presets ?? [], isLoading, error }),
+    [error, isLoading, user?.presets]
+  );
+
+  const isSetAlreadySaved: boolean = useMemo(
+    () =>
+      user?.presets.some((set) => CommonUtils.areObjectsDeeplyEqual(set.hiitConfiguration, hiitConfiguration)) || false,
+    [hiitConfiguration, user?.presets]
+  );
+
+  const saveSet = useCallback(
+    (name: string) => {
+      if (user?.email) {
+        let snack: { message: string; variant: VariantType | undefined };
+        updateDoc(doc(db, 'users', user.email), {
+          presets: arrayUnion({
+            creator: user.email,
+            name,
+            hiitConfiguration
+          })
+        })
+          .then((value) => {
+            console.log(value);
+            snack = { message: `Set saved as ${name}, thanks!`, variant: 'success' };
+          })
+          .catch((error) => (snack = { message: error.message, variant: 'error' }))
+          .finally(() => {
+            const snackbarKey = enqueueSnackbar(snack.message, {
+              variant: snack.variant,
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'center'
+              },
+              onClick: () => closeSnackbar(snackbarKey)
+            });
+          });
+      }
+    },
+    [closeSnackbar, enqueueSnackbar, hiitConfiguration, user?.email]
+  );
+
+  return { hiitConfiguration, getSavedSets, saveSet, isSetAlreadySaved };
 };
 
 export const useFeedback = () => {

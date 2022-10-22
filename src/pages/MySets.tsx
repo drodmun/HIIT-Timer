@@ -12,14 +12,15 @@ import { useSetRecoilState } from 'recoil';
 import { hiitConfigurationAtom } from '../stores/timers';
 import Button from '../components/Button/Button';
 import { useUIConfig, useDarkMode } from 'hooks';
-import { useSavedSets } from 'hooks/useFirebaseDB';
+import { useHIITSets } from 'hooks/useFirebaseDB';
 
 const MySets = ({ onClose }: { onClose: () => void }) => {
   const theme = useTheme();
   const { isLightMode } = useDarkMode();
   const { isMobileOrSmall, executeFinalAction } = useUIConfig();
 
-  const { data: sets } = useSavedSets();
+  const { getSavedSets } = useHIITSets();
+  const { data: sets } = getSavedSets();
 
   const setHIITConfiguration = useSetRecoilState(hiitConfigurationAtom);
 

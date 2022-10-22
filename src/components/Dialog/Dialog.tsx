@@ -10,12 +10,14 @@ const Dialog = ({
   onClose,
   title,
   content,
-  isScrollable
+  isScrollable,
+  isModal
 }: {
   onClose: () => void;
   title: string;
   content: ReactNode;
   isScrollable?: boolean;
+  isModal?: boolean;
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -23,8 +25,8 @@ const Dialog = ({
   const { isLightMode } = useDarkMode();
 
   return (
-    <MUIDialog key='settings_popup' fullScreen={fullScreen} maxWidth='md' fullWidth open={true}>
-      <Container isSecondary={isLightMode} isPopup={true} isScrollable={isScrollable}>
+    <MUIDialog fullScreen={!isModal && fullScreen} maxWidth='md' fullWidth={!isModal} open={true}>
+      <Container isSecondary={isLightMode} isPopup={isModal} isScrollable={isScrollable}>
         <DialogTitle>
           <Grid container direction='row' justifyContent='space-between' alignItems='center'>
             <Typography
