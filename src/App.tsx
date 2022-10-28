@@ -27,10 +27,10 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <FirebaseAuthProvider>
-          <DarkModeProvider>
-            <RecoilRoot>
-              <SnackbarProvider preventDuplicate maxSnack={3} autoHideDuration={3500}>
+        <SnackbarProvider preventDuplicate maxSnack={3} autoHideDuration={3500}>
+          <FirebaseAuthProvider>
+            <DarkModeProvider>
+              <RecoilRoot>
                 <Routes>
                   <Route path='/' element={<Index />} />
                   <Route path='Login' element={<LoginPage />} />
@@ -38,10 +38,10 @@ const App = () => {
                   <Route path='Signup' element={<SignUpPage />} />
                   <Route path='*' element={<NotFoundPage />} />
                 </Routes>
-              </SnackbarProvider>
-            </RecoilRoot>
-          </DarkModeProvider>
-        </FirebaseAuthProvider>
+              </RecoilRoot>
+            </DarkModeProvider>
+          </FirebaseAuthProvider>
+        </SnackbarProvider>
 
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

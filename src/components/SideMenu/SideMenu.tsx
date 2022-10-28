@@ -1,12 +1,20 @@
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { BookmarkBorder, Share } from '@mui/icons-material';
 
-import { useHIITSets, useUIConfig } from 'hooks';
+import { useHIITSets, useUIConfig, useWindowSize } from 'hooks';
 
 const SideMenu = () => {
+  const size = useWindowSize();
   const { openDialog, toggleSetOpenDialog, isHasChanges } = useUIConfig();
   const { isSetAlreadySaved } = useHIITSets();
+
+  const [menuHeight, setMenuHeight] = useState<number | undefined>(undefined);
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setMenuHeight(ref.current?.clientHeight);
+  }, [setMenuHeight]);
 
   const isDisabled = !isHasChanges || isSetAlreadySaved;
   const actions: {
@@ -28,14 +36,22 @@ const SideMenu = () => {
     [isDisabled, toggleSetOpenDialog]
   );
 
+  const verticalPosition = useMemo(() => {
+    if (!!size.height && !!menuHeight) return { top: size.height - menuHeight - 16 };
+    return { bottom: 16 };
+  }, [menuHeight, size.height]);
+
   return (
     <>
       <SpeedDial
+        ref={ref}
         ariaLabel='SpeedDial'
         sx={{
+          display: 'flex',
+          alignItems: 'flex-end',
           position: 'absolute',
-          bottom: 16,
-          right: 16
+          right: 16,
+          ...verticalPosition
         }}
         icon={<SpeedDialIcon />}
         direction='up'

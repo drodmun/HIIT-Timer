@@ -1,19 +1,16 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { Link, Snackbar } from '@mui/material';
-import { auth } from '../../config/firebase/firebaseConf';
-import { useDarkMode } from 'hooks';
+import { Link } from '@mui/material';
+import { useDarkMode, useFirebaseAuth } from 'hooks';
 import Button from 'components/Button/Button';
 import ExternalAuth from './ExternalAuth';
-import Alert from '../Alert/Alert';
 
 const LoginForm = () => {
   const { isLightMode } = useDarkMode();
-  const [open, setOpen] = useState(false);
+  const { login } = useFirebaseAuth();
   const [redirect, setRedirect] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const toggleRedirect = () => setRedirect((prevState) => !prevState);
   const formElements = ['Email', 'Password'];
   const [formData, setFormData] = useState({
     email: '',
@@ -31,47 +28,30 @@ const LoginForm = () => {
     [setFormData]
   );
 
-  const handleErrorMessage = useCallback(
-    (message: string) => {
-      setErrorMessage(message);
-      setOpen(true);
-    },
-    [setErrorMessage, setOpen]
-  );
-
-  const login = () =>
-    signInWithEmailAndPassword(auth, formData.email, formData.password)
-      .then(() => setRedirect((pRedirect) => !pRedirect))
-      .catch((e) => {
-        console.error(e);
-        setErrorMessage(
-          `No user found with that email and password. Please try again or sign up if you don't have an account.`
-        );
-        setOpen(true);
-      });
+  const handleOnLogin = () => login(formData.email, formData.password, toggleRedirect);
 
   return (
     <>
-      {redirect && <Navigate replace to='/' />}
+      {redirect && <Navigate to='/' />}
 
       <div style={{ color: isLightMode ? 'black' : 'white' }}>
         <h2 style={{ margin: '16px 0' }}>Welcome!</h2>
 
         <>
           <Form className=' d-flex flex-column'>
-            {formElements.map((element, index) => (
-              <Form.Group key={`Login-Form${index}`} className='mb-2' controlId={`Login-Form${element}`}>
+            {formElements.map((e, index) => (
+              <Form.Group key={`Login-Form${index}`} className='mb-2' controlId={`Login-Form${e}`}>
                 <Form.Control
                   className='rounded-3'
-                  type={element === 'Password' ? 'password' : 'text'}
-                  placeholder={element}
-                  name={element.toLowerCase()}
+                  type={e === 'Password' ? 'password' : 'text'}
+                  placeholder={e}
+                  name={e.toLowerCase()}
                   onChange={handleChange}
                 />
               </Form.Group>
             ))}
 
-            <Button className='mt-2' onClick={login} sx={{ textDecoration: 'none' }} size='large'>
+            <Button className='mt-2' onClick={handleOnLogin} sx={{ textDecoration: 'none' }} size='large'>
               Log In
             </Button>
 
@@ -95,16 +75,10 @@ const LoginForm = () => {
               </Button>
             </Link>
 
-            <ExternalAuth setRedirect={setRedirect} redirect={redirect} errorMessage={handleErrorMessage} />
+            <ExternalAuth toggleRedirect={toggleRedirect} />
           </Form>
         </>
       </div>
-
-      <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-        <Alert onClose={() => setOpen(false)} severity='error' sx={{ width: '100%' }}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

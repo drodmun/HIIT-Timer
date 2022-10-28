@@ -1,78 +1,83 @@
 import { memo, useState, useCallback } from 'react';
-import { useRecoilValue } from 'recoil';
-import { Grid, TextField, Snackbar } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
 import Dialog from 'components/Dialog/Dialog';
 import Button from 'components/Button/Button';
-import { sharePreset } from '../stores/presetShare';
-import { hiitConfigurationAtom } from '../stores/timers';
-import Alert from '../components/Alert/Alert';
+import { useDarkMode, useHIITSets } from 'hooks';
 
 const Share = ({ onClose }: { onClose: () => void }) => {
-  const [openAlert, setOpenAlert] = useState(false);
-  const [loadSuccess, setLoadSuccess] = useState(false);
+  const { isLightMode } = useDarkMode();
+  const { shareSet } = useHIITSets();
+
   const [label, setLabel] = useState<string>('');
   const [shareToUser, setShareToUser] = useState<string>('');
 
-  const hiitConfiguration = useRecoilValue(hiitConfigurationAtom);
-
-  //let docRef = doc(db, 'presets', label);
-  //const presetData = presetObj;
   const handleShare = useCallback(() => {
     if (!!shareToUser.trim() && !!label.trim()) {
-      sharePreset(shareToUser, label, hiitConfiguration).then(() => {
-        setOpenAlert(true);
-        setLoadSuccess(true);
-        setLabel('');
-      });
-    } else {
-      setLoadSuccess(false);
-      setOpenAlert(true);
+      shareSet(label, shareToUser);
     }
-    //alert here
-  }, [hiitConfiguration, label, shareToUser]);
+  }, [label, shareSet, shareToUser]);
 
   return (
     <Dialog
       onClose={onClose}
       title=''
       content={
-        <div className='text-center pb-5'>
-          <Grid>
-            {/* change handleSave */}
-            <TextField
-              type='text'
-              variant='outlined'
-              label='Preset Name'
-              required
-              value={label}
-              onChange={(e) => setLabel(e.target.value)}
-            />
-            <div className='py-2'></div>
-            <TextField
-              type='text'
-              variant='outlined'
-              label='Share To'
-              required
-              value={shareToUser}
-              onChange={(e) => setShareToUser(e.target.value)}
-            />
-            <div className='px-5 pt-3'>
-              <Button sx={{ textTransform: 'none' }} size='x-large' onClick={handleShare}>
-                Share
-              </Button>
-            </div>
-          </Grid>
-          <Snackbar open={openAlert} autoHideDuration={6000} onClose={() => setOpenAlert(false)}>
-            <Alert
-              onClose={() => setOpenAlert(false)}
-              severity={loadSuccess ? 'success' : 'error'}
-              sx={{ width: '100%' }}
+        <Box
+          sx={{
+            pl: 2,
+            pr: 2,
+            pt: 4,
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'center'
+          }}
+        >
+          {/* change handleSave */}
+          <TextField
+            InputProps={{
+              sx: { color: isLightMode ? '#0d174d' : 'background.paper', borderColor: 'primary.main' }
+            }}
+            InputLabelProps={{ style: { fontSize: 25 } }} // font size of input label
+            type='text'
+            variant='outlined'
+            label='Preset Name'
+            required
+            fullWidth
+            value={label}
+            autoFocus={true}
+            onChange={(e) => setLabel(e.target.value)}
+            focused
+          />
+          <div className='py-2'></div>
+          <TextField
+            InputProps={{
+              sx: { color: isLightMode ? '#0d174d' : 'background.paper', borderColor: 'primary.main' }
+            }}
+            InputLabelProps={{ style: { fontSize: 25 } }} // font size of input label
+            type='text'
+            variant='outlined'
+            label='Share To'
+            required
+            fullWidth
+            value={shareToUser}
+            autoFocus={true}
+            onChange={(e) => setShareToUser(e.target.value)}
+            focused
+          />
+          <div className='px-5 pt-3'>
+            <Button
+              sx={{ textTransform: 'none' }}
+              size='x-large'
+              onClick={handleShare}
+              disabled={!shareToUser.trim() && !label.trim()}
             >
-              {loadSuccess ? `Preset Shared.` : `User not found.`}
-            </Alert>
-          </Snackbar>
-        </div>
+              Share
+            </Button>
+          </div>
+        </Box>
       }
     />
   );

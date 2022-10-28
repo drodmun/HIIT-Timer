@@ -88,15 +88,17 @@ const Header = ({ hideMenu }: { hideMenu?: boolean }): JSX.Element => {
     <>
       <AppBar component='nav' sx={{ minHeight: { md: 120, lg: 160 }, background: 'transparent', boxShadow: 'none' }}>
         <Toolbar>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            edge='start'
-            onClick={toggleSetOpenMobileDrawer}
-            sx={{ mr: 2, mt: 1, display: { md: 'none' }, color: isLightMode ? 'black' : 'white' }}
-          >
-            <MenuIcon />
-          </IconButton>
+          {!hideMenu && (
+            <IconButton
+              color='inherit'
+              aria-label='open drawer'
+              edge='start'
+              onClick={toggleSetOpenMobileDrawer}
+              sx={{ mr: 2, mt: 1, display: { md: 'none' }, color: isLightMode ? 'black' : 'white' }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
 
           <Box
             sx={{

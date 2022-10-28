@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react';
-import { Divider as MUIDivider, ListItemIcon, MenuItem, Typography } from '@mui/material';
-import { Comment, DarkMode, Info, LightMode, Logout, Settings, Tune } from '@mui/icons-material';
+import { Divider as MUIDivider, Link, ListItemIcon, MenuItem, Typography } from '@mui/material';
+import { Comment, DarkMode, Info, LightMode, Logout, Settings, Tune, Login } from '@mui/icons-material';
 
 import { useDarkMode, useFirebaseAuth, useUIConfig } from 'hooks';
 import Divider from 'components/Divider/Divider';
@@ -9,7 +9,7 @@ import { PossibleDialogType } from 'types/UIConfig';
 const MenuOptions = () => {
   const { isLightMode, toggleDarkMode } = useDarkMode();
   const { toggleSetOpenDialog, executeFinalAction } = useUIConfig();
-  const { logout } = useFirebaseAuth();
+  const { user, logout } = useFirebaseAuth();
 
   const [openSubMenu, setOpenSubMenu] = useState<PossibleDialogType>('none');
   const toggleSetOpenSubMenu = (subMenu: typeof openSubMenu) => () =>
@@ -37,10 +37,29 @@ const MenuOptions = () => {
 
   return (
     <>
-      {renderMenuItem(
-        'My Sets',
-        <Tune sx={{ color: 'secondary.main' }} />,
-        executeFinalAction(toggleSetOpenDialog('My Sets'))
+      {!!user ? (
+        <>
+          {renderMenuItem(
+            'My Sets',
+            <Tune sx={{ color: 'secondary.main' }} />,
+            executeFinalAction(toggleSetOpenDialog('My Sets'))
+          )}
+        </>
+      ) : (
+        <MenuItem sx={{ width: '100%' }}>
+          <Link href='/Login' style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+            <ListItemIcon sx={{ ml: 0 }}>
+              <Login sx={{ color: 'secondary.main' }} />
+            </ListItemIcon>
+            <Typography
+              variant='h6'
+              component='span'
+              sx={{ flexGrow: 1, fontWeight: 300, color: isLightMode ? 'black' : '#fff' }}
+            >
+              Login
+            </Typography>
+          </Link>
+        </MenuItem>
       )}
 
       <Divider />
@@ -66,9 +85,13 @@ const MenuOptions = () => {
         executeFinalAction(toggleSetOpenDialog('About'))
       )}
 
-      <Divider />
+      {!!user && (
+        <>
+          <Divider />
 
-      {renderMenuItem('Logout', <Logout sx={{ color: 'secondary.main' }} />, executeFinalAction(logout))}
+          {renderMenuItem('Logout', <Logout sx={{ color: 'secondary.main' }} />, executeFinalAction(logout))}
+        </>
+      )}
     </>
   );
 };

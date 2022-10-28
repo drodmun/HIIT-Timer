@@ -1,20 +1,16 @@
 import { ChangeEvent, useCallback, useState } from 'react';
-import Form from 'react-bootstrap/Form';
 import { Navigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc, getDoc } from 'firebase/firestore';
-import { Link, Snackbar } from '@mui/material';
+import Form from 'react-bootstrap/Form';
+import { Link } from '@mui/material';
+import { useDarkMode, useFirebaseAuth } from 'hooks';
 import Button from 'components/Button/Button';
-import { auth, db } from '../../config/firebase/firebaseConf';
-import { useDarkMode } from 'hooks';
 import ExternalAuth from './ExternalAuth';
-import Alert from '../Alert/Alert';
 
 const SignUpForm = () => {
   const { isLightMode } = useDarkMode();
-  const [open, setOpen] = useState(false);
+  const { signup } = useFirebaseAuth();
   const [redirect, setRedirect] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const toggleRedirect = () => setRedirect((prevState) => !prevState);
   const formElements = ['Name', 'Email', 'Password', 'Confirm_Password'];
   const [formData, setFormData] = useState({
     name: '',
@@ -34,52 +30,7 @@ const SignUpForm = () => {
     [setFormData]
   );
 
-  const handleErrorMessage = useCallback(
-    (message: string) => {
-      setErrorMessage(message);
-      setOpen(true);
-    },
-    [setErrorMessage, setOpen]
-  );
-
-  const register = () =>
-    createUserWithEmailAndPassword(auth, formData.email, formData.password)
-      .then((res) =>
-        setDoc(doc(db, 'users', formData.email), {
-          name: formData.name,
-          authProvider: 'local',
-          email: formData.email,
-          password: formData.password,
-          userID: res.user.uid,
-          presets: []
-        })
-          .then(() => setRedirect((pRedirect) => !pRedirect))
-          .catch(handleError)
-      )
-      .catch(handleError);
-
-  const handleError = (e: Error) => {
-    console.error(e);
-    setErrorMessage('An error occurred. Please try again.');
-    setOpen(true);
-  };
-
-  const handleRegister = () =>
-    getDoc(doc(db, 'users', formData.email))
-      .then((doc) => {
-        if (doc.exists()) {
-          setErrorMessage('Email already exists.');
-          setOpen(true);
-        } else {
-          if (formData.password === formData.confirm_password) {
-            register();
-          } else {
-            setErrorMessage('Passwords do not match.');
-            setOpen(true);
-          }
-        }
-      })
-      .catch((error) => console.log('Error getting document:', error));
+  const handleOnSignup = () => signup(formData.email, formData.password, toggleRedirect);
 
   return (
     <>
@@ -87,22 +38,23 @@ const SignUpForm = () => {
 
       <div style={{ color: isLightMode ? 'black' : 'white' }}>
         <h2 style={{ margin: '16px 0' }}>Welcome!</h2>
+
         <>
           <Form className=' d-flex flex-column'>
-            {formElements.map((element, index) => (
-              <Form.Group key={`SignUp-Form${index}`} className='mb-2' controlId={`SignUp-Form${element}`}>
+            {formElements.map((e, index) => (
+              <Form.Group key={`SignUp-Form${index}`} className='mb-2' controlId={`SignUp-Form${e}`}>
                 <Form.Control
                   className='rounded-3'
-                  type={element == 'Password' || element == 'Confirm_Password' ? 'password' : 'text'}
+                  type={e == 'Password' || e == 'Confirm_Password' ? 'password' : 'text'}
                   required
-                  placeholder={`${element.replace('_', ' ')}`}
-                  name={element.toLowerCase()}
+                  placeholder={`${e.replace('_', ' ')}`}
+                  name={e.toLowerCase()}
                   onChange={handleChange}
                 />
               </Form.Group>
             ))}
 
-            <Button className='mt-2' onClick={handleRegister} sx={{ textDecoration: 'none' }} size='large'>
+            <Button className='mt-2' onClick={handleOnSignup} sx={{ textDecoration: 'none' }} size='large'>
               Sign Up
             </Button>
 
@@ -126,16 +78,10 @@ const SignUpForm = () => {
               </Button>
             </Link>
 
-            <ExternalAuth setRedirect={setRedirect} redirect={redirect} errorMessage={handleErrorMessage} />
+            <ExternalAuth toggleRedirect={toggleRedirect} />
           </Form>
         </>
       </div>
-
-      <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-        <Alert onClose={() => setOpen(false)} severity='error' sx={{ width: '100%' }}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

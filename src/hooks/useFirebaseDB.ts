@@ -84,7 +84,35 @@ export const useHIITSets = () => {
     [closeSnackbar, enqueueSnackbar, hiitConfiguration, user?.email]
   );
 
-  return { hiitConfiguration, getSavedSets, saveSet, isSetAlreadySaved };
+  const shareSet = useCallback(
+    (name: string, recipient: string) => {
+      let snack: { message: string; variant: VariantType | undefined };
+      updateDoc(doc(db, 'users', recipient), {
+        presets: arrayUnion({
+          name,
+          hiitConfiguration
+        })
+      })
+        .then((value) => {
+          console.log(value);
+          snack = { message: `Set ${name} shared with ${recipient}!`, variant: 'success' };
+        })
+        .catch((error) => (snack = { message: error.message, variant: 'error' }))
+        .finally(() => {
+          const snackbarKey = enqueueSnackbar(snack.message, {
+            variant: snack.variant,
+            anchorOrigin: {
+              vertical: 'bottom',
+              horizontal: 'center'
+            },
+            onClick: () => closeSnackbar(snackbarKey)
+          });
+        });
+    },
+    [closeSnackbar, enqueueSnackbar, hiitConfiguration]
+  );
+
+  return { hiitConfiguration, getSavedSets, saveSet, shareSet, isSetAlreadySaved };
 };
 
 export const useFeedback = () => {
